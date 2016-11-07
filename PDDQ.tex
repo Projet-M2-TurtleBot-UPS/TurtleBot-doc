@@ -1,6 +1,7 @@
 \documentclass[10pt,a4paper]{article}
 
 \usepackage[utf8]{inputenc}
+\usepackage[margin=1.2in]{geometry}
 \usepackage[french]{babel}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -55,9 +56,9 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
 \begin{minipage}{0.4\textwidth}
 \begin{flushright} \large
 \emph{Tuteur:} \\
-\href{mailto:bouchetmarinee@gmail.com}{Frédéric \textsc{Erasle}}\\
+\href{mailto:lerasle@laas.fr}{Frédéric \textsc{Lerasle}}\\
 \href{mailto:michael.lauer@laas.fr}{Michaël \textsc{Lauer}} \\
-\href{mailto:bouchetmarinee@gmail.com}{Michel \textsc{Taix}}
+\href{mailto:taix@laas.f}{Michel \textsc{Taix}}
 \end{flushright}
 \end{minipage}\\[1cm]
 
@@ -264,6 +265,7 @@ SCHEMA
 Un arbre produit, ou Product Breakdown Structure donne une liste exhaustive des différents livrables du projet, de manière hiérarchisée. Il permet d’avoir une vue claire des différentes fonctionnalités à développer, de décrire l’architecture logicielle et matérielle du produit à livrer, et d’en prévoir les coûts. Dans le cadre de notre projet de navigation, l’aspect budgétaire ne sera pas abordé puisqu’il s’agit d’un projet dans le cadre de la formation.
 La figure suivante présente l’arbre produit du projet de grande envergure. Les parties encadrées correspondent aux nœuds de l’arbre, c’est à dire les groupes de fonctions à développer, tandis que les parties non encadrées correspondent aux feuilles, autrement dit aux fonctions elles-mêmes.
 L’arbre produit de notre projet de navigation est décomposé en cinq parties :
+
 \begin{description}
 \item [Simulateur ROS] : concerne les différents éléments à utiliser sous ce simulateur, à savoir la modélisation de l’environnement, les différents obstacles, le calcul des trajectoires de notre robot et l’intégration des blocs au cours des différentes étapes.
 \item  [Perception] : décrit l’ensemble des fonctionnalités permettant l’identification à partir d’une image. On distingue ainsi 2 groupes : la perception de l’environnement et la détection des obstacles. La détection des obstacles tient compte des différentes méthodes utilisées au cours de ce projet : le nuage de points, l’étude laser, les différentes méthodes de segmentation, etc…
@@ -300,20 +302,19 @@ GANTT OK %\noindent\includegraphics[width=\textwidth]{general.png}
 
 \item [W1] du 17/10 au 14/11 : 
 \begin{itemize}
-\item Plan Développement V1 : 4/11
-\item Plan Qualité V1 : 3/11
+\item Plan de Développement Qualité V1 : 8/11
 \item Code de l'étape 1 et Manuel Utilisateur correspondant : 8/11
 \end{itemize}
 
 \item [W2] du 02/01 au 27/01  : 
 \begin{itemize}
 \item Etat de l'Art de l'étape 2 : à définir avant le W2
-\item Plan Qualité V2 : 02/03
+\item Plan  V2 : 02/03
 \item Backlog de l'étape 2 : 02/03
-\item Plan Développement V2 : à définir avant le W2
+\item Plan de Développement Qualité V2 : à définir avant le W2
 \item Code V2 et Manuel Utilisateur : à définir avant le W2
 \item Cahier de recettes V2 : à définir lors avant le W2
-\item Plan Qualité V3 : à définir avant l'étape 3
+\item Plan de Développement Qualité V3 : à définir avant l'étape 3
 \item Backlog de l'étape 3 : à définir avant l'étape 3
 \item Plan Développement V3 : à définir avant l'étape 3
 \end{itemize}
@@ -324,8 +325,7 @@ GANTT OK %\noindent\includegraphics[width=\textwidth]{general.png}
 \item Code V3 et Manuel Utilisateur : à définir avant le W3
 \item Cahier de recettes V3 : à définir avant le W3
 \item Backlog : à définir avant l'épate 4
-\item Plan Développement V4 : à définir avant l'épate 4
-\item Plan Qualité V4 : à définir avant l'épate 4
+\item Plan de Développement Qualité V4 : à définir avant l'épate 4
 \item Code V4 et Manuel Utilisateur : à définir avant l'étape 4
 \item Bilan de projet : à définir avant le W3
 \item Cahier de recettes : à définir avant le W3
@@ -333,15 +333,14 @@ GANTT OK %\noindent\includegraphics[width=\textwidth]{general.png}
 
 \item [Tout au long du projet] : 
 \begin{itemize}
-\item Compte-rendus de réunions : ?
+\item Compte-rendus de réunions 
 \end{itemize}
 \end{description}
 
 \subsubsection{Pour les intervenants externes}
 \begin{itemize}
 \item Compte-rendus de réunions 
-\item Plan Développement 
-\item Plan Qualité
+\item Plan de Développement Qualité
 \end{itemize}
 
 \subsection{[OK] Planning du W1}
@@ -367,23 +366,32 @@ Le projet et les résultats obtenus seront décrits dans le bilan et exprimés l
 
 \subsection{[AFAIRE] Organisation interne}
 
+L'organisation de notre projet suit une configuration Agile.
+Nous avons réparti les rôles dans l'équipe afin de respecter cette organisation :
+\begin{itemize}
+\item Scrum Master (Tristan Klempka) : Responsable du processus de développement
+\item Product Owner (Bruno Dato) : Il représente le client au sein de notre équipe. Il dirige l'ordre de développement des fonctionnalités en maximisant la satisfaction du client.
+\item Équipe de développement : Ensemble des membres du projet
+\end{itemize}
+En ce qui concerne la communication interne au groupe, des mêlées sont organisées par le Scrum Master tous les jours vers 10h. Ces réunion sont courtes et ne doivent pas dépasser les 15 minutes. Chaque membre du groupe fait le point sur ce qu'il a effectué la veille, ce sur quoi il travaillera le jour de la réunion et des éventuels obstacles liés à ses activités
+
+
 \subsection{[AMODIFIER] Organisation externe}
 
 La communication avec les clients se fera premièrement par courrier électronique. Les clients pourront alors répondre à toute l’équipe via l’adresse mail du groupe mise à leur disposition. Deuxièmement, des réunions hebdomadaires seront également prévues afin de tenir informés les intervenants sur l’avancement du projet. Des réunions supplémentaires pourront également être organisées si cela s’avère nécessaire. Chaque réunion sera prévue au moins 2 jours à l’avance et donnera lieu à un compte rendu de réunion. Ces deux comptes rendus seront envoyés par courriel, dont l’objet sera identifié VOIR PARTIE, et ils seront rédigés à partir des formulaires fournis en Annexe. Ces documents seront soumis à l’approbation dans les trois jours. De plus, toutes les informations relatives au projet, quelle que soit leur nature seront accessibles immédiatement dans nos espaces de travail VOIR PARTIE.
 
-\subsection{[AMODIFIER] Outils et Standards}
+\subsection{[AMODIFIER] Outils}
 
 \subsubsection{Développement}
 \begin{description}
-\item * Systèmes d'exploitation : Ubuntu 14.04 LTS
-\item * ROS
+\item [Système d'exploitation : Ubuntu 14.04 LTS et ROS]
 \item [Git] : Logiciel libre de gestion de versions. Nous l'utilisons pour la gestion de nos sources mais aussi pour gérer la rédaction collaborative de nos documents.
 \item [Github] : Hébergeur de notre dépôt Git. L'interface Web fourni également un accès à des outils de gestion du code. Une liste d'Issues qui sera utilisé pour discuter des modifications effectuée dans les codes et un système de Pull Request qui nous permet de valider et d'intégrer des modifications. Un wiki est également accessible via cette interface.\\ \href{https://github.com/Projet-Navigation-UPS}{[lien vers le dépôt GitHub]} 
 \end{description}
 
 \subsubsection{Documentation}
 \begin{description}
-\item * Langage de modélisation : UML
+\item [Unified Modeling Language (UML)] : Ce langage ve nous permettre de modéliser les différents composants et le déroulement de nos programme. La modélisation y est graphique et permet de comprendre et de communiquer simplement sur le fonctionnement d'une application complexe.
 \item [Google Drive] : Système de stockage et de partage en ligne de fichiers. Il permet d'archiver et d'avoir accès aux versions finales des documents rédigés et utilisés durant le projet. \\
 \href{https://drive.google.com/drive/folders/0B17hXXH2aZiVb1ZiNlhpMWk4OFE?usp=sharing}{[lien vers le dépôt Google Drive]}
 \item [Cacoo] : Service en ligne de création et de partage de diagramme.
@@ -392,7 +400,7 @@ La communication avec les clients se fera premièrement par courrier électroniq
 
 \subsubsection{Espace de travail}
 \begin{description}
-\item [GanttProject] : Outil de gestion de projet en mode diagrammes de Gantt. Il nous permet de planifier la réalisation des tâches globales sur toute la durée du projet et pendant les sprints. 
+\item [GanttProject] : Logiciel libre de gestion de projet. Il nous permet de modéliser dans le temps l'ensemble des tâches liée au projet ainsi que leur relation entre elles.
 \item [Trello] : Outil de gestion de projet en mode « Tableau de tâches ». Il nous permet d'organiser la distribution et la réalisation des tâches. Il sert également comme vecteur d'information sur la gestion du projet en général (liens des outils, documents importants… etc.).\\ \href{https://trello.com/b/eJKigNIz}{[lien vers le tableau Trello]}
 \item [Placker] : Outil de gestion de projet en mode diagrammes de Gantt. Il permet de gérer les tâches d'un tableau Trello à l'aide d'un diagramme de Gantt. Il est utilisé pour surveiller l'avancement des tâches de plus bas niveau.
 \item [Google Mail] : Service de messagerie électronique. Il est utilisé pour l’ensemble de nos échanges internes ou externes au projet.
@@ -404,6 +412,42 @@ Il est important que le code soit suffisamment découpé. La taille des fichiers
 L'indentation doit être strictement respectée et doit correspondre à un espacement de 4 caractères.
 La taille des lignes ne doit pas dépasser 80 caractères.
 
+\subsection{[AMODIFIER] Standards}
+
+\subsubsection{Gestion des documents}
+
+Chaque document produit par le groupe projet devra comporter une page de garde reprenant les éléments nécessaires à leur suivi :
+\begin{itemize}
+\item Information générale de suivi :
+\begin{itemize} 
+	\renewcommand{\labelitemii}{$\cdot$}
+	\item Nom du document
+	\item Version
+	\item Date de création
+	\item Date de modification
+\end{itemize}
+\item Auteurs du document
+\item Auteur et date de la validation du document pour la version en cours.
+\item Historique de révision
+\end{itemize}
+
+\noindent Processus de production des documents :
+\begin{itemize}
+\item Rédaction des parties du document par l'ensemble des auteurs concernés ;
+\item Ajout des rédactions par \textit{commit} sur le dépôt Git. 
+\item Fusion et résolution des conflits. Ajout des corrections si nécessaire ;
+\item Validation finale d'une version du document. \textit{Tag} de version sur le dépôt Git ;
+\item Envoi ou diffusion du document aux destinataires concernées ;
+\item Archivage du document.
+\end{itemize}
+
+Il peut être nécessaire de répéter plusieurs fois la partie rédaction, ajout et fusion afin d'obtenir une version du document convenable.
+
+\subsubsection{Object des e-mails}
+
+Pour des raisons de suivi, l'ensemble des e-mails est envoyé à plusieurs destinataires chacun travaillant dans des domaines différents. Pour faciliter la recherche et l'identification du contenu des e-mails, nous avons décidé de respecter la forme d'objet suivante : 
+
+\verb|[Projet NAV - Thème] Objet du mail|
 
 \subsubsection{Entête des fichiers}
 L'entête de chaque fichier source doit être complétée afin d'expliquer leur comportement. Elle doit être mise à jour au fur et à mesure des évolutions du fichier qu'elle décrit.
@@ -413,12 +457,12 @@ Voici une liste non exhaustive des éléments à renseigner :
 \item Méthode/Fonction
 \begin{itemize} 
 	\renewcommand{\labelitemii}{$\cdot$}
-	\item D: Descriptif
-	\item A: Auteur(s)
-	\item E: Description des paramètres
-	\item S: Donnée(s) renvoyée(s)
-	\item R: Donnée renvoyée
-	\item F: Exceptions et/ou code d'erreurs renvoyées
+	\item \verb|D:| Descriptif
+	\item \verb|A:| Auteur(s)
+	\item \verb|E:| Description des paramètres
+	\item \verb|S:| Donnée(s) renvoyée(s)
+	\item \verb|R:| Donnée renvoyée
+	\item \verb|F:| Exceptions et/ou code d'erreurs renvoyées
 \end{itemize}
 \item Classe
 \begin{itemize} 
@@ -442,7 +486,7 @@ Pour les fichiers C++ c'est le suffixe cpp qui sera utilisé. Pour les headers C
 \item Première lettre de chaque mot en majuscule
 \item Donner des noms simples et descriptifs 
 \item Éviter les acronymes 
-\item N’utiliser que [a-z][A-Z] et [0-9]
+\item N’utiliser que \verb|[a-z][A-Z]| et \verb|[0-9]|
 \end{itemize}
 
 \item [Variables] : 
@@ -450,7 +494,7 @@ Pour les fichiers C++ c'est le suffixe cpp qui sera utilisé. Pour les headers C
 \item Première lettre en minuscule
 \item Mélange de minuscule, majuscule avec la première lettre de chaque mot en majuscule 
 \item Donner des noms simples et descriptifs 
-\item N’utiliser que [a-z][A-Z] et [0-9] 
+\item N’utiliser que \verb|[a-z][A-Z]| et \verb|[0-9]|
 \end{itemize}
 
 
@@ -459,10 +503,45 @@ Pour les fichiers C++ c'est le suffixe cpp qui sera utilisé. Pour les headers C
 \item Tout en majuscule 
 \item Séparer les mots par des underscore
 \item Donner des noms simples et descriptifs 
-\item N’utiliser que [A-Z] et [0-9] 
+\item N’utiliser que \verb|[A-Z]| et \verb|[0-9] |
 \end{itemize}
 
 \end{description}
+
+\subsubsection{Découpage du code}
+
+Il est important que le code soit suffisamment découpé. La taille des fichiers ne devrait pas excéder 1000 lignes et chaque fonction (ou méthode) ne devrait pas dépasser la centaine de lignes au grand maximum. Les headers et les fichiers source séparent les déclaration des définitions.
+
+L'indentation doit être strictement respectée et doit correspondre à un espacement de 4 caractères. La taille des lignes ne doit pas dépasser 80 caractères.
+
+
+\subsubsection{Workflow}
+
+Voici une description du \textit{workflow} utilisé pour réaliser les tâches de développement de notre projet :
+\begin{itemize}
+\item La branche \textit{master} contient uniquement un système complet en état de fonctionner.
+\item Pour travailler sur quelque chose de nouveau , on créé une nouvelle branche à partir de la branche \textit{master}.
+\item Lorsque la branche de modification est prête, on ouvre une \textit{Pull Request} pour demander une intégration à la branche master.
+\item Validation et/ou corrections des modifications. Une fois que cela est fait on fusionne dans la branche \textit{master}.
+\item Déploiement du code de la branche \textit{master} sur le système.
+\end{itemize}
+
+Il est également important d'alimenter le \textit{wiki} lorsqu'un membre du groupe estime qu'une information importante concernant les développements doit être partagée aux utilisateurs et/ou aux membres du projet. La forme de rédaction est libre mais chaque page doit être référencé avec un titre précis et explicite sur le contenu qu'elle présente.
+
+Il est conseillé de respecter le format suivant pour les préfixes des \textit{commit} sur le dépôt Git :
+\begin{description}
+\item \verb|[ADD]| : Ajout de fichiers, de méthodes, d'une configuration… etc.
+\item \verb|[ENH]| : Amélioration d'une fonctionnalité déjà présente
+\item \verb|[RM]| : Suppression d'un fichier, d'une méthode, d'une classe… etc.
+\item \verb|[BUG]| : Correction d'un bug.
+\item \verb|[TEST]| : Relatif aux tests.
+\item \verb|[DOC]| : Relatif à la documentation.
+\end{description}
+
+Il est nécessaire que l'ensemble des membres du projet utilisent la liste d'\textit{Issues} pour pouvoir effectuer et archiver les différents discussions sur le code du projet. Il est possible d'ouvrir et de fermer ces issues. Lorsqu'un \textit{commit} est en rapport avec une issue il doit être relié avec celui-ci (i.e. \verb|BUG : add method close #12| ce commit ferme automatiquement l'issue numéro 12).
+
+
+
 
 
 
