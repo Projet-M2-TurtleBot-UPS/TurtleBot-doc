@@ -366,16 +366,6 @@ Le projet et les résultats obtenus seront décrits dans le bilan et exprimés l
 
 \subsection{[AFAIRE] Organisation interne}
 
-L'organisation de notre projet suit une configuration Agile.
-Nous avons réparti les rôles dans l'équipe afin de respecter cette organisation :
-\begin{itemize}
-\item Scrum Master (Tristan Klempka) : Responsable du processus de développement
-\item Product Owner (Bruno Dato) : Il représente le client au sein de notre équipe. Il dirige l'ordre de développement des fonctionnalités en maximisant la satisfaction du client.
-\item Équipe de développement : Ensemble des membres du projet
-\end{itemize}
-En ce qui concerne la communication interne au groupe, des mêlées sont organisées par le Scrum Master tous les jours vers 10h. Ces réunion sont courtes et ne doivent pas dépasser les 15 minutes. Chaque membre du groupe fait le point sur ce qu'il a effectué la veille, ce sur quoi il travaillera le jour de la réunion et des éventuels obstacles liés à ses activités
-
-
 \subsection{[AMODIFIER] Organisation externe}
 
 La communication avec les clients se fera premièrement par courrier électronique. Les clients pourront alors répondre à toute l’équipe via l’adresse mail du groupe mise à leur disposition. Deuxièmement, des réunions hebdomadaires seront également prévues afin de tenir informés les intervenants sur l’avancement du projet. Des réunions supplémentaires pourront également être organisées si cela s’avère nécessaire. Chaque réunion sera prévue au moins 2 jours à l’avance et donnera lieu à un compte rendu de réunion. Ces deux comptes rendus seront envoyés par courriel, dont l’objet sera identifié VOIR PARTIE, et ils seront rédigés à partir des formulaires fournis en Annexe. Ces documents seront soumis à l’approbation dans les trois jours. De plus, toutes les informations relatives au projet, quelle que soit leur nature seront accessibles immédiatement dans nos espaces de travail VOIR PARTIE.
@@ -519,9 +509,10 @@ L'indentation doit être strictement respectée et doit correspondre à un espac
 
 Voici une description du \textit{workflow} utilisé pour réaliser les tâches de développement de notre projet :
 \begin{itemize}
-\item La branche \textit{master} contient uniquement un système complet en état de fonctionner.
-\item Pour travailler sur quelque chose de nouveau , on créé une nouvelle branche à partir de la branche \textit{master}.
-\item Lorsque la branche de modification est prête, on ouvre une \textit{Pull Request} pour demander une intégration à la branche master.
+\item La branche \textit{master} contient uniquement un système complet en état de fonctionner. Elle est protégée en écriture par le Scrum Master.
+\item La branche \textit{develop} est notre branche de travail par défaut.
+\item Pour travailler sur une nouveauté, on travaille directement sur la branche \textit{develop} ou on créé une nouvelle branche à partir de la branche \textit{develop} lorsque la fonctionnalité développée demande au moins un jour de travail.
+\item Lorsque la branche de travail est prête, on ouvre une \textit{Pull Request} pour demander une intégration à la branche master au Scrum Master.
 \item Validation et/ou corrections des modifications. Une fois que cela est fait on fusionne dans la branche \textit{master}.
 \item Déploiement du code de la branche \textit{master} sur le système.
 \end{itemize}
@@ -529,14 +520,15 @@ Voici une description du \textit{workflow} utilisé pour réaliser les tâches d
 Il est également important d'alimenter le \textit{wiki} lorsqu'un membre du groupe estime qu'une information importante concernant les développements doit être partagée aux utilisateurs et/ou aux membres du projet. La forme de rédaction est libre mais chaque page doit être référencé avec un titre précis et explicite sur le contenu qu'elle présente.
 
 Il est conseillé de respecter le format suivant pour les préfixes des \textit{commit} sur le dépôt Git :
-\begin{description}
-\item \verb|[ADD]| : Ajout de fichiers, de méthodes, d'une configuration… etc.
-\item \verb|[ENH]| : Amélioration d'une fonctionnalité déjà présente
-\item \verb|[RM]| : Suppression d'un fichier, d'une méthode, d'une classe… etc.
-\item \verb|[BUG]| : Correction d'un bug.
-\item \verb|[TEST]| : Relatif aux tests.
-\item \verb|[DOC]| : Relatif à la documentation.
-\end{description}
+\begin{itemize}
+
+\item \verb|ADD| : Ajout de fichiers, de méthodes, d'une configuration, d'un texte \ldots etc.
+\item \verb|ENH| : Amélioration d'un élément déjà présent
+\item \verb|RM| : Suppression d'un fichier, d'une méthode, d'une classe, d'un texte \ldots etc.
+\item \verb|BUG| : Correction d'un bug.
+\item \verb|TEST| : Relatif aux tests.
+\item \verb|DOC| : Relatif à la documentation.
+\end{itemize}
 
 Il est nécessaire que l'ensemble des membres du projet utilisent la liste d'\textit{Issues} pour pouvoir effectuer et archiver les différents discussions sur le code du projet. Il est possible d'ouvrir et de fermer ces issues. Lorsqu'un \textit{commit} est en rapport avec une issue il doit être relié avec celui-ci (i.e. \verb|BUG : add method close #12| ce commit ferme automatiquement l'issue numéro 12).
 
