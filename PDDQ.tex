@@ -12,9 +12,9 @@
 \setlength{\parindent}{0.6cm} 
 \setlength{\parskip}{0.10cm}
 \usepackage[automark]{scrpage2}
-\pagestyle{scrheadings}
 \usepackage{color, colortbl}
 \usepackage[table]{xcolor}
+
 
 \ihead[]{Equipe Navigation}
 \ohead[]{Plan Qualité}
@@ -22,14 +22,17 @@
 
 
 \begin{document}
+\pagestyle{scrheadings}
+
 \begin{titlepage}
+
 
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}} 
 
 \center
 
 \textsc{\Large Université Paul Sabatier}\\[1cm] 
-%\includegraphics[scale=0.3]{UPS.jpg}\\[0.6cm] 
+\includegraphics[scale=0.3]{UPS.jpg}\\[0.6cm] 
 
 
 \textsc{Master Intelligence Artificielle et \\ 
@@ -71,7 +74,53 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
 
 \newpage
 
-REF
+
+\subsection*{Suivi du document}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l | l |}
+    \hline
+     \rowcolor{gray} Nom du document & Version Majeure & Version Majeure & Date de création & Dernière version \\ \hline
+    PDDQ & A & 0 & 27/10/2016 & 07/11/2016 \\ \hline
+    \end{tabular}
+\end{center}
+
+
+\subsection*{Auteurs du document}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    \rowcolor{gray} Rédaction & Intégration & Relecture & Validation Interne \\ \hline
+    Equipe & Marine Bouchet & Bruno Dato, Thibaut Aghnatios & 07/11/2016 \\ \hline
+    \end{tabular}
+\end{center}
+
+\subsection*{Validation du document}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+     \rowcolor{gray} Validation & Nom & Date & Visa \\ \hline
+    & & & \\
+     \hline
+    \end{tabular}
+\end{center}
+
+\subsection*{Liste de diffusion}
+
+Le plan qualité de projet est diffusé à l’ensemble .... 
+
+\subsection*{Historiques de révision}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+     \rowcolor{gray} Version & Modification apportée & Auteur & Date \\ \hline
+    & & & \\
+     \hline
+    \end{tabular}
+\end{center}
 
 \newpage
 \tableofcontents
@@ -256,7 +305,11 @@ SCHEMA A FAIRE !!!
 
 A la fin et entre chaque étape, une étude des limites et des problématiques de la prochaine étape est demandée.
 
-SCHEMA %\noindent\includegraphics[width=\textwidth]{scrum.png} 
+\begin{figure}
+  \centering
+\noindent\includegraphics[width=\textwidth]{scrum.png} 
+  \caption{Schéma Méthode Scrum}
+\end{figure}
 
 \section{[OK] Arbre produit}
 
@@ -272,7 +325,11 @@ L’arbre produit de notre projet de navigation est décomposé en cinq parties 
 \item [Action] : Concerne toutes les fonctions correspondant au domaine de la commande robotisée permettant le respect des consignes (atteindre une balle de couleur, un amer, …), la réalisation des mouvements, et les contraintes cinématiques. On parlera aussi de l’odométrie.
 \end{description}
 
-ARBRE %\noindent\includegraphics[width=\textwidth]{arbreproduit.png} 
+\begin{figure}
+  \centering
+\noindent\includegraphics[width=\textwidth]{arbreproduit.png} 
+  \caption{Arbre Produit}
+\end{figure}
 
 \section{[AFAIRE] RoadMap}
 
@@ -285,12 +342,19 @@ Un lot de tâches, ou \textit{Work Breakdown Structure}, est une décomposition 
 
 La figure suivante représente nos lots de tâches pour l'ensemble du projet, nous en avons identifié six.
 
-DIAGRAMME
-% \noindent\includegraphics[width=\textwidth]{lottaches.png} 
+\begin{figure}
+  \centering
+\noindent\includegraphics[width=\textwidth]{lottaches.png} 
+  \caption{Lot de tâches}
+\end{figure}
 
 \subsection{[OK] Planning général}
 
-GANTT OK %\noindent\includegraphics[width=\textwidth]{general.png} 
+\begin{figure}
+  \centering
+\noindent\includegraphics[width=\textwidth]{general.png} 
+  \caption{Gantt du projet}
+\end{figure}
 
 \subsection{[ACONFIRMER] Livrables}
 
@@ -342,7 +406,11 @@ GANTT OK %\noindent\includegraphics[width=\textwidth]{general.png}
 
 \subsection{[OK] Planning du W1}
 
-GANTT OK %\noindent\includegraphics[width=\textwidth]{W1.png} 
+\begin{figure}
+  \centering
+  \noindent\includegraphics[width=\textwidth]{W1.png} 
+  \caption{Gannt du W1}
+\end{figure}
 
 \subsection{[OK] Conclusion du projet}
 
@@ -525,14 +593,12 @@ Il est conseillé de respecter le format suivant pour les préfixes des \textit{
 Il est nécessaire que l'ensemble des membres du projet utilisent la liste d'\textit{Issues} pour pouvoir effectuer et archiver les différents discussions sur le code du projet. Il est possible d'ouvrir et de fermer ces \textit{issues}. Lorsqu'un \textit{commit} est en rapport avec une \textit{issue} il doit être relié avec celui-ci (i.e. \verb|BUG : add method close #12| ce commit ferme automatiquement l'\textit{issue} numéro 12).
 
 
-
-
-
-
 \section{[OK] Analyse des risques}
-TABLEAU  %\noindent\includegraphics[width=\textwidth]{risques.jpg} 
-
-
+\begin{figure}
+  \centering
+\noindent\includegraphics[width=\textwidth]{risques.jpg} 
+  \caption{Analyse de risques}
+\end{figure}
 
 \section{[AFAIRE] Validation}
 
@@ -541,13 +607,10 @@ TABLEAU  %\noindent\includegraphics[width=\textwidth]{risques.jpg}
 \listoffigures
 \newpage
 
-\begin{appendix}
+\section*{ANNEXE}
+\subsection*{Template de compte-rendu de réunion}
 
-ANNEXE 
-
-Templates CR
-
-DICO
+\noindent\includegraphics[width=\textwidth]{tmp-cr.png} 
 
 \end{appendix}
 
