@@ -508,9 +508,10 @@ L'indentation doit être strictement respectée et doit correspondre à un espac
 
 Voici une description du \textit{workflow} utilisé pour réaliser les tâches de développement de notre projet :
 \begin{itemize}
-\item La branche \textit{master} contient uniquement un système complet en état de fonctionner.
-\item Pour travailler sur quelque chose de nouveau , on créé une nouvelle branche à partir de la branche \textit{master}.
-\item Lorsque la branche de modification est prête, on ouvre une \textit{Pull Request} pour demander une intégration à la branche master.
+\item La branche \textit{master} contient uniquement un système complet en état de fonctionner. Elle est protégée en écriture par le Scrum Master.
+\item La branche \textit{develop} est notre branche de travail par défaut.
+\item Pour travailler sur une nouveauté, on travaille directement sur la branche \textit{develop} ou on créé une nouvelle branche à partir de la branche \textit{develop} lorsque la fonctionnalité développée demande au moins un jour de travail.
+\item Lorsque la branche de travail est prête, on ouvre une \textit{Pull Request} pour demander une intégration à la branche master au Scrum Master.
 \item Validation et/ou corrections des modifications. Une fois que cela est fait on fusionne dans la branche \textit{master}.
 \item Déploiement du code de la branche \textit{master} sur le système.
 \end{itemize}
@@ -518,14 +519,15 @@ Voici une description du \textit{workflow} utilisé pour réaliser les tâches d
 Il est également important d'alimenter le \textit{wiki} lorsqu'un membre du groupe estime qu'une information importante concernant les développements doit être partagée aux utilisateurs et/ou aux membres du projet. La forme de rédaction est libre mais chaque page doit être référencé avec un titre précis et explicite sur le contenu qu'elle présente.
 
 Il est conseillé de respecter le format suivant pour les préfixes des \textit{commit} sur le dépôt Git :
-\begin{description}
-\item \verb|[ADD]| : Ajout de fichiers, de méthodes, d'une configuration… etc.
-\item \verb|[ENH]| : Amélioration d'une fonctionnalité déjà présente
-\item \verb|[RM]| : Suppression d'un fichier, d'une méthode, d'une classe… etc.
-\item \verb|[BUG]| : Correction d'un bug.
-\item \verb|[TEST]| : Relatif aux tests.
-\item \verb|[DOC]| : Relatif à la documentation.
-\end{description}
+\begin{itemize}
+
+\item \verb|ADD| : Ajout de fichiers, de méthodes, d'une configuration… etc.
+\item \verb|ENH| : Amélioration d'une fonctionnalité déjà présente
+\item \verb|RM| : Suppression d'un fichier, d'une méthode, d'une classe… etc.
+\item \verb|BUG| : Correction d'un bug.
+\item \verb|TEST| : Relatif aux tests.
+\item \verb|DOC| : Relatif à la documentation.
+\end{itemize}
 
 Il est nécessaire que l'ensemble des membres du projet utilisent la liste d'\textit{Issues} pour pouvoir effectuer et archiver les différents discussions sur le code du projet. Il est possible d'ouvrir et de fermer ces issues. Lorsqu'un \textit{commit} est en rapport avec une issue il doit être relié avec celui-ci (i.e. \verb|BUG : add method close #12| ce commit ferme automatiquement l'issue numéro 12).
 
