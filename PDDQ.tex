@@ -69,7 +69,7 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
 
 \includegraphics[scale=0.3]{laas.png} \\[1.1cm] 
 
-\large 29 août 2016
+\large 7 novembre 2016
 % laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaas
  
 
@@ -194,13 +194,13 @@ Il se déroule tout le long de l'année par tranche, nommées W, de 3, 4 et 4 se
 \end{itemize} 
 
 \subsubsection{Sorties}
-L'objectif du projet est de répondre à un cahier des charges divisé en 4 étapes incrémentales. Le projet étant enmené à être réutilisé par la suite pour d'autres étudiants, la qualité du produit est primordiale.
+L'objectif du projet est de répondre à un cahier des charges divisé en 4 étapes incrémentales. Le projet étant emmené à être réutilisé par la suite pour d'autres étudiants, la qualité du produit est primordiale.
 
 \begin{itemize}
 \renewcommand{\labelitemi}{$\square$}
 \item Un code propre, fonctionnel et surtout facilement réutilisable 
 \item Documentations
-\item Robot opérationnel qui ...
+\item Robot opérationnel qui effectue les tâches demandées
 \item Manuel Utilisateur
 \end{itemize} 
 
@@ -269,14 +269,14 @@ Coach
 \begin{itemize}
 \item Robot TurtleBot
 \item Planning du Master et ses jalons 
-\item Connaissance partielle .... + entre les membres
+\item Connaissances partielles selon les périodes de projet
 
 \end{itemize} 
 
 % -------------------------------
 
 
-
+\newpage
 \section{Organisation du projet}
 \label{sec:organisation}
 
@@ -288,7 +288,7 @@ Pour chaque sprint, la période initiale permettra de faire le point sur les él
 
 Scrum se différencie des autres méthodes de développement par ses avantages qui font de ce procédé une réponse à certains problèmes fréquemment rencontrés dans le développement logiciel. Pour éviter l’effet tunnel, la communication restera permanente entre les membres de l’équipe mais aussi entre l’équipe et le client, permettant une meilleure coopération à l’intérieur de l’équipe Scrum. 
 
-\begin{figure}
+\begin{figure}[h]
   \centering
 \noindent\includegraphics[width=\textwidth]{scrum.png} 
   \caption{Schéma Méthode Scrum}
@@ -315,11 +315,11 @@ La première étape a pour objectif de prendre en main les différentes ressourc
 A la fin et entre chaque étape, une étude des limites et des problématiques de la prochaine étape est demandée.
 
 
-
+\newpage
 \section{Arbre produit}
 
 Un arbre produit, ou \textit{Product Breakdown Structure} donne une liste exhaustive des différents livrables du projet, de manière hiérarchisée. Il permet d’avoir une vue claire des différentes fonctionnalités à développer, de décrire l’architecture logicielle et matérielle du produit à livrer, et d’en prévoir les coûts. Dans le cadre de notre projet de navigation, l’aspect budgétaire ne sera pas abordé puisqu’il s’agit d’un projet dans le cadre de la formation.
-La figure suivante présente l’arbre produit du projet de navigation. Les parties encadrées correspondent aux nœuds de l’arbre, c’est à dire les groupes de fonctions à développer, tandis que les parties non encadrées correspondent aux feuilles, autrement dit aux fonctions elles-mêmes.
+La figure suivante présente l’arbre produit du projet de navigation. Les parties encadrées correspondent aux nœuds de l'arbre, c’est à dire les groupes de fonctions à développer, tandis que les parties non encadrées correspondent aux feuilles, autrement dit aux fonctions elles-mêmes.
 L’arbre produit de notre projet de navigation est décomposé en cinq parties :
 
 \begin{description}
@@ -330,20 +330,22 @@ L’arbre produit de notre projet de navigation est décomposé en cinq parties 
 \item [Action] : Concerne toutes les fonctions correspondant au domaine de la commande robotisée permettant le respect des consignes (atteindre une balle de couleur, un amer, …), la réalisation des mouvements, et les contraintes cinématiques. On parlera aussi de l’odométrie.
 \end{description}
 
-\begin{figure}
+\begin{figure}[h]
   \centering
-\noindent\includegraphics[width=13cm]{arbreproduit.png} 
+\noindent\includegraphics[scale=0.5]{arbreproduit.png} 
   \caption{Arbre Produit}
 \end{figure}
 
+\newpage
 \section{RoadMap}
 
-\begin{figure}
+\begin{figure}[h]
   \centering
-\noindent\includegraphics[width=\textwidth]{roadmap.png} 
+\noindent\includegraphics[scale=0.55]{roadmap.png} 
   \caption{Roadmap}
 \end{figure}
 
+\newpage
 \section{Planning}
 \label{sec:planning}
 
@@ -351,21 +353,24 @@ L’arbre produit de notre projet de navigation est décomposé en cinq parties 
 
 Un lot de tâches, ou \textit{Work Breakdown Structure}, est une décomposition hiérarchique des tâches à effectuer dans un projet. Il permet à la fois d'avoir une représentation visuelle du travail restant à réaliser, mais aussi d'évaluer rapidement l'avancement de chacune des tâches.
 
-La figure suivante représente nos lots de tâches pour l'ensemble du projet, nous en avons identifié six.
-
-\begin{figure}
-  \centering
-\noindent\includegraphics[width=9.5cm]{lottaches.png} 
-  \caption{Lot de tâches}
-\end{figure}
+La figure \ref{lottaches} représente nos lots de tâches pour l'ensemble du projet, nous en avons identifié six.
 
 \subsection{Planning général}
 
-\begin{figure}
+\begin{figure}[h]
   \centering
-\noindent\includegraphics[width=\textwidth]{general.png} 
+\noindent\includegraphics[scale=0.35]{general.png} 
   \caption{Gantt du projet}
 \end{figure}
+
+
+\begin{figure}
+  \centering
+\noindent\includegraphics[scale=0.55]{lottaches.png} 
+  \caption{Lot de tâches}
+  \label{lottaches}
+\end{figure}
+
 
 \subsection{Livrables}
 
@@ -391,7 +396,7 @@ La figure suivante représente nos lots de tâches pour l'ensemble du projet, no
 \item Backlog de l'étape 3 : à définir avant l'étape 3
 \end{itemize}
 
-\item [W3] du 01/03 au ??/03  : 
+\item [W3] du 01/03 au 31/03  : 
 \begin{itemize}
 \item Etat de l'Art de l'étape 3  : à définir avant l'étape 3
 \item Code V3 et Manuel Utilisateur V3 : à définir lors du W3
@@ -417,11 +422,17 @@ La figure suivante représente nos lots de tâches pour l'ensemble du projet, no
 
 \subsection{Planning du W1}
 
+On peut voir sur la figure \ref{W1} le planning de la première période de projet W1.
+
 \begin{figure}
-  \centering
-  \noindent\includegraphics[width=13.5cm]{W1.png} 
-  \caption{Gannt du W1}
+\begin{center}
+\includegraphics[scale=0.45]{W1.png} 
+\end{center}
+\caption{Gannt du W1}
+\label{W1}
 \end{figure}
+
+
 
 \subsection{Conclusion du projet}
 
@@ -438,6 +449,7 @@ Le projet et les résultats obtenus seront décrits dans le bilan et exprimés l
 
 % ----------------------------
 
+\newpage
 \section{Assurance qualité}
 
 \subsection{Organisation interne}
@@ -614,26 +626,27 @@ Il est conseillé de respecter le format suivant pour les préfixes des \textit{
 
 Il est nécessaire que l'ensemble des membres du projet utilisent la liste d'\textit{Issues} pour pouvoir effectuer et archiver les différents discussions sur le code du projet. Il est possible d'ouvrir et de fermer ces \textit{issues}. Lorsqu'un \textit{commit} est en rapport avec une \textit{issue} il doit être relié avec celui-ci (i.e. \verb|BUG : add method close #12| ce commit ferme automatiquement l'\textit{issue} numéro 12).
 
-
+\newpage
 \section{Analyse des risques}
 L’analyse des risques projet se doit d’être menée dès le tout début de la phase de lancement, afin d’identifier au plus tôt et de la manière la plus exhaustive possible les éléments qui pourraient avoir une influence négative sur le déroulement du projet. Cette analyse est destinée à évoluer tout au long de notre projet.
 Les risques seront synthétisés et classés dans un tableau avec pour chacun sa définition, sa probabilité,
 sa gravité, ses causes et effets, ainsi que les actions préventives et correctives à mettre en oeuvre pour y pallier. On définira ainsi la criticité de chaque risque.
 
-\begin{figure}
+\begin{figure}[h]
   \centering
-\noindent\includegraphics[width=13cm]{risques.png} 
+\noindent\includegraphics[width=15cm]{risques.png} 
   \caption{Analyse de risques}
 \end{figure}
 
+\newpage
 \section{Tests et Validation}
 Scénario Etape 1 : Détection d'une balle de couleur et approche du TurtleBot
 Pré-requis :  Environnement propre, lumineux,  et une balle de couleur de diamètre 10.5 cm.
 Le listing des différents tests de l'étape 1 est le suivant :
 
-\begin{figure}
+\begin{figure}[h]
   \centering
-\noindent\includegraphics[width=13cm]{Tests_etape1.jpg} 
+\noindent\includegraphics[width=15cm]{Tests_etape1.jpg} 
   \caption{Les différents tests de l'étape 1}
 \end{figure}
  
