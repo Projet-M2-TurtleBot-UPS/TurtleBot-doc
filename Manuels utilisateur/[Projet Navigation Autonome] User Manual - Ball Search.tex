@@ -14,6 +14,7 @@
 \usepackage[automark]{scrpage2}
 \usepackage{color, colortbl}
 \usepackage[table]{xcolor}
+\usepackage{verbatim}
 
 
 \pagestyle{scrheadings}
@@ -84,7 +85,7 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
     \begin{tabular}{| l | l | l | l | l |}
     \hline
      \rowcolor{gray} Name & Major Version & Minor Version & Creation Date & Last version \\ \hline
-    User Manual - Ball Search & A & 0 & 10/01/2017 & 10/01/2017 \\ \hline
+    User Manual - Ball Search & A & 0 & 10/01/2017 & 11/01/2017 \\ \hline
     \end{tabular}
 \end{center}
 
@@ -121,7 +122,7 @@ User Manual - Ball Search is distributed to all clients and external stakeholder
     \hline
      \rowcolor{gray} Version & Section added & Author & Date \\ \hline
     A.0 & Création & Bruno Dato & 10/01/2017\\ \hline
-    A.0 & Section  & Bruno Dato & 11/01/2017\\ \hline
+    A.0 & Section \ref{sec:Prerequisites} and \ref{sec:Run Ball Search}  & Bruno Dato & 11/01/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -133,6 +134,97 @@ User Manual - Ball Search is distributed to all clients and external stakeholder
 
 \section{Prerequisites}
 \label{sec:Prerequisites}
+
+\subsection{Equipment}
+
+\begin{itemize}
+\item[•] TurtleBot 2
+\item[•] Red balls (diameter $\sim$ 10.5 cm)
+\end{itemize}
+
+\subsection{Software}
+
+To be able to use any TurtleBot 2 with all the basic features, you need to complete the following tutorials :
+
+\begin{itemize}
+\item[•] \href{http://wiki.ros.org/turtlebot/Tutorials/indigo/Turtlebot%20Installation}{Turtlebot Installation} 
+\item[•] \href{http://wiki.ros.org/turtlebot/Tutorials/indigo/PC%20Installation}{PC Installation} 
+\item[•] \href{http://wiki.ros.org/turtlebot/Tutorials/indigo/Network%20Configuration}{Network Configuration} 
+\end{itemize}
+
+
+You also need the following software :
+
+\begin{itemize}
+\item[•] GIT \href{https://git-scm.com/download/linux}{[Installation]} 
+\end{itemize}
+
+\subsection{Buid workspace}
+
+You need a ROS workspace (catkin workspace) to build our project before executing it. If you are running the ball search on the TurtleBot PC you have to create the workspace on the TurtleBot PC. In the case your are running it on a remote PC, you have to create the workspace on this PC.\\
+
+Place you where you want to build the workspace and execute the following commands :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> mkdir -p /catkin_ws/src \end{verbatim}
+\item[]  \begin{verbatim}> cd /catkin_ws/src \end{verbatim}
+\item[]  \begin{verbatim}> catkin_init_workspace \end{verbatim}
+\item[]  \begin{verbatim}> cd .. \end{verbatim}
+\item[]  \begin{verbatim}> catkin_make \end{verbatim}
+\end{itemize}
+
+Then, in .bashrc, add the following lines (some of them must already be there) :
+
+\begin{itemize}
+\item[]  \begin{verbatim} #Initialisation Turtlebot kinect \end{verbatim}
+\item[]  \begin{verbatim} export TURTLEBOT_3D_SENSOR=kinect \end{verbatim}
+\item[]  \begin{verbatim} #ROS Version \end{verbatim}
+\item[]  \begin{verbatim} source /opt/ros/indigo/setup.bash \end{verbatim}
+\item[]  \begin{verbatim} source <YOUR_PATH>/catkin_ws/devel/setup.bash \end{verbatim}
+\item[]  \begin{verbatim} #Select corresponding TurtleBot on your network \end{verbatim}
+\item[]  \begin{verbatim} export ROS_MASTER_URI=http://<IP_OF_TURTLEBOT>:11311  \end{verbatim}
+\end{itemize}
+
+\subsection{Download package}
+
+Now, you need to download the package containing the source code. Place you in your workspace (catkin\_ws), and execute the following commands :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> cd src \end{verbatim}
+\item[]  \begin{verbatim}> git clone https://github.com/Projet-Navigation-UPS/TurtleBot-pkgs \end{verbatim}
+\end{itemize}
+
+\subsection{Build executables}
+
+Now that you have downloaded the source code, you just need to compile you build the executables files. Place you in your workspace (catkin\_ws) and run the command : 
+
+\begin{itemize}
+\item[]  \begin{verbatim}> catkin_make \end{verbatim}
+\end{itemize}
+
+Three red lines must appear at the end of the compilation, meaning that the three executables we need have been created.
+
+\section{Run Ball Search}
+\label{sec:Run Ball Search}
+
+First, you need to turn on the TurtleBot (there is a switch button on the side of the robot base). Then, turn on the PC on the the TurtleBot. We will now launch all the ROS nodes that we need to run our application.
+
+\subsection{On the TurtleBot PC}
+
+If you are using the TurtleBot PC, open two terminals and chronologically execute the following commands to activate the minimal features et kinect :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> roslaunch turtlebot_bringup minimal.launch \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_bringup 3dsensor.launch \end{verbatim}
+\end{itemize}
+
+Ounce you have place the robot in a place with no obstacles and no red objects except the ball which should be at maximum distance of 1.80 m. On a third terminal, you can now launch the research of the ball executing the following command :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> roslaunch turtlebot_navigation TP_recherche_balle.launch \end{verbatim}
+\end{itemize}
+
+\subsection{On a remote PC}
 
 
 
