@@ -2,7 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[margin=1.2in]{geometry}
-\usepackage[french]{babel}
+\usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{graphicx}
@@ -19,7 +19,7 @@
 \pagestyle{scrheadings}
 
 \ihead[]{Équipe Navigation}
-\ohead[]{Étape 1 - TP recherche balle - Manuel Utilisateur}
+\ohead[]{User Manual - Ball Search}
 
 
 
@@ -41,15 +41,15 @@
 Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm] 
 
 \HRule \\[0.4cm]
-{ \huge \bfseries Étape 1 - TP recherche balle \\ Manuel Utilisateur}\\[0.4cm] 
-\LARGE Navigation Autonome de Robot Mobile
+{ \huge \bfseries User Manual - Ball Search}\\[0.4cm] 
+\LARGE Mobile Robot Navigation
 
 \HRule \\[1.5cm]
  
 
 \begin{minipage}{0.4\textwidth}
 \begin{flushleft} \large
-\emph{Auteur:}\\
+\emph{Autors:}\\
 \href{mailto:thibaut.aghnatios@laposte.net}{Thibaut \textsc{Aghnatios} }  \\
 \href{mailto:bouchetmarinee@gmail.com}{Marine \textsc{Bouchet} } \\
 \href{mailto:bruno.dato.meneses@gmail.com}{Bruno \textsc{Dato} } \\
@@ -60,16 +60,16 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
 ~
 \begin{minipage}{0.4\textwidth}
 \begin{flushright} \large
-\emph{Tuteur:} \\
+\emph{Tutors:} \\
 \href{mailto:lerasle@laas.fr}{Frédéric \textsc{Lerasle}}\\
 \href{mailto:michael.lauer@laas.fr}{Michaël \textsc{Lauer}} \\
 \href{mailto:taix@laas.f}{Michel \textsc{Taix}}
 \end{flushright}
-\end{minipage}\\[4cm]
+\end{minipage}\\[5cm]
 
 \includegraphics[scale=0.3]{laas.png} \\[1.1cm] 
 
-\large 7 novembre 2016
+\large 10 January 2017
 % laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaas
  
 
@@ -78,51 +78,50 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
 \newpage
 
 
-\subsection*{Suivi du document}
+\subsection*{Document tracking}
 
 \begin{center}
     \begin{tabular}{| l | l | l | l | l |}
     \hline
-     \rowcolor{gray} Nom du document & Version Majeure & Version Majeure & Date de création & Dernière version \\ \hline
-    Étape 1 - Manuel Utilisateur & A & 0 & 27/10/2016 & 09/11/2016 \\ \hline
+     \rowcolor{gray} Name & Major Version & Minor Version & Creation Date & Last version \\ \hline
+    User Manual - Ball Search & A & 0 & 10/01/2017 & 10/01/2017 \\ \hline
     \end{tabular}
 \end{center}
 
 
-\subsection*{Auteurs du document}
+\subsection*{Document authors}
 
 \begin{center}
     \begin{tabular}{| l | l | l | l |}
     \hline
-    \rowcolor{gray} Rédaction & Intégration & Relecture & Validation Interne \\ \hline
-    Equipe & Marine Bouchet & Bruno Dato & Bruno Dato \\ 
-     &   & Thibaut Aghnatios  & Thibaut Aghnatios \\ \hline
+    \rowcolor{gray} Redaction & Integration & Review & Validation \\ \hline
+    Bruno Dato & Bruno Dato & ?? & ?? \\  \hline
     \end{tabular}
 \end{center}
 
-\subsection*{Validation du document}
+\subsection*{Document validation}
 
 \begin{center}
     \begin{tabular}{| l | l | l | l |}
     \hline
-     \rowcolor{gray} Validation & Nom & Date & Visa \\ \hline
+     \rowcolor{gray} Validation & Name & Date & Visa \\ \hline
     & & & \\
      \hline
     \end{tabular}
 \end{center}
 
-\subsection*{Liste de diffusion}
+\subsection*{Broadcast list}
 
-Le plan de développement qualité est diffusé à l'ensemble des clients et des intervenants externes aux projets.
+User Manual - Ball Search is distributed to all clients and external stakeholders.
 
-\subsection*{Historiques de révision}
+\subsection*{Review history}
 
 \begin{center}
     \begin{tabular}{| l | l | l | l |}
     \hline
-     \rowcolor{gray} Version & Modification apportée & Auteur & Date \\ \hline
-    A.0 & Création et intégration du document & Marine Bouchet & 07/11/2016\\ \hline
-    A.0 & Ajout de la section \ref{AssuranceQualiteStandardsDocuments} & Bruno Dato & 09/11/2016\\ \hline
+     \rowcolor{gray} Version & Section added & Author & Date \\ \hline
+    A.0 & Création & Bruno Dato & 10/01/2017\\ \hline
+    A.0 & Section  & Bruno Dato & 11/01/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -132,16 +131,9 @@ Le plan de développement qualité est diffusé à l'ensemble des clients et des
 \newpage
 	
 
-\section{Introduction}
-\label{sec:introduction}
+\section{Prerequisites}
+\label{sec:Prerequisites}
 
-
-
-\newpage
-\listoffigures
-\newpage
-
-\section*{ANNEXE}
 
 
 
