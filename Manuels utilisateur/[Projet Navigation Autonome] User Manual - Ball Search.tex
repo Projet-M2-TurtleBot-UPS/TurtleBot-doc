@@ -85,7 +85,7 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
     \begin{tabular}{| l | l | l | l | l |}
     \hline
      \rowcolor{gray} Name & Major Version & Minor Version & Creation Date & Last version \\ \hline
-    User Manual - Ball Search & A & 0 & 10/01/2017 & 11/01/2017 \\ \hline
+    User Manual - Ball Search & A & 2 & 10/01/2017 & 12/01/2017 \\ \hline
     \end{tabular}
 \end{center}
 
@@ -120,9 +120,10 @@ User Manual - Ball Search is distributed to all clients and external stakeholder
 \begin{center}
     \begin{tabular}{| l | l | l | l |}
     \hline
-     \rowcolor{gray} Version & Section added & Author & Date \\ \hline
-    A.0 & Création & Bruno Dato & 10/01/2017\\ \hline
-    A.0 & Section \ref{sec:Prerequisites} and \ref{sec:Run Ball Search}  & Bruno Dato & 11/01/2017\\ \hline
+     \rowcolor{gray} Version & Additions or modifications & Author & Date \\ \hline
+    A.0 & Document creation & Bruno Dato & 10/01/2017\\ \hline
+    A.1 & Section \ref{sec:Prerequisites} and \ref{sec:Run Ball Search}  & Bruno Dato & 11/01/2017\\ \hline
+    A.2 & Section \ref{sec:Run Ball Search}  & Bruno Dato & 12/01/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -139,7 +140,7 @@ User Manual - Ball Search is distributed to all clients and external stakeholder
 
 \begin{itemize}
 \item[•] TurtleBot 2
-\item[•] Red balls (diameter $\sim$ 10.5 cm)
+\item[•] Red balls\footnote{The color can be changed in the code in ballSearch\_node.cpp line 53} (diameter $\sim$ 10.5 cm)
 \end{itemize}
 
 \subsection{Software}
@@ -173,7 +174,7 @@ Place you where you want to build the workspace and execute the following comman
 \item[]  \begin{verbatim}> catkin_make \end{verbatim}
 \end{itemize}
 
-Then, in .bashrc, add the following lines (some of them must already be there) :
+Then, in .bashrc, add the following lines (it's normal if some of them are already there) :
 
 \begin{itemize}
 \item[]  \begin{verbatim} #Initialisation Turtlebot kinect \end{verbatim}
@@ -196,39 +197,68 @@ Now, you need to download the package containing the source code. Place you in y
 
 \subsection{Build executables}
 
-Now that you have downloaded the source code, you just need to compile you build the executables files. Place you in your workspace (catkin\_ws) and run the command : 
+Now that you have downloaded the source code, you just need to compile to build the executables files. Place you in your workspace (catkin\_ws) and run the command : 
 
 \begin{itemize}
 \item[]  \begin{verbatim}> catkin_make \end{verbatim}
 \end{itemize}
 
-Three red lines must appear at the end of the compilation, meaning that the three executables we need have been created.
+Three red lines must appear in the compilation description, meaning that the three executables we need have been created.
 
+\newpage
 \section{Run Ball Search}
 \label{sec:Run Ball Search}
 
-First, you need to turn on the TurtleBot (there is a switch button on the side of the robot base). Then, turn on the PC on the the TurtleBot. We will now launch all the ROS nodes that we need to run our application.
+First, you need to turn on the TurtleBot (there is a switch button on the side of the robot base). Then, turn on the TurtleBot PC. We will now launch all the ROS nodes that we need to run our application.
 
 \subsection{On the TurtleBot PC}
 
-If you are using the TurtleBot PC, open two terminals and chronologically execute the following commands to activate the minimal features et kinect :
+\subsubsection{Basic features}
+
+If you are using the TurtleBot PC, open two terminals and chronologically execute the following commands to activate the minimal features and the vision features, one on each terminal :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> roslaunch turtlebot_bringup minimal.launch \end{verbatim}
 \item[]  \begin{verbatim}> roslaunch turtlebot_bringup 3dsensor.launch \end{verbatim}
 \end{itemize}
 
-Ounce you have place the robot in a place with no obstacles and no red objects except the ball which should be at maximum distance of 1.80 m. On a third terminal, you can now launch the research of the ball executing the following command :
+\subsubsection{Ball search}
+
+Ounce you have place the robot in an environment with no obstacles and no red objects except the ball which should be at maximum distance of 1.80 m. On a third terminal, you can now launch the research of the ball executing the following command :
 
 \begin{itemize}
-\item[]  \begin{verbatim}> roslaunch turtlebot_navigation TP_recherche_balle.launch \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_navigation ballSearch.launch \end{verbatim}
 \end{itemize}
 
 \subsection{On a remote PC}
 
+\subsubsection{Basic features}
 
+To execute the ball search from a remote PC, fist you have to ssh to the TurtleBot PC to launch the minimal and vision features. Open a fist terminal and write the following commands :
 
+\begin{itemize}
+\item[]  \begin{verbatim}> ssh turtle@<TURTLEBOTP_IP> \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_bringup minimal.launch \end{verbatim}
+\end{itemize}
 
+Then, in a second terminal :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> ssh turtle@<TURTLEBOTP_IP> \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_bringup 3dsensor.launch \end{verbatim}
+\end{itemize}
+
+\subsubsection{Ball search}
+
+Like previously, ounce you have place the robot in an environment with no obstacles and no red objects except the ball which should be at maximum distance of 1.80 m. On a third terminal, you can now launch the research of the ball executing the following command without having to ssh the TurtleBot PC:
+
+\begin{itemize}
+\item[]  \begin{verbatim}> roslaunch turtlebot_navigation ballSearch.launch \end{verbatim}
+\end{itemize}
+
+\subsection{Behaviour of the search}
+
+Ounce ballSearch is launched, you can see on your screen the video stream of the RGB TurtleBot's camera and the treatment on that stream that allows to detect the ball. If there is no ball in front of the robot, it will scan the environment to find one. If it hasn't find anything after the scan, it will abandon the search. If it finds a ball, it will get closer to to ball by first sniping to focus on the ball if it has to, and them moving towards the ball. Ounce a ball is found, the robot is done.
 
 \end{document}
 
