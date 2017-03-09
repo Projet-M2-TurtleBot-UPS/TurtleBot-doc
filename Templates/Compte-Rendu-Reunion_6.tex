@@ -60,7 +60,7 @@ Plusieurs décisions et observations ont été faites :
 
 \begin{itemize}
 \item Une série de tests sur les limites de la bibliothèque détection des ar\_marker (distance min, max et angle de visibilté maximum) ainsi que la confiance en la position relative retournée pour un marker détecté.
-\item Réfléchir à la possibilité d'un filtre de Kalman qui faciliterait le process d'integration des observations visuelles -- et, en utilisant la brique déjà faites navigation\_stack. 
+\item Réfléchir à la possibilité d'un filtre de Kalman qui faciliterait le process d'intégration des observations visuelles -- et, en utilisant la brique déjà faites navigation\_stack. 
 Il s'agira notement de définir le vecteur d'états cachés : $(x, y, \theta, v, dv, ddv)$ du robot. 
 Faire des observations à l'arrêt -- STATIC LOOK, pour rendre le filtre linéaire, en perdant les paramètres de vitesses, serait plus facile.
 Pour la prédiction de la position, quand on ne voit pas d'amers, nous éviterons de faire des estimations trop souvent pour éviter d'accumuler trop erreurs : $periode > 100 ms$ par exemple (adapté à la vitesse du robot).  
@@ -71,23 +71,23 @@ Pour la prédiction de la position, quand on ne voit pas d'amers, nous éviteron
 
 \subsection*{Commande Haut Niveau, Trajectoire et Commande/Odométrie}
 
-Le robot se déplace actuellement dans une carte avec des obstacles connus. Il suit une trajectoire pour attendre un but prédéfi dans la brique navigation\_stack avec les paramètres les plus optimisés dans la limite de l'odométrie et des roues. 
-Des tests ont été réalisés pour l'évitement d'obstacles ou des passages entre les portes. 
+Le robot se déplace actuellement dans une carte avec des obstacles connus. Il suit une trajectoire pour atteindre un but prédéfi dans la brique navigation\_stack avec les paramètres adéquats dans la limite de l'odométrie et des roues. 
+Des tests ont été réalisés pour l'évitement d'obstacles et les passages entre les portes. 
 
 Plusieurs décisions et observations ont été faites :
 
 \begin{itemize}
-\item Pour l'odométrie, l'erreur systématique de chacune des roues est à définir en testant en ligne droite (grande pour réduire l'impact de l'erreur du démarrage -- nous ne contrôlons l'accélération) et en arc de cerle. L'erreur quand le robot tourne devra être géré en définissant la vitesse la plus adéquate, ni trop grande ni trop petite, pour éviter à la fois les sauts et le patinage. Un rapport devra être fourni.
+\item Pour l'odométrie, l'erreur systématique de chacune des roues est à définir en testant en ligne droite (grande pour réduire l'impact de l'erreur du démarrage -- nous ne contrôlons l'accélération) et en cerle. L'erreur quand le robot tourne devra être géré en définissant la vitesse la plus adéquate, ni trop grande ni trop petite, pour éviter à la fois les sauts et le patinage. Un rapport devra être fourni.
 \item La brique navigation\_stack ne permet pas de gérer les obstacles non connues, dynamique. Il va falloir, dès que le cas se présente, reprendre la main, et utiliser une brique de navigation locale que nous devrons coder pour éviter cet obstacle -- simplement dans un premier temps (exemple, tourner à droite pour le contourner) et un algorithme de "table top" dans un deuxième temps.
-\item la navigation se fera d'un point vers un amer -- dans le champs de vision de l'amer en question plus précisément. S'il ne le voit pas, il tourne sur lui même et s'arrête pour récuperer la position relative de celui-ci. Si deux amer peuvent être détecter, il en détècte l'un, se tourne et détècte le deuxième.
-\item A l'initialisation nous admettrons que la position du robot sera soit connue, soit dans l'angle d'un vue d'un amer. 
+\item la navigation se fera d'un point vers un amer -- dans le champs de vision de l'amer en question plus précisément. S'il ne le voit pas, il tourne sur lui même et s'arrête pour récuperer la position relative de celui-ci. Si deux amer peuvent être détectés, il en détècte un, se tourne et détècte le deuxième.
+\item A l'initialisation nous admettrons que la position du robot sera soit connue, soit dans l'angle de vue d'un amer. 
 \end{itemize}
 
 
 \section*{Autres}
 
 \subsection*{Première étape}
-Pour le tp de "recherche balle", il faudra essayer d'effectuer la recherche en boucle fermée et le rendre le plus robuste.
+Pour le tp de "recherche balle", il faudra essayer d'effectuer la recherche en boucle fermée et le rendre le plus robuste possible.
 
 \subsection*{Gestion de projet et Présentation}
 Le bilan de projet devra être court, détaillé et contenir une vidéo. Un manuel d'utilision sera fourni et le code commenté. Un oral blanc sera réalisé et les diapositives envoyées avant la présentation. Le début de la dernière semaine sera consacrées à ses tâches ainsi qu'à la préparation du stand pour la journée EEA. 
