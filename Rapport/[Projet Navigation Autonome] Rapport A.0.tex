@@ -1,0 +1,178 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.2in]{geometry}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[nottoc, notlof, notlot]{tocbibind}
+\hypersetup{colorlinks=true,citecolor=black,filecolor=black,linkcolor=black,urlcolor=black}
+\setlength{\parindent}{0.6cm} 
+\setlength{\parskip}{0.10cm}
+\usepackage[automark]{scrpage2}
+\usepackage{color, colortbl}
+\usepackage[table]{xcolor}
+
+
+\pagestyle{scrheadings}
+
+\ihead[]{Équipe Navigation}
+\ohead[]{Plan de Développement Qualité}
+
+
+
+\begin{document}
+\pagestyle {plain}
+
+\begin{titlepage}
+
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} 
+
+\center
+
+\textsc{\Large Université Paul Sabatier}\\[1cm] 
+\includegraphics[scale=0.3]{figures/UPS.jpg}\\[0.6cm] 
+
+
+\textsc{Master Intelligence Artificielle et \\ 
+Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm] 
+
+\HRule \\[0.4cm]
+{ \huge \bfseries Rapport}\\[0.4cm] 
+\LARGE Navigation Autonome de Robot Mobile
+
+\HRule \\[1.5cm]
+ 
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Auteur:}\\
+\href{mailto:thibaut.aghnatios@laposte.net}{Thibaut \textsc{Aghnatios} }  \\
+\href{mailto:bouchetmarinee@gmail.com}{Marine \textsc{Bouchet} } \\
+\href{mailto:bruno.dato.meneses@gmail.com}{Bruno \textsc{Dato} } \\
+\href{mailto:klempka.tristan@gmail.com}{Tristan \textsc{Klempla} } \\
+\href{mailto:lagoute.31@gmail.com}{Thibault \textsc{Lagoute} }  
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Tuteur:} \\
+\href{mailto:lerasle@laas.fr}{Frédéric \textsc{Lerasle}}\\
+\href{mailto:michael.lauer@laas.fr}{Michaël \textsc{Lauer}} \\
+\href{mailto:taix@laas.f}{Michel \textsc{Taix}}
+\end{flushright}
+\end{minipage}\\[5cm]
+
+\includegraphics[scale=0.3]{figures/laas.png} \\[1.1cm] 
+
+\large 13 mars 2017
+% laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaas
+ 
+
+\end{titlepage}
+
+\newpage
+
+
+\subsection*{Suivi du document}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l | l |}
+    \hline
+     \rowcolor{gray} Nom du document & Version Majeure & Version Majeure & Date de création & Dernière version \\ \hline
+    Rapport & A & 0 & 13/03/2017 & 13/03/2017 \\ \hline
+    \end{tabular}
+\end{center}
+
+
+\subsection*{Auteurs du document}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    \rowcolor{gray} Rédaction & Intégration & Relecture & Validation Interne \\ \hline
+    Equipe & ?? & ?? & ?? \\ \hline
+
+    \end{tabular}
+\end{center}
+
+\subsection*{Validation du document}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+     \rowcolor{gray} Validation & Nom & Date & Visa \\ \hline
+    & & & \\
+     \hline
+    \end{tabular}
+\end{center}
+
+\subsection*{Liste de diffusion}
+
+Le rapport du projet est diffusé à l'ensemble des clients et des intervenants externes aux projets.
+
+\subsection*{Historiques de révision}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+     \rowcolor{gray} Version & Modification apportée & Auteur & Date \\ \hline
+    A.0 & Création du document & Bruno Dato & 13/03/2017\\ \hline
+     
+    \end{tabular}
+\end{center}
+
+\newpage
+\tableofcontents
+\newpage
+	
+
+\section{Présentation du projet}
+\label{sec:presentation}
+
+\subsection{Contexte}
+
+\subsection{Problématiques}
+
+\newpage
+\section{Recherche balle}
+\label{sec:recherche_balle}
+
+\newpage
+\section{Navigation avec amers 2D dans un environnement connu}
+\label{sec:navigation_avec_amers_2D_dans_un_environnement_connu}
+
+\subsection{Solution mise en place}
+\label{sec:solution_mise_en_place}
+
+\subsection{Commande haut niveau}
+\label{sec:commande_haut_niveau}
+
+\subsection{Perception et localisation}
+\label{sec:perception_et_localisation}
+
+\subsection{Commande}
+\label{sec:commande}
+
+\subsubsection{Odométrie}
+
+\newpage
+\section{Conclusion}
+\label{sec:conclusion}
+
+\newpage
+\listoffigures
+\newpage
+
+\section*{ANNEXE}
+
+
+
+
+
+\end{document}
+
