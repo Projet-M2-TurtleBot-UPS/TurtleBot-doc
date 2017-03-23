@@ -14,6 +14,7 @@
 \usepackage[automark]{scrpage2}
 \usepackage{color, colortbl}
 \usepackage[table]{xcolor}
+\usepackage{hyperref}
 
 
 \pagestyle{scrheadings}
@@ -152,8 +153,73 @@ Le rapport du projet est diffusé à l'ensemble des clients et des intervenants 
 \subsection{Commande haut niveau}
 \label{sec:commande_haut_niveau}
 
-\subsection{Perception et localisation}
-\label{sec:perception_et_localisation}
+\subsection{Détection et localisation}
+\label{sec:detection_et_localisation}
+
+
+\noindent Avant toute chose, il est important de rappeler que quelque soit la situation :
+\begin{itemize}
+\item $/map \rightarrow /odom \rightarrow /base\_link $ (\url{cf. http://www.ros.org/reps/rep-0105.html})
+\item /odom est le repère relatif, assimilé certain, du robot et est placé au départ sur /map
+\item chaque frame peut avoir plusieurs fils mais qu'un seul parent
+\item la transformé entre deux frames est décrite par deux attributs : 
+  \begin{itemize}
+  \item $m\_origin$ : Vector3 de translation 
+  \item $m\_basis$ : Matrix3x3 de rotation
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{Détection}
+\label{sec:detection}
+
+Pour la localisation, nous utilisons des markers AR tags de la librairie $ar\_track\_alvar$. DEF 
+Cette librairie a plusieurs avantages, x services 
+
+\begin{itemize}
+\item tracking
+\item x ar
+\item renvoie l'id du marker 
+\item renvoie la position et l'orientation d'un amer dans le repère de la caméra $/camera\_rgb\_optical\_frame$
+\end{itemize}
+
+\begin{figure}
+\center
+\includegraphics[scale=0.6]{figures/artags.png} 
+\caption{texte de la légende}	
+\end{figure}
+
+Dans notre projets
+
+\subsubsection{Localisation}
+\label{sec:localision}
+
+\begin{itemize}
+
+\item [localisation\_node.cpp] :
+
+Ce nœud permet d'envoyer la nouvelle localisation du robot si il détecte un marqueur. 
+
+\noindent La recherche se déclanche uniquement quand la commande haut niveau publie un $<$std\_msgs::Empty$>$ sur le topic $/nav/HLC/askForMarker$. \\
+
+Dans le cas ou un marqueur est visible : \\
+\noindent \underline{init} 
+/map $\rightarrow$ /odom $\rightarrow$ /baselink $\rightarrow$ /camera\_rgb\_frame $\rightarrow$ /camera\_rgb\_optical\_frame \\
+\noindent \underline{arrivée d'un marker} 
+/camera\_rgb\_optical\_frame $\rightarrow$ /ar\_marker\_0 \\
+\noindent \underline{traitement} \\
+\indent /baselink $\rightarrow$ /camera\_rgb\_frame $\rightarrow$ /camera\_rgb\_optical\_frame $\rightarrow$ /ar\_marker\_0 \\
+\indent on sait donc /ar\_marker\_0 $\rightarrow$ /baselink 
+= /marker\_0 $\rightarrow$ /baselink \\
+\indent sachant /map $\rightarrow$ /marker\_0, on sait /map $\rightarrow$ /baselink = /map  $\rightarrow$ /odom \\
+
+\noindent Cette transformation est envoyé sur $/new\_odom$ que l'on publie avec le publisher $odom\_pub$. On publie également l'id du marqueur vu sur $/nav/loca/markerSeen$ sous un $<$std\_msgs::Int16$>$. 
+
+Dans le cas où on ne voit rien on publie : -1 \\
+
+\item [localisation\_broadcaster\_node.cpp] :
+
+Ce nœud permet de tout le temps broadcaster la transfom entre /map et /odom. Il souscrit à la $<$geometry\_msgs::Transform$>$ /new\_odom, qui contient la "nouvelle" position certaine du robot. Dès que celle-ci est publiée, /odom actualise sa position et on réinitialise le nav\_msgs/Odometry : il devient notre nouveau référentiel.
+\end{itemize}
 
 \subsection{Commande}
 \label{sec:commande}
