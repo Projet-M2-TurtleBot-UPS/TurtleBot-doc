@@ -15,6 +15,8 @@
 \usepackage{color, colortbl}
 \usepackage[table]{xcolor}
 \usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
 
 
 \pagestyle{scrheadings}
@@ -156,6 +158,7 @@ Le rapport du projet est diffusé à l'ensemble des clients et des intervenants 
 \subsection{Détection et localisation}
 \label{sec:detection_et_localisation}
 
+CALIBRAGE 
 
 \noindent Avant toute chose, il est important de rappeler que quelque soit la situation :
 \begin{itemize}
@@ -172,24 +175,37 @@ Le rapport du projet est diffusé à l'ensemble des clients et des intervenants 
 \subsubsection{Détection}
 \label{sec:detection}
 
-Pour la localisation, nous utilisons la librairie $ar\_track\_alvar$ qui utilise des marqueurs AR tags.   
-Cette librairie permet de détecter et de suivre ces markers. Elle retourne l'identifiant, la position et l'orientation du marker.
+Pour la détection, nous utilisons la librairie $ar\_track\_alvar$ qui utilise des marqueurs AR tags.   
+Cette librairie permet de détecter et de suivre ces markers en utilisant la [?]. Elle retourne l'identifiant, la position et l'orientation du marker dans la position de la $/camera\_rgb\_optical\_frame$, dans notre cas. La librairie fournie 55 AR tags et la possibilité d'entendre cette liste facilement. Dans notre cas, nous utilisons uniquement le noeud qui ne permet de lire plusieurs AR tags à la fois dans la même capture du flux vidéos. 
 
+\lstset{language=XML}
 \begin{description}
 \item [Mise en place physique] : \\
- On a utilisé des AR tags de $16 \times 16$ cms. On place leur milieu à 31 cm du sol.
-\item [Initialisation] : \\
+ On a utilisé des AR tags de $16 \times 16$ cm. On place leur milieu à 31 cm du sol.
+\item [Initialisation] : \\ Le nœud $ar\_track\_alvar$ s'initialise dans $localisation.launch$ avec les paramètres suivant : 
+\begin{lstlisting}
+<arg name="marker_size" default="16" />
+<arg name="max_new_marker_error" default="0.08" />
+<arg name="max_track_error" default="0.2" />
 
-\item [Performance]
+<arg name="cam_image_topic" 
+	default="/camera/depth_registered/points" />
+<arg name="cam_info_topic" 		
+	default="/camera/depth_registered/camera_info" />
+<arg name="output_frame" default="/camera_rgb_optical_frame" />
+\end{lstlisting}
+
+\item [Lecture du contenu [?]] : \\
+	On peut écouter les ar\_track\_alvar\_msgs::AlvarMarkers que publie le nœud avec la commande : 
+	\begin{lstlisting} 
+	rostopic echo /ar_marker_pose
+	\end{lstlisting}
+\item [Performances et évolutions] : \\
+	L'orientation du markeur trouvé par $ar\_track\_alvar$ doit être : $\vec{z}$ la normale et $\vec{x}$ vers le haut. Il arrive, pour des problèmes inconnus (le réseau ?) que ce repère ne soit pas correctement capturé, avec par exemple, $\vec{y}$ vers le haut. Le robot, à la fin de la localisation se trouve alors couché. Il faudrait alors comprendre d'où vient le problème ou, sinon, ne pas prendre en compte les orientations aberrantes. 
+	La détection des marqueurs de $16 \times 16$ cm s'effectue jusqu'à 2m 25 avec une précision de 2 cm et jusqu'à 45\degres d'angle à 5\degres près. Il serait intéressant, à l'avenir, d'approfondir les résultats obtenus avec d'autres tailles si l'erreur est trop aléatoire, ou alors, intégrer un filtre de Kalman pour fusionner les données odométriques et les observations.
+
 \end{description}
 
-
-\begin{itemize}
-\item tracking
-\item x ar
-\item renvoie l'id du marker 
-\item renvoie la position et l'orientation d'un amer dans le repère de la caméra $/camera\_rgb\_optical\_frame$
-\end{itemize}
 
 \begin{figure}
 \center
@@ -197,7 +213,6 @@ Cette librairie permet de détecter et de suivre ces markers. Elle retourne l'id
 \caption{texte de la légende}	
 \end{figure}
 
-Dans notre projets
 
 \subsubsection{Localisation}
 \label{sec:localision}
