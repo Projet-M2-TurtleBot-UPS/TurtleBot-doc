@@ -158,22 +158,13 @@ Le rapport du projet est diffusé à l'ensemble des clients et des intervenants 
 \subsection{Détection et localisation}
 \label{sec:detection_et_localisation}
 
-CALIBRAGE 
 
-\noindent Avant toute chose, il est important de rappeler que quelque soit la situation :
-\begin{itemize}
-\item $/map \rightarrow /odom \rightarrow /base\_link $ (\url{cf. http://www.ros.org/reps/rep-0105.html})
-\item /odom est le repère relatif, assimilé certain, du robot et est placé au départ sur /map
-\item chaque frame peut avoir plusieurs fils mais qu'un seul parent
-\item la transformé entre deux frames est décrite par deux attributs : 
-  \begin{itemize}
-  \item $m\_origin$ : Vector3 de translation 
-  \item $m\_basis$ : Matrix3x3 de rotation
-  \end{itemize}
-\end{itemize}
+
 
 \subsubsection{Détection}
 \label{sec:detection}
+
+CALIBRAGE 
 
 Pour la détection, nous utilisons la librairie $ar\_track\_alvar$ qui utilise des marqueurs AR tags.   
 Cette librairie permet de détecter et de suivre ces markers en utilisant la [?]. Elle retourne l'identifiant, la position et l'orientation du marker dans la position de la $/camera\_rgb\_optical\_frame$, dans notre cas. La librairie fournie 55 AR tags et la possibilité d'entendre cette liste facilement. Dans notre cas, nous utilisons uniquement le noeud qui ne permet de lire plusieurs AR tags à la fois dans la même capture du flux vidéos. 
@@ -209,13 +200,26 @@ Cette librairie permet de détecter et de suivre ces markers en utilisant la [?]
 
 \begin{figure}
 \center
-%\includegraphics[scale=0.6]{figures/artags.png} 
+\includegraphics[scale=0.6]{figures/artags.png} 
 \caption{texte de la légende}	
 \end{figure}
 
 
 \subsubsection{Localisation}
 \label{sec:localision}
+
+\noindent Avant toute chose, il est important de rappeler que quelque soit la situation :
+\begin{itemize}
+\item $/map \rightarrow /odom \rightarrow /base\_link $ (\url{cf. http://www.ros.org/reps/rep-0105.html})
+\item ATTENTION AU REPERE MAP [?]
+\item /odom est le repère relatif de l'odométrie, assimilé certain, du robot et est placé au départ sur /map. Il est en quelque sorte le point de départ d'un déplacement. Etant donné que ce repère drift au cours du déplacement du robot, il peut être étonné. La localisation via un amer connu permet de placer le repère /odom au bon endroit, et de réinitialiser l'odométrie, ce qui place /base\_link au même endroit. C'est un localisation absolu.
+\item chaque frame peut avoir plusieurs fils mais qu'un seul parent
+\item la transformé entre deux frames est décrite par deux attributs : 
+  \begin{itemize}
+  \item $m\_origin$ : Vector3 de translation 
+  \item $m\_basis$ : Matrix3x3 de rotation
+  \end{itemize}
+\end{itemize}
 
 \begin{itemize}
 
@@ -245,10 +249,16 @@ Dans le cas où on ne voit rien on publie : -1 \\
 Ce nœud permet de tout le temps broadcaster la transfom entre /map et /odom. Il souscrit à la $<$geometry\_msgs::Transform$>$ /new\_odom, qui contient la "nouvelle" position certaine du robot. Dès que celle-ci est publiée, /odom actualise sa position et on réinitialise le nav\_msgs/Odometry : il devient notre nouveau référentiel.
 \end{itemize}
 
+\begin{figure}
+\center
+\includegraphics[scale=0.6]{figures/rqt_loca.png} 
+\caption{texte de la légende}	
+\end{figure}
+
+
 \subsection{Commande}
 \label{sec:commande}
 
-\subsubsection{Odométrie}
 
 \newpage
 \section{Conclusion}
