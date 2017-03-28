@@ -161,6 +161,41 @@ Le rapport du projet est diffusé à l'ensemble des clients et des intervenants 
 \subsubsection{Détection}
 \label{sec:detection}
 
+\subsubsection*{Utilisation}
+
+Nous détaillons ici les étapes nécessaires afin d'utiliser le noeud de détection. Ce noeud est lancé indépendamment des autres noeuds du système. 
+Le fichier ROS de launch permet de lancer le noeud.\\
+\textit{roslaunch localisation.launch}\\
+
+Ce fichier configure et lance la détection d'amer de type AR code à l'aide d'une bibliothèque spécialisée couplée à un noeud ROS. 
+Plusieurs paramètres dans ce fichier peuvent être configurés.
+\begin{itemize}
+\item $marker\_size$ : Largueur (cm) des marqueurs AR utilisés
+\item $cam\_image\_topic$ : Topic ROS du flux d'images de la caméra.
+\item $cam\_info\_topic$ : Topic ROS des infos propres à la caméra. C'est ici que les données de calibrage sont récupérées.
+\item $output\_frame$ : Repère dans lequel sera exprimé le résultat de la détection.\\
+\end{itemize}
+Des paramètres supplémentaires se trouvent dans le fichier $localication\_node.cpp$. Le changement de ces paramètre nécessite une compilation du noeud ROS.
+\begin{itemize}
+\item $DEBUG$ : Active ou non les sorties de debug. Si cette option est activée, les transformations intermediaires sont publiées.
+\item $TIMEOUT\_AR\_DETEC$ : Temps d'attente maximum pour la reception d'un marqueur. Ce paramètre est utile lors de l'utilisation en réseau. La latence provoque des retards dans la publication des transformées. Il est donc nécessaire de donner une marge de temps au système. Lors de l'utilisation en mode local cette valeur peut \^etre faible.
+\item $NB\_MARKER$ : Nombre de marqueurs total dans la scène.\\
+\end{itemize}
+
+Une fois le lancement effectué, l'utilisateur peut observé les comportement de ce noeud avec des sorties console.
+\begin{itemize}
+\item $GLOBAL\_SEARCH$ : La recherche de marqueur a été demandée.
+\item $ MARKER DETECTED: ID\_MARKER\_DETECTED$ : Identifiant du marqueur détecté.
+\item $LOOKING FOR TF: tf$ :Nom de la transformée attendue.\\
+\end{itemize}
+
+\textit{Remarque} : Les performances de la détection des marqueurs reposent sur une bonne calibration de la caméra.
+
+
+
+
+
+
 CALIBRAGE 
 
 Pour la détection, nous utilisons la librairie $ar\_track\_alvar$ qui utilise des marqueurs AR tags.   
