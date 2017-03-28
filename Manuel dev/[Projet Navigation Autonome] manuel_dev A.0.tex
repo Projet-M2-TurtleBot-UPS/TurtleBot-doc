@@ -241,17 +241,18 @@ Cette librairie permet de détecter et de suivre ces markers en utilisant la [?]
 \label{sec:localision}
 
 \subsubsection*{Utilisation}
-La node de localisation est lancé gr\^ace à un ficher ROS de launch. Cependant, contrairement au noeud de détection, ce noeud ne se lance pas indépendamment des autres. Il est lancé avec l'ensemble du système de navigation avec la commande suivante.
+La node de localisation est lancé gr\^ace à un ficher ROS de launch. Cependant, contrairement au noeud de détection, ce noeud ne se lance pas indépendamment des autres. Il est lancé avec l'ensemble du système de navigation avec la commande suivante.\\
 \textit{roslaunch navigation.launch}\\
-blablalblalblallbla\\
-blablalblalblallbla\\
-blablalblalblallbla\\
-blablalblalblallbla\\
+
+Ce fichier configure et lance le système de navigation qui comprend la node de localisation. 
+On trouve dans ce fichier des paramètres propre à la localisation pouvant être configurés.
+
+\begin{itemize}
+\item $map\_file$ : Chemin de la carte utilisée pour la navigation. Notre système utilise le noeud ROS $map\_server$ pour le chargement de la carte.
+\item $marker\_tf\_publisher\_X$ : L'utilisateur renseigne ici, pour chaque marqueur, la transformée qui sera publiée pour le repérer sur la carte. L'orientation est renseignée avec un quaternion. \\
+\end{itemize}
 
 
-
-
-blablalblalblallbla\\
 
 
 \noindent Avant toute chose, il est important de rappeler que quelque soit la situation :
