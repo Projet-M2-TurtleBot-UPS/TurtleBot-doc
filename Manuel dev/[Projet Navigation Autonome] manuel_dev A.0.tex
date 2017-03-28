@@ -2,7 +2,6 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[margin=1.2in]{geometry}
-\usepackage[french]{babel}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{graphicx}
@@ -129,25 +128,64 @@ Le rapport du projet est diffusé à l'ensemble des clients et des intervenants 
 \newpage
 \tableofcontents
 \newpage
-	
 
-\section{Présentation du projet}
-\label{sec:presentation}
+\section{Introduction}
+\label{sec:introduction}
 
-\subsection{Contexte}
+Ce manuel donne les informations nécessaires à l'utilisation et à l'évolution du projet "Navigation autonome d'un robot mobile" du Master 2 IARF et RODECO. Celui-ci permet, à ce jour, d'effectuer une navigation autonome  d'un Turtlebot dans un environnement connu, contenant des amers dont leur position et leur orientation sont connus. Ces indices visuels, récupérer par la kinect, capteur RGB-D, permettent de supprimer les erreurs systématiques de la localisation des capteurs proprioceptifs embarqués -- de l'odométrie. 
 
-\subsection{Problématiques}
+La navigation s'effectue entre la position initiale, dont la position est connue ou dans la zone de visibilité d'un amer, et une position finale : 
 
-\newpage
-\section{Recherche balle}
-\label{sec:recherche_balle}
+\begin{tabular}{c|c|c}
+Scénario & A & B \\ \hline
+Départ & Position absolue & Position inconnue mais dans une zone de visibilité d'un marqueur \\  \hline
+Arrivée & Position & Position 
+\end{tabular} \\
 
-\newpage
+DESCR + deco\\
+\begin{tabular}{cl}
+B & Si pas de position en entrée  \\
+  & Le robot effectue une recherche de marqueur dans son champs visuel \\
+  & Tant que pas de marqueur en vue \\
+  & Le robot tourne de ? \\
+  & Il effectue un autre recherche de marqueur dans son champs visuel \\
+& \\
+A & Tant que le but est plus loin que le prochain marqueur dans sa direction \\
+  & Le robot se déplace jusqu’à la zone de visibilité du marqueur le plus proche dans la direction du but  \\
+  & Le robot effectue une recherche de marqueur dans son champs visuel \\
+  & Tant que pas de marqueur en vue  \\
+  & Le robot tourne de ?  \\
+  & Il effectue un autre recherche de marqueur dans son champs visuel \\
+  & Le robot se déplace jusqu’au but  \\
+\end{tabular}
+
 \section{Navigation avec amers 2D dans un environnement connu}
 \label{sec:navigation_avec_amers_2D_dans_un_environnement_connu}
 
+La tâche de navigation autonome se découpe en cinq briques : ++ de textes résumé texte 
+\begin{description}
+\item [Détection] qui permet de repérer les amers dans le champs de vision quand ils se présentent (cf. AR
+\item [Localisation] qui permet de savoir où se trouve le robot, en utilisant soit les données d'odométrie interne, soit les données d’observation (cf. NOUS
+\item [Trajectoire] qui permet de se déplacer en boucle fermée d'un point A à un point B (cf. NAV
+\item [Commande] "
+\item [Visibilité] TH
+\item [Supervision] qui gère le bon déroulement de la tâche, le déplacement du point de départ au point d'arrivée (cf. 
+\end{description}
+
+
+
 \subsection{Solution mise en place}
 \label{sec:solution_mise_en_place}
+
+L'architecture globale de notre produit est décrite par le schéma suivant :
+
+\begin{figure}[h]
+\center
+% \includegraphics[scale=0.6]{figures/archi.png} 
+\caption{Architecture ROS}	
+\end{figure}
+
+
 
 \subsection{Commande haut niveau}
 \label{sec:commande_haut_niveau}
@@ -225,7 +263,9 @@ Cette librairie permet de détecter et de suivre ces markers en utilisant la [?]
 	\end{lstlisting}
 \item [Performances et évolutions] : \\
 	L'orientation du markeur trouvé par $ar\_track\_alvar$ doit être : $\vec{z}$ la normale et $\vec{x}$ vers le haut. Il arrive, pour des problèmes inconnus (le réseau ?) que ce repère ne soit pas correctement capturé, avec par exemple, $\vec{y}$ vers le haut. Le robot, à la fin de la localisation se trouve alors couché. Il faudrait alors comprendre d'où vient le problème ou, sinon, ne pas prendre en compte les orientations aberrantes. 
-	La détection des marqueurs de $16 \times 16$ cm s'effectue jusqu'à 2m 25 avec une précision de 2 cm et jusqu'à 45\degres d'angle à 5\degres près. Il serait intéressant, à l'avenir, d'approfondir les résultats obtenus avec d'autres tailles si l'erreur est trop aléatoire, ou alors, intégrer un filtre de Kalman pour fusionner les données odométriques et les observations.
+% La détection des marqueurs de $16 \times 16$ cm s'effectue jusqu'à 2m 25 avec une précision de 2 cm et jusqu'à 45\degres d'angle à 5\degres près. Il serait intéressant, à l'avenir, d'approfondir les résultats obtenus avec d'autres tailles si l'erreur est trop aléatoire, ou alors, intégrer un filtre de Kalman pour fusionner les données odométriques et les observations.
+
+DEGRES
 
 \end{description}
 
