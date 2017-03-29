@@ -346,8 +346,18 @@ Ce nœud permet de tout le temps broadcaster la transfom entre /map et /odom. Il
 
 \subsection{Commande}
 \label{sec:commande}
+\subsubsection*{Utilisation}
 
+Pour la version actuelle du projet, la commande est effectué par une brique ROS. La brique $move\_base$ réalise la commande afin de suivre la trajectoire générée par la brique trajectoire. Cette brique est lancé dans un fichier ROS de launch.\\
+\textit{roslaunch navigation.launch}\\
+La commande peut être configurée à l'aide du fichier XML : \textit{move\_base.launch.xml}. Ce fichier XML référence un ensemble de fichiers XML qui configure la commande. Une description exhaustive des paramètres de cette brique peut être trouvée à cette adresse :\\
+\textit{http://wiki.ros.org/move\_base}
 
+\subsubsection*{Fonctionnement}
+
+Pendant le début du projet une ébauche de commande a été réalisée. Celle-ci est simple, elle permet un déplacement en ligne droite et une rotation sur place. Cette commande est en boucle ouverte. Il peut \^etre intéréssant de continuer ce travail afin de prendre en compte une correction odométrique notamment lors d'un évitement d'obstacle lorsque le système reprend la main sur le $navigation\_stack$.\\
+Cette ébauche ce trouve dans le fichier $commande\_node.cpp$ \\
+Cette node, bien qu'inactive, est lancée dans le fichier ROS de launch $navigation.launch$
 \newpage
 \section{Conclusion}
 \label{sec:conclusion}
