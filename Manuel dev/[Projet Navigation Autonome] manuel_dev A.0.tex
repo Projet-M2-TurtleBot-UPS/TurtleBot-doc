@@ -236,13 +236,14 @@ Une fois le lancement effectué, l'utilisateur peut observé les comportement de
 
 
 \newpage
+\subsubsection*{Fonctionnement}
 Afin de détecter les amers dans la scène nous avons recours à la brique ROS : $ar\_track\_alvar$. Cette brique est une interface qui permet d'intégrer à un projet ROS la librairie Alvar. Alvar est une librairie open source pour la détection de marqueur AR.
 Cette brique utilise le nuage de points 3D associé à la couleur pour identifier un marqueur. L'information de profondeur permet à l'algorithme de mieux repérer les plans des marqueurs dans la scène. Elle retourne l'identifiant, la position et l'orientation du marqueur dans la position de la $/camera\_rgb\_optical\_frame$, dans notre cas. La librairie fournie 55 AR tags et la possibilité d'entendre cette liste facilement. Dans notre cas, nous utilisons uniquement le noeud qui permet de lire plusieurs marqueurs, un par un, dans un même flux vidéo. 
 
 \lstset{language=XML}
 \begin{description}
 \item [Mise en place physique] : \\
-Lors de notre projet nous avons utilisé des marqueurs de taille $16 \times 16$ cm. On place leur milieu à 31 cm du sol afin que l'axe caméra-marqueur soit parallèle au sol.
+Lors de notre projet nous avons utilisé des marqueurs de taille $16 \times 16$ cm. On place leur milieu à 31 cm du sol afin que l'axe caméra-marqueur soit le plus parallèle au sol possible.
 \item [Initialisation] : \\ Le nœud $ar\_track\_alvar$ s'initialise dans $localisation.launch$ avec les paramètres suivant : 
 \begin{lstlisting}
 <arg name="marker_size" default="16" />
@@ -273,7 +274,7 @@ DEGRES
 \begin{figure}
 \center
 \includegraphics[scale=0.6]{figures/artags.png} 
-\caption{texte de la légende}	
+\caption{Exemple de marqueurs AR. Les valeurs 3, 4 et 5 sont codés avec ces marqueurs.}	
 \end{figure}
 
 
