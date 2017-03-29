@@ -168,7 +168,7 @@ La tâche de navigation autonome se découpe en cinq briques : ++ de textes rés
 \item [Localisation] qui permet de savoir où se trouve le robot, en utilisant soit les données d'odométrie interne, soit les données d’observation (cf. NOUS
 \item [Trajectoire] qui permet de se déplacer en boucle fermée d'un point A à un point B (cf. NAV
 \item [Commande] "
-\item [Visibilité] TH
+\item [Visibilité] qui permet de générer une carte contenant les positions des amers et leurs orientations ; et de renvoyer à partir de cette carte le nombre d'amers visibles.
 \item [Supervision] qui gère le bon déroulement de la tâche, le déplacement du point de départ au point d'arrivée (cf. 
 \end{description}
 
@@ -361,6 +361,17 @@ Cette ébauche ce trouve dans le fichier $commande\_node.cpp$ \\
 Cette node est lancée dans le fichier ROS de launch $navigation.launch$
 
 %TODO explication machine a état
+
+\subsection{Visibilité}
+Le but de cette section est de créer une carte de visibilité, c'est à dire une carte contenant nos différents amers et de retourner le nombre d'amers visibles en fonction de la position du robot.\\
+L’intérêt de cette visibilité est d'avoir une carte de visibilité sous RVIZ pour suivre notre navigation d'amers en amers et de savoir si l'on se trouve dans un champ de visibilité pour lancer la détection et la localisation avec notre superviseur.\\
+C'est pourquoi, nous allons expliquer comment nous générons notre carte de visibilité à l'aide de $visib\_pgmwriter\_node.cpp$ et notre node retournant le nombre d'amers visibles : $visib\_pgmreader\_node.cpp$.\\
+
+\subsubsection{Génération de la carte de visibilité}
+Bientot
+
+\subsubsection{Node retournant le nombre d'amers visibles}
+Bientot
 
 \newpage
 \section{Conclusion}
