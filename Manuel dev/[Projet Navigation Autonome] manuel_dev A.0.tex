@@ -365,13 +365,56 @@ Cette node est lancée dans le fichier ROS de launch $navigation.launch$
 \subsection{Visibilité}
 Le but de cette section est de créer une carte de visibilité, c'est à dire une carte contenant nos différents amers et de retourner le nombre d'amers visibles en fonction de la position du robot.\\
 L’intérêt de cette visibilité est d'avoir une carte de visibilité sous RVIZ pour suivre notre navigation d'amers en amers et de savoir si l'on se trouve dans un champ de visibilité pour lancer la détection et la localisation avec notre superviseur.\\
-C'est pourquoi, nous allons expliquer comment nous générons notre carte de visibilité à l'aide de $visib\_pgmwriter\_node.cpp$ et notre node retournant le nombre d'amers visibles : $visib\_pgmreader\_node.cpp$.\\
+C'est pourquoi, nous allons expliquer comment nous générons notre carte de visibilité à l'aide de $visib\_pgmwriter\_node.cpp$ et notre node retournant le nombre d'amers visibles : $visib\_pgmreader\_node.cpp$.
 
 \subsubsection{Génération de la carte de visibilité}
-Bientot
+Tout d'abord pour générer notre carte de visibilité, il faut préalablement avoir une carte de l'environnement (créé virtuellement ou en utilisant la cartographie disponible sur le Turtlebot).\\
+
+\begin{figure}[!h]
+\center
+\includegraphics[scale=0.6]{figures/aip_map.png} 
+\caption{Cartographie de l'environnement avec le Turtlebot}	
+\end{figure}
+
+Le node $visib\_pgmwriter\_node.cpp$ ne doit pas être modifié, toutes les configurations se font directement dans le fichier $visib\_init.cpp$. En effet, le node lance la fonction $Ecriture\_carte\_visib()$ qui créé un fichier au format PGM l'ensemble des amers définit dans le $graph.xml$ se trouvant dans le dossier $/rsc$. Donc pour une taille de carte donnée et pour les configurations effectuées correctement dans $visib\_init.cpp$, il suffit de modifier la position et l'orientation de nos amers dans le $graph.xml$ pour que la nouvelle carte de visibilité soit généré automatiquement en lançant à nouveau notre node $visib\_pgmwriter\_node.cpp$.\\
+
+\begin{figure}[!h]
+\center
+\includegraphics{figures/visib.png} 
+\caption{Exemple d'une carte de visibilité}	
+\end{figure}
+
+Une fois notre carte générée, il faut pouvoir la visualiser sur Rviz et la superposée avec la carte de notre environnement pour qu'elle soit plus parlante. En lançant le $navigation.launch$ notre carte de visibilité est publiée sur le topic $\/markers\_visibility\_map$. Il suffit de l'ajouter directement sur Rviz en ajoutant une carte et en se plaçant sur ce topic si la configuration de rviz n'est pas enregistrée. Le résultat obtenu sur rviz est le suivant :
+
+\begin{figure}[!h]
+\center
+\includegraphics[scale=0.4]{figures/visib_rviz.png} 
+\caption{Superposition de nos cartes sur rviz}	
+\end{figure}
+
+Au niveau de la configuration de $visib\_init.cpp$ dans la fonction $Ecriture\_carte\_visib()$, il faut modifier $int largeur=512;	 int hauteur=640;$ pour que la carte est toujours les mêmes dimensions que la carte de notre environnement. $int nbr_amers=2;$ pour prendre en compte le nombre d'amers dans $graph.xml$ (mettre 2 si 2 amers dans le graphe). Ensuite dans la boucle for faisant la conversion de la position en m en pixels :
+
+$\\
+for(a=0;a<nbr\_amers;a++)\\
+	\{	\\
+		x[a]=(x1[a]+12.2)/0.05;\\
+		y[a]=-(y1[a]+13.8-32)/0.05;\\
+		alphamax[a]=pi/4;\\
+	\}\\$
+
+Avant tout, il faut savoir qu'on a 3 repères différents.\\ 
+- On a le repère du robot que l'on nomme R et possède la position en x et y du robot donc R (X,Y).\\
+- Le repère de la carte de l'environnement note R' qui a pour origine (-12.2 ; -13.8) (dans notre cas pour une carte 512x640) donc R' (X+12.2,Y+13.8).\\
+- Ensuite on a le repère de notre carte de visibilité noté Rp qui est positionné en haut a gauche de la carte (vecteur u dans le même sens que x et vecteur v opposé au vecteur y) c'est pourquoi on peut écrire Rp(X+12.2,-(Y+13.8-32)).\\
+
+Explicitons maintenant les différentes valeurs utilisées : 0.05 correspond à la résolution qui se trouve dans le fichier .yaml dans $/map$. Ici 12.2 et 13.8 correspond à l'origine de la carte pour que la superposition des cartes soit correctes. En effet, si on laisse 0;0 la carte se générera a la base du robot sur Rviz donc on aura un décalage lors de la superposition. C'est pourquoi dans le fichier $visib.yaml$, il faut aussi le configurer de cette maniere :\\
+$resolution: 0.050000\\
+origin: [-12.200000, -13.800000, 0.000000]\\$
+Enfin, la valeur 32 correspond à la conversion pixel/mètres de la hauteur de notre fenêtre soit :\\ $640*0.05=32$.
 
 \subsubsection{Node retournant le nombre d'amers visibles}
-Bientot
+Maintenant que nous possédons une carte de visibilité, on va l'utiliser pour renvoyer le nombre d'amers visibles à l'aide de la node $visib\_pgmreader\_node.cpp$. Cette node va aller lire le fichier PGM créé et renvoyer la valeur du pixel pour une position x, y sur cette carte. Si le pixel vaut 15 on est dans une zone blanche donc pas de marqueurs visibles. Pour un pixel de valeur 12, cela veut dire qu'on est dans le champ de visibilité d'un amer. Pour 9, 2 amers visibles et ainsi de suite. Dans notre cas on suppose qu'au maximum 4 amers sont visibles en même temps. Si l'on souhaite plus, il suffit d'augmenter la valeur maximal lors de l’écriture  de notre carte de visibilité. En effet, lors de la création de l’entête PGM, on définit la valeur maximale utilisée (dans notre cas 15).
+Au niveau de cette node, elle n'est plus fonctionnelle lors de notre intégration avec le système complet. Lors des tests avant intégration, la node suivante renvoyée bien le nombre d'amers visibles, cependant en l’intégrant notre fonction $pgm\_imread(char *argv)$ ne stocke plus correctement les valeurs des données. Donc cette node est disponible, cependant il faut la débugger pour qu'elle soit utilisée.
 
 \newpage
 \section{Conclusion}
