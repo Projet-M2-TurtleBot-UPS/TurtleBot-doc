@@ -19,7 +19,7 @@
 
 \pagestyle{scrheadings}
 
-\ihead[]{Équipe Navigation}
+\ihead[]{Navigation Team}
 \ohead[]{User Manual - Ball Search}
 
 
@@ -69,7 +69,7 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
 \end{minipage}\\[5cm]
 
 
-\large 10 January 2017s
+\large 10 January 2017
  
 
 \end{titlepage}
@@ -83,7 +83,7 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
     \begin{tabular}{| l | l | l | l | l |}
     \hline
      \rowcolor{gray} Name & Major Version & Minor Version & Creation Date & Last version \\ \hline
-    User Manual - Ball Search & A & 2 & 10/01/2017 & 12/01/2017 \\ \hline
+    User Manual - Ball Search & A & 3 & 10/01/2017 & 30/03/2017 \\ \hline
     \end{tabular}
 \end{center}
 
@@ -122,6 +122,7 @@ User Manual - Ball Search is distributed to all clients and external stakeholder
     A.0 & Document creation & Bruno Dato & 10/01/2017\\ \hline
     A.1 & Section \ref{sec:Prerequisites} and \ref{sec:Run Ball Search}  & Bruno Dato & 11/01/2017\\ \hline
     A.2 & Section \ref{sec:Run Ball Search}  & Bruno Dato & 12/01/2017\\ \hline
+    A.3 & Minor updates  & Bruno Dato & 30/03/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -225,7 +226,7 @@ If you are using the TurtleBot PC, open two terminals and chronologically execut
 Ounce you have place the robot in an environment with no obstacles and no red objects except the ball which should be at maximum distance of 1.80 m. On a third terminal, you can now launch the research of the ball executing the following command :
 
 \begin{itemize}
-\item[]  \begin{verbatim}> roslaunch turtlebot_navigation ballSearch.launch \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_proj_nav ballSearch.launch \end{verbatim}
 \end{itemize}
 
 \subsection{On a remote PC}
@@ -235,14 +236,14 @@ Ounce you have place the robot in an environment with no obstacles and no red ob
 To execute the ball search from a remote PC, fist you have to ssh to the TurtleBot PC to launch the minimal and vision features. Open a fist terminal and write the following commands :
 
 \begin{itemize}
-\item[]  \begin{verbatim}> ssh turtle@<TURTLEBOTP_IP> \end{verbatim}
+\item[]  \begin{verbatim}> ssh turtlebot@<TURTLEBOTP_IP> \end{verbatim}
 \item[]  \begin{verbatim}> roslaunch turtlebot_bringup minimal.launch \end{verbatim}
 \end{itemize}
 
 Then, in a second terminal :
 
 \begin{itemize}
-\item[]  \begin{verbatim}> ssh turtle@<TURTLEBOTP_IP> \end{verbatim}
+\item[]  \begin{verbatim}> ssh turtlebot@<TURTLEBOTP_IP> \end{verbatim}
 \item[]  \begin{verbatim}> roslaunch turtlebot_bringup 3dsensor.launch \end{verbatim}
 \end{itemize}
 
@@ -251,7 +252,7 @@ Then, in a second terminal :
 Like previously, ounce you have place the robot in an environment with no obstacles and no red objects except the ball which should be at maximum distance of 1.80 m. On a third terminal, you can now launch the research of the ball executing the following command without having to ssh the TurtleBot PC:
 
 \begin{itemize}
-\item[]  \begin{verbatim}> roslaunch turtlebot_navigation ballSearch.launch \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_proj_launch ballSearch.launch \end{verbatim}
 \end{itemize}
 
 \subsection{Behaviour of the search}
