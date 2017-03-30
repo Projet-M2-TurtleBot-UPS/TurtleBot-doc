@@ -20,7 +20,7 @@
 \pagestyle{scrheadings}
 
 \ihead[]{Navigation Team}
-\ohead[]{User Manual - Ball Search}
+\ohead[]{User Manual - Navigation Between Markers}
 
 
 
@@ -42,7 +42,7 @@
 Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm] 
 
 \HRule \\[0.4cm]
-{ \huge \bfseries User Manual - Ball Search}\\[0.4cm] 
+{ \huge \bfseries User Manual - Navigation Between Markers}\\[0.4cm] 
 \LARGE Mobile Robot Navigation
 
 \HRule \\[1.5cm]
@@ -69,7 +69,7 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
 \end{minipage}\\[5cm]
 
 
-\large 10 January 2017
+\large 30 March 2017
  
 
 \end{titlepage}
@@ -83,7 +83,8 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
     \begin{tabular}{| l | l | l | l | l |}
     \hline
      \rowcolor{gray} Name & Major Version & Minor Version & Creation Date & Last version \\ \hline
-    User Manual - Ball Search & A & 3 & 10/01/2017 & 30/03/2017 \\ \hline
+    User Manual - Navigation & A & 0 & 30/03/2017 & 30/03/2017 \\ 
+    Between Markers &  &  &  &  \\ \hline
     \end{tabular}
 \end{center}
 
@@ -111,7 +112,7 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
 
 \subsection*{Broadcast list}
 
-User Manual - Ball Search is distributed to all clients and external stakeholders.
+User Manual - Navigation Between Markers is distributed to all clients and external stakeholders.
 
 \subsection*{Review history}
 
@@ -119,10 +120,7 @@ User Manual - Ball Search is distributed to all clients and external stakeholder
     \begin{tabular}{| l | l | l | l |}
     \hline
      \rowcolor{gray} Version & Additions or modifications & Author & Date \\ \hline
-    A.0 & Document creation & Bruno Dato & 10/01/2017\\ \hline
-    A.1 & Section \ref{sec:Prerequisites} and \ref{sec:Run Ball Search}  & Bruno Dato & 11/01/2017\\ \hline
-    A.2 & Section \ref{sec:Run Ball Search}  & Bruno Dato & 12/01/2017\\ \hline
-    A.3 & Minor updates  & Bruno Dato & 30/03/2017\\ \hline
+    A.0 & Document creation & Bruno Dato & 30/01/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -139,7 +137,7 @@ User Manual - Ball Search is distributed to all clients and external stakeholder
 
 \begin{itemize}
 \item[•] TurtleBot 2
-\item[•] Red balls\footnote{The color can be changed in the code in ballSearch\_node.cpp line 53} (diameter $\sim$ 10.5 cm)
+\item[•] AR markers ... (à compléter)
 \end{itemize}
 
 \subsection{Software}
@@ -202,11 +200,15 @@ Now that you have downloaded the source code, you just need to compile to build 
 \item[]  \begin{verbatim}> catkin_make \end{verbatim}
 \end{itemize}
 
-Three red lines must appear in the compilation description, meaning that the three executables we need have been created.
+Several red lines must appear in the compilation description, meaning that the executables we need have been created.
+
+\subsection{Map configuration}
+
+\subsection{Markers configuration}
 
 \newpage
-\section{Run Ball Search}
-\label{sec:Run Ball Search}
+\section{Navigation Between Markers}
+\label{sec:Navigation Between Markers}
 
 First, you need to turn on the TurtleBot (there is a switch button on the side of the robot base). Then, turn on the TurtleBot PC. We will now launch all the ROS nodes that we need to run our application.
 
@@ -221,12 +223,12 @@ If you are using the TurtleBot PC, open two terminals and chronologically execut
 \item[]  \begin{verbatim}> roslaunch turtlebot_bringup 3dsensor.launch \end{verbatim}
 \end{itemize}
 
-\subsubsection{Ball search}
+\subsubsection{Navigation}
 
-Ounce you have place the robot in an environment with no obstacles and no red objects except the ball which should be at maximum distance of 1.80 m. On a third terminal, you can now launch the research of the ball executing the following command :
+(à compléter)
 
 \begin{itemize}
-\item[]  \begin{verbatim}> roslaunch turtlebot_proj_nav ballSearch.launch \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_proj_nav navigation.launch \end{verbatim}
 \end{itemize}
 
 \subsection{On a remote PC}
@@ -247,17 +249,17 @@ Then, in a second terminal :
 \item[]  \begin{verbatim}> roslaunch turtlebot_bringup 3dsensor.launch \end{verbatim}
 \end{itemize}
 
-\subsubsection{Ball search}
+\subsubsection{Navigation}
 
-Like previously, ounce you have place the robot in an environment with no obstacles and no red objects except the ball which should be at maximum distance of 1.80 m. On a third terminal, you can now launch the research of the ball executing the following command without having to ssh the TurtleBot PC:
+(à compléter)
 
 \begin{itemize}
-\item[]  \begin{verbatim}> roslaunch turtlebot_proj_launch ballSearch.launch \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_proj_launch navigation.launch \end{verbatim}
 \end{itemize}
 
-\subsection{Behaviour of the search}
+\subsection{Behaviour of the navigation}
 
-Ounce ballSearch is launched, you can see on your screen the video stream of the RGB TurtleBot's camera and the treatment on that stream that allows to detect the ball. If there is no ball in front of the robot, it will scan the environment to find one. If it hasn't find anything after the scan, it will abandon the search. If it finds a ball, it will get closer to to ball by first sniping to focus on the ball if it has to, and them moving towards the ball. Ounce a ball is found, the robot is done.
+(à compléter)
 
 \end{document}
 
