@@ -186,10 +186,6 @@ L'architecture globale de notre produit est décrite par le schéma suivant :
 \end{figure}
 
 
-
-\subsection{Commande haut niveau}
-\label{sec:commande_haut_niveau}
-
 \subsection{Détection et localisation}
 \label{sec:detection_et_localisation}
 
@@ -349,7 +345,7 @@ Ce nœud permet de tout le temps broadcaster la transfom entre /map et /odom. Il
 \subsubsection*{Utilisation}
 
 Pour la version actuelle du projet, la plupart de la commande est effectué par une brique ROS. La brique $move\_base$ réalise la commande afin de suivre la trajectoire générée par la brique trajectoire. Cette brique est lancé dans un fichier ROS de launch.\\
-\textit{roslaunch navigation.launch}\\
+\textit{roslaunch turtlebot$\_$proj$\_$nav navigation.launch}\\
 La commande peut être configurée à l'aide du fichier XML : \textit{move\_base.launch.xml}. Ce fichier XML référence un ensemble de fichiers XML qui configure la commande. Une description exhaustive des paramètres de cette brique peut être trouvée à cette adresse :\\
 \textit{http://wiki.ros.org/move\_base}\\
 Lors de la recherche d'un marqueur, nous reprenons la main et c'est la node $commande\_node$ qui prend le relais. Celle-ci est également lancée dans $navigation.launch$.
@@ -361,6 +357,12 @@ Cette ébauche ce trouve dans le fichier $commande\_node.cpp$ \\
 Cette node est lancée dans le fichier ROS de launch $navigation.launch$
 
 %TODO explication machine a état
+
+\begin{figure}[!h]
+\centering\includegraphics[scale=0.4]{figures/commande_MEF.png}
+\caption{Schéma de la machine à états de la commande utilisée pour la recherche d'une balle et pour la recherche d'un amer}
+\label{commande_MEF}
+\end{figure}
 
 \subsection{Visibilité}
 Le but de cette section est de créer une carte de visibilité, c'est à dire une carte contenant nos différents amers et de retourner le nombre d'amers visibles en fonction de la position du robot.\\
@@ -400,7 +402,8 @@ for(a=0;a<nbr\_amers;a++)\\
 		x[a]=(x1[a]+12.2)/0.05;\\
 		y[a]=-(y1[a]+13.8-32)/0.05;\\
 		alphamax[a]=pi/4;\\
-	\}\\$
+	\}\\
+	$
 
 Avant tout, il faut savoir qu'on a 3 repères différents.\\ 
 - On a le repère du robot que l'on nomme R et possède la position en x et y du robot donc R (X,Y).\\
@@ -409,12 +412,22 @@ Avant tout, il faut savoir qu'on a 3 repères différents.\\
 
 Explicitons maintenant les différentes valeurs utilisées : 0.05 correspond à la résolution qui se trouve dans le fichier .yaml dans $/map$. Ici 12.2 et 13.8 correspond à l'origine de la carte pour que la superposition des cartes soit correctes. En effet, si on laisse 0;0 la carte se générera a la base du robot sur Rviz donc on aura un décalage lors de la superposition. C'est pourquoi dans le fichier $visib.yaml$, il faut aussi le configurer de cette maniere :\\
 $resolution: 0.050000\\
-origin: [-12.200000, -13.800000, 0.000000]\\$
+origin: [-12.200000, -13.800000, 0.000000]\\
+$
 Enfin, la valeur 32 correspond à la conversion pixel/mètres de la hauteur de notre fenêtre soit :\\ $640*0.05=32$.
 
 \subsubsection{Node retournant le nombre d'amers visibles}
 Maintenant que nous possédons une carte de visibilité, on va l'utiliser pour renvoyer le nombre d'amers visibles à l'aide de la node $visib\_pgmreader\_node.cpp$. Cette node va aller lire le fichier PGM créé et renvoyer la valeur du pixel pour une position x, y sur cette carte. Si le pixel vaut 15 on est dans une zone blanche donc pas de marqueurs visibles. Pour un pixel de valeur 12, cela veut dire qu'on est dans le champ de visibilité d'un amer. Pour 9, 2 amers visibles et ainsi de suite. Dans notre cas on suppose qu'au maximum 4 amers sont visibles en même temps. Si l'on souhaite plus, il suffit d'augmenter la valeur maximal lors de l’écriture  de notre carte de visibilité. En effet, lors de la création de l’entête PGM, on définit la valeur maximale utilisée (dans notre cas 15).
 Au niveau de cette node, elle n'est plus fonctionnelle lors de notre intégration avec le système complet. Lors des tests avant intégration, la node suivante renvoyée bien le nombre d'amers visibles, cependant en l’intégrant notre fonction $pgm\_imread(char *argv)$ ne stocke plus correctement les valeurs des données. Donc cette node est disponible, cependant il faut la débugger pour qu'elle soit utilisée.
+
+\subsection{Superviseur}
+\label{sec:Superviseur}
+
+\begin{figure}[!h]
+\centering\includegraphics[scale=0.5]{figures/HLC_MEF.pdf}
+\caption{Schéma de la machine à états du superviseur de la navigation entre amers}
+\label{HLC_MEF}
+\end{figure}
 
 \newpage
 \section{Conclusion}
