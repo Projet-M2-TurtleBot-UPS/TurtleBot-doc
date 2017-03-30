@@ -82,8 +82,8 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
 \begin{center}
     \begin{tabular}{| l | l | l | l | l |}
     \hline
-     \rowcolor{gray} Nom du document & Version Majeure & Version Majeure & Date de création & Dernière version \\ \hline
-    Rapport & A & 0 & 13/03/2017 & 13/03/2017 \\ \hline
+     \rowcolor{gray} Nom du document & Version Majeure & Version Mineure & Date de création & Dernière version \\ \hline
+    Manuel développeur & A & 4 & 13/03/2017 & 30/03/2017 \\ \hline
     \end{tabular}
 \end{center}
 
@@ -121,6 +121,10 @@ Le rapport du projet est diffusé à l'ensemble des clients et des intervenants 
     \hline
      \rowcolor{gray} Version & Modification apportée & Auteur & Date \\ \hline
     A.0 & Création du document & Bruno Dato & 13/03/2017\\ \hline
+    A.1 & Sections \ref{sec:detection_et_localisation} et \ref{sec:introduction} & Marine Bouchet & ??/03/2017\\ \hline
+    A.2 & Section \ref{sec:detection_et_localisation} & Tristan Klempka & ??/03/2017\\ \hline
+    A.3 & Section \ref{sec:Visibilite} & Thibaut Aghnatios & 30/03/2017\\ \hline
+    A.4 & Sections \ref{sec:commande} et \ref{sec:Superviseur} & Bruno Dato & 30/03/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -201,10 +205,10 @@ Nous détaillons ici les étapes nécessaires afin d'utiliser le noeud de détec
 Le fichier ROS de launch permet de lancer le noeud.\\
 \textit{roslaunch localisation.launch}\\
 
-Ce fichier configure et lance la détection d'amer de type AR code à l'aide d'une bibliothèque spécialisée couplée à un noeud ROS. 
+Ce fichier configure et lance la détection d'amer de type AR code à l'aide d'une bibliothèque spécialisée couplée à un nœud ROS. 
 Plusieurs paramètres dans ce fichier peuvent être configurés.
 \begin{itemize}
-\item $marker\_size$ : Largueur (cm) des marqueurs AR utilisés
+\item $marker\_size$ : Largeur (cm) des marqueurs AR utilisés
 \item $cam\_image\_topic$ : Topic ROS du flux d'images de la caméra.
 \item $cam\_info\_topic$ : Topic ROS des infos propres à la caméra. C'est ici que les données de calibrage sont récupérées.
 \item $output\_frame$ : Repère dans lequel sera exprimé le résultat de la détection.\\
@@ -365,6 +369,8 @@ Cette node est lancée dans le fichier ROS de launch $navigation.launch$
 \end{figure}
 
 \subsection{Visibilité}
+\label{sec:Visibilite}
+
 Le but de cette section est de créer une carte de visibilité, c'est à dire une carte contenant nos différents amers et de retourner le nombre d'amers visibles en fonction de la position du robot.\\
 L’intérêt de cette visibilité est d'avoir une carte de visibilité sous RVIZ pour suivre notre navigation d'amers en amers et de savoir si l'on se trouve dans un champ de visibilité pour lancer la détection et la localisation avec notre superviseur.\\
 C'est pourquoi, nous allons expliquer comment nous générons notre carte de visibilité à l'aide de $visib\_pgmwriter\_node.cpp$ et notre node retournant le nombre d'amers visibles : $visib\_pgmreader\_node.cpp$.
@@ -418,16 +424,36 @@ Enfin, la valeur 32 correspond à la conversion pixel/mètres de la hauteur de n
 
 \subsubsection{Node retournant le nombre d'amers visibles}
 Maintenant que nous possédons une carte de visibilité, on va l'utiliser pour renvoyer le nombre d'amers visibles à l'aide de la node $visib\_pgmreader\_node.cpp$. Cette node va aller lire le fichier PGM créé et renvoyer la valeur du pixel pour une position x, y sur cette carte. Si le pixel vaut 15 on est dans une zone blanche donc pas de marqueurs visibles. Pour un pixel de valeur 12, cela veut dire qu'on est dans le champ de visibilité d'un amer. Pour 9, 2 amers visibles et ainsi de suite. Dans notre cas on suppose qu'au maximum 4 amers sont visibles en même temps. Si l'on souhaite plus, il suffit d'augmenter la valeur maximal lors de l’écriture  de notre carte de visibilité. En effet, lors de la création de l’entête PGM, on définit la valeur maximale utilisée (dans notre cas 15).
-Au niveau de cette node, elle n'est plus fonctionnelle lors de notre intégration avec le système complet. Lors des tests avant intégration, la node suivante renvoyée bien le nombre d'amers visibles, cependant en l’intégrant notre fonction $pgm\_imread(char *argv)$ ne stocke plus correctement les valeurs des données. Donc cette node est disponible, cependant il faut la débugger pour qu'elle soit utilisée.
+Au niveau de cette node, elle n'est plus fonctionnelle lors de notre intégration avec le système complet. Lors des tests avant intégration, la node suivante renvoyée bien le nombre d'amers visibles, cependant en l'intégrant notre fonction $pgm\_imread(char *argv)$ ne stocke plus correctement les valeurs des données. Donc cette node est disponible, cependant il faut la débugger pour qu'elle soit utilisée.
 
 \subsection{Superviseur}
 \label{sec:Superviseur}
+
+\subsubsection{Comportement de la navigation}
+
+Le but du superviseur est de guider le robot pour qu'il atteigne un but de coordonnées $(x,y)$ dans la carte. Afin de gérer le comportement de la navigation à l'aide des amers pour atteindre ce but précis, nous avons mis en place un nœud ROS de supervision : $hightLevelCommand\_node$. Ce nœud permet d'utiliser des commande de haut niveau telles que chercher un amer ou bien se déplacer vers un but.\\
+
+On suppose alors qu'initialement, le robot est dans une position connue a priori et dans une des zones de visibilité. Si sa position est assez proche du but final suivant un seuil que l'on définira par la suite, on commande alors au robot de se déplacer directement vers le but. Si la position initiale est trop éloignée, on se déplace d'amer en amer pour atteindre l'amer qui est le plus proche du but final et enfin se déplacer vers le but final. Tous les amers et les distances entre ces derniers sont représentés par un graphe, ainsi on utilise l'algorithme de plus court chemin de Dijkstra pour déterminer vers quel amer se déplacer lorsque l'on en a détecté un.\\
+
+Le comportement détaillé du superviseur est décrit par la machine à états figure \ref{HLC_MEF}.
 
 \begin{figure}[!h]
 \centering\includegraphics[scale=0.5]{figures/HLC_MEF.pdf}
 \caption{Schéma de la machine à états du superviseur de la navigation entre amers}
 \label{HLC_MEF}
 \end{figure}
+
+\subsubsection{Commandes de haut niveau}
+
+(détail des commandes principales)
+
+\subsubsection{Graphe des amers}
+
+(construction du graphe et explications)
+
+\subsubsection{Lancement du superviseur}
+
+(explication des différents paramètres)
 
 \newpage
 \section{Conclusion}
