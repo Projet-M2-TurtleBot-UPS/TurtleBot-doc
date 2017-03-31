@@ -83,7 +83,7 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
     \begin{tabular}{| l | l | l | l | l |}
     \hline
      \rowcolor{gray} Nom du document & Version Majeure & Version Mineure & Date de création & Dernière version \\ \hline
-    Manuel développeur & A & 4 & 13/03/2017 & 30/03/2017 \\ \hline
+    Manuel développeur & A & 5 & 13/03/2017 & 31/03/2017 \\ \hline
     \end{tabular}
 \end{center}
 
@@ -125,6 +125,7 @@ Le rapport du projet est diffusé à l'ensemble des clients et des intervenants 
     A.2 & Section \ref{sec:detection_et_localisation} & Tristan Klempka & ??/03/2017\\ \hline
     A.3 & Section \ref{sec:Visibilite} & Thibaut Aghnatios & 30/03/2017\\ \hline
     A.4 & Sections \ref{sec:commande} et \ref{sec:Superviseur} & Bruno Dato & 30/03/2017\\ \hline
+    A.5 & Section \ref{sec:Superviseur} & Bruno Dato & 31/03/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -426,6 +427,7 @@ Enfin, la valeur 32 correspond à la conversion pixel/mètres de la hauteur de n
 Maintenant que nous possédons une carte de visibilité, on va l'utiliser pour renvoyer le nombre d'amers visibles à l'aide de la node $visib\_pgmreader\_node.cpp$. Cette node va aller lire le fichier PGM créé et renvoyer la valeur du pixel pour une position x, y sur cette carte. Si le pixel vaut 15 on est dans une zone blanche donc pas de marqueurs visibles. Pour un pixel de valeur 12, cela veut dire qu'on est dans le champ de visibilité d'un amer. Pour 9, 2 amers visibles et ainsi de suite. Dans notre cas on suppose qu'au maximum 4 amers sont visibles en même temps. Si l'on souhaite plus, il suffit d'augmenter la valeur maximal lors de l’écriture  de notre carte de visibilité. En effet, lors de la création de l’entête PGM, on définit la valeur maximale utilisée (dans notre cas 15).
 Au niveau de cette node, elle n'est plus fonctionnelle lors de notre intégration avec le système complet. Lors des tests avant intégration, la node suivante renvoyée bien le nombre d'amers visibles, cependant en l'intégrant notre fonction $pgm\_imread(char *argv)$ ne stocke plus correctement les valeurs des données. Donc cette node est disponible, cependant il faut la débugger pour qu'elle soit utilisée.
 
+\newpage
 \subsection{Superviseur}
 \label{sec:Superviseur}
 
@@ -433,7 +435,7 @@ Au niveau de cette node, elle n'est plus fonctionnelle lors de notre intégratio
 
 Le but du superviseur est de guider le robot pour qu'il atteigne un but de coordonnées $(x,y)$ dans la carte. Afin de gérer le comportement de la navigation à l'aide des amers pour atteindre ce but précis, nous avons mis en place un nœud ROS de supervision : $hightLevelCommand\_node$. Ce nœud permet d'utiliser des commande de haut niveau telles que chercher un amer ou bien se déplacer vers un but.\\
 
-On suppose alors qu'initialement, le robot est dans une position connue a priori et dans une des zones de visibilité. Si sa position est assez proche du but final suivant un seuil que l'on définira par la suite, on commande alors au robot de se déplacer directement vers le but. Si la position initiale est trop éloignée, on se déplace d'amer en amer pour atteindre l'amer qui est le plus proche du but final et enfin se déplacer vers le but final. Tous les amers et les distances entre ces derniers sont représentés par un graphe, ainsi on utilise l'algorithme de plus court chemin de Dijkstra pour déterminer vers quel amer se déplacer lorsque l'on en a détecté un.\\
+On suppose alors qu'initialement, le robot est dans une position connue a priori ou dans une des zones de visibilité. Si sa position est assez proche du but final suivant un seuil que l'on définira par la suite, on commande alors au robot de se déplacer directement vers le but. Si la position initiale est trop éloignée, on se déplace d'amer en amer pour atteindre l'amer qui est le plus proche du but final et enfin se déplacer vers le but final. Tous les amers et les distances entre ces derniers sont représentés par un graphe, ainsi on utilise l'algorithme de plus court chemin de Dijkstra pour déterminer vers quel amer se déplacer lorsque l'on en a détecté un.\\
 
 Le comportement détaillé du superviseur est décrit par la machine à états figure \ref{HLC_MEF}.
 
@@ -443,17 +445,81 @@ Le comportement détaillé du superviseur est décrit par la machine à états f
 \label{HLC_MEF}
 \end{figure}
 
-\subsubsection{Commandes de haut niveau}
+Lors de la navigation, quatre signaux sonores permettent de connaitre l'état de la navigation. Ils ont lieu lorsqu'un marqueur est détecté, lorsque le robot a atteint un but intermédiaire ou final et lorsque le robot décroche de sont suivi de trajectoire. Si le robot atteint sont but final avec une précision inférieure à celle demandée au lancement du superviseur, un son supplémentaire est joué.\\
 
-(détail des commandes principales)
+La recherche d'une zone de visibilité n'a pas encore été implémentée. Dans le cas où l'on connait la position initiale du robot dans la carte, il faudrait alors lui commander de se déplacer vers la zone de visibilité la plus proche et alors entamer la recherche de marqueur comme dans le scénario habituel. Dans le cas où cette position est inconnue, il faudrait tout d'abord mettre en place une détection d'obstacles pour pouvoir évoluer dans un environnement inconnu jusqu'à trouver un marqueur.
 
 \subsubsection{Graphe des amers}
+\label{sec:grapheDesAmers}
 
-(construction du graphe et explications)
+Pour choisir vers quel amer (AR marqueur) se déplacer lorsque l'on en a détecté un et que l'on se trouve encore trop loin du but final pour de diriger directement vers celui-ci, on utilise un graphe représentant tous les marqueurs (figure \ref{graphe}) défini dans un fichier de format XML (figure \ref{graphe_xml}). Chaque nœud du graphe possèdes différentes propriétés : 
+
+\begin{itemize}
+\item[•] Id : numéro correspondant au marqueur AR,
+\item[•] Label : nom du nœud, chaque nœud correspond à un marqueur AR,
+\item[•] PositionX : coordonnée selon l'axe x de la carte connue de l'environnement,
+\item[•] PositionY : coordonnée selon l'axe y de la carte,
+\item[•] Orientation : angle entre la normale du marqueur AR et l'axe x de la carte (entre 0 et 2$\pi$).
+\end{itemize}
+
+Les numéros permettent de se situer dans le graphe lorsque l'on détecte un marqueur et ainsi trouver le marqueur suivant à atteindre pour continuer la navigation. Les coordonnées $(X,Y)$ des marqueurs permet de connaitre les positions à atteindre dans la carte. L'orientation permet de commander au robot de se déplacer en face et à une certaine distance du marqueur pour ne pas foncer dans un mur.
+
+\begin{figure}[!h]
+\centering\includegraphics[scale=0.4]{figures/graphe.png}
+\caption{Exemple de graphe d'amers (marqueurs AR)}
+\label{graphe}
+\end{figure}
+
+\begin{figure}[!h]
+\centering\includegraphics[scale=0.7]{figures/graphe_xml.png}
+\caption{Exemple de définition d'un graphe d'amers (marqueurs AR) en format XML}
+\label{graphe_xml}
+\end{figure}
+
+\newpage
+\subsubsection{Commandes de haut niveau}
+\label{sec:commandesDeHautNiveau}
+
+Pour mener à bien la navigation, le superviseur utilise la classe $HighLevelCommand$ qui fournie les commandes de haut niveau suivantes :
+
+\begin{itemize}
+\item[•] \textbf{init(threshold)} : L'initialisation permet de définir suivant le seuil (\textbf{threshold}) choisi en paramètre si le robot est trop éloigné ou non du but final pour se servir des marqueurs AR durant la navigation. Si le robot est trop proche, la fonction \textbf{init} renvoie $-1$, le superviseur commandera alors au robot de se déplacer directement vers le but final à l'aide de la fonction \textbf{sendFinalGoal()}. Dans le cas contraire, la fonction cherche le marqueur le plus proche du but final pour naviguer jusqu'à celui-ci avant d'envoyer la dernière commande vers le but final.
+\item[•] \textbf{seekMarker()} : Cette fonction permet de commander le comportement de la recherche d'un amer lorsque l'on se trouve dans une zone de visibilité. Tant que cette méthode est appelée et qu'aucun marqueur n'a été détecté, le robot tourne successivement sur lui même des angles $\pi/4$, $-\pi/2$, $3\pi/4$, $-\pi$, $5\pi/4$, $-3\pi/2$ ou $7\pi/4$. Si aucun marqueur n'a été détecté après toutes les rotations, la recherche recommence.
+\item[•] \textbf{sendMarkerGoal(distanceToMarker)} : Cette méthode permet de commander au robot de se déplacer en face du marqueur suivant à atteindre pour suivre le plus court chemin vers le but final. La distance à respecter par rapport au marqueur est définie par le paramètre \textbf{distanceToMarker}. 
+\item[•] \textbf{sendFinalGoal()} : Cette fonction commande directement le robot vers le but final choisi à l'instanciation de la classe $HighLevelCommand$.
+\item[•] \textbf{askForMarker()} :  Cette méthode permet de lancer une rechercher visuelle de marqueur effectuée par le nœud de localisation.
+\item[•] \textbf{finalGoal(threshold)} : Permet de jouer une signal sonore spécial lorsque la précision de la position finale du robot par rapport au but fixé est inférieure à un certain seuil défini à l'aide du paramètre \textbf{threshold}.
+\end{itemize}
+
+\newpage
+\subsubsection{Structure logicielle}
+\label{sec:StructureLogicielle}
+
+Afin de communiquer avec les différents nœuds, le nœud de supervision $hightLevelCommand\_node$ est client d'un service, il publie sur quatre topics et il est abonné à quatre autres topics.
+
+
+\begin{figure}[!h]
+\centering\includegraphics[scale=0.6]{figures/HLC_ROS_struc.pdf}
+\caption{Schéma de la structure logicielle du nœud de supervision et de ses interactions }
+\label{HLC_ROS_struc}
+\end{figure}
 
 \subsubsection{Lancement du superviseur}
+\label{sec:LancementDuSuperviseur}
 
-(explication des différents paramètres)
+Une fois la configuration minimale et les nœuds de navigation lancés, on lance le superviseur dans un terminal à l'aide de la commande suivante :\\
+
+\textbf{rosrun turtlebot$\_$proj$\_$nav highLevelCommand$\_$node X$\_$GOAL Y$\_$GOAL XY$\_$THRESHOLD XY$\_$PRECISION DISTANCE$\_$TO$\_$MARKERS}\\
+
+On choisit alors au lancement du superviseur les paramètres suivants :
+
+\begin{itemize}
+\item[•] \textbf{X$\_$GOAL} et \textbf{Y$\_$GOAL} : les coordonnées (X,Y) du but final à atteindre dans la carte,
+\item[•] \textbf{XY$\_$THRESHOLD} : le seuil à partir duquel les amers ne sont pas utilisés pour la navigation,
+\item[•] \textbf{XY$\_$PRECISION} : la contrainte de précision demandée pour que le signal sonore final soit joué ou non,
+\item[•] \textbf{DISTANCE$\_$TO$\_$MARKERS} : la distance par rapport aux marqueurs que le robot doit respecter lorsqu'il se déplace d'amer en amer.
+\end{itemize}
+
 
 \newpage
 \section{Conclusion}
