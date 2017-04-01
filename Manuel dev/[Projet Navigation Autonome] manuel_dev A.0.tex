@@ -83,7 +83,7 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
     \begin{tabular}{| l | l | l | l | l |}
     \hline
      \rowcolor{gray} Nom du document & Version Majeure & Version Mineure & Date de création & Dernière version \\ \hline
-    Manuel développeur & A & 5 & 13/03/2017 & 31/03/2017 \\ \hline
+    Manuel développeur & A & 6 & 13/03/2017 & 1/04/2017 \\ \hline
     \end{tabular}
 \end{center}
 
@@ -121,11 +121,12 @@ Le rapport du projet est diffusé à l'ensemble des clients et des intervenants 
     \hline
      \rowcolor{gray} Version & Modification apportée & Auteur & Date \\ \hline
     A.0 & Création du document & Bruno Dato & 13/03/2017\\ \hline
-    A.1 & Sections \ref{sec:detection_et_localisation} et \ref{sec:introduction} & Marine Bouchet & ??/03/2017\\ \hline
-    A.2 & Section \ref{sec:detection_et_localisation} & Tristan Klempka & ??/03/2017\\ \hline
+    A.1 & Sections \ref{sec:solution_mise_en_place}, \ref{sec:detection_et_localisation} et \ref{sec:introduction} & Marine Bouchet & 27/03/2017\\ \hline
+    A.2 & Section \ref{sec:detection_et_localisation} & Tristan Klempka & 28/03/2017\\ \hline
     A.3 & Section \ref{sec:Visibilite} & Thibaut Aghnatios & 30/03/2017\\ \hline
     A.4 & Sections \ref{sec:commande} et \ref{sec:Superviseur} & Bruno Dato & 30/03/2017\\ \hline
     A.5 & Section \ref{sec:Superviseur} & Bruno Dato & 31/03/2017\\ \hline
+    A.6 & Section \ref{sec:introduction} & Bruno Dato & 1/04/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -137,32 +138,37 @@ Le rapport du projet est diffusé à l'ensemble des clients et des intervenants 
 \section{Introduction}
 \label{sec:introduction}
 
-Ce manuel donne les informations nécessaires à l'utilisation et à l'évolution du projet "Navigation autonome d'un robot mobile" du Master 2 IARF et RODECO. Celui-ci permet, à ce jour, d'effectuer une navigation autonome  d'un Turtlebot dans un environnement connu, contenant des amers dont leur position et leur orientation sont connus. Ces indices visuels, récupérer par la kinect, capteur RGB-D, permettent de supprimer les erreurs systématiques de la localisation des capteurs proprioceptifs embarqués -- de l'odométrie. 
+Ce manuel donne les informations nécessaires à l'utilisation et à l'évolution du projet "Navigation autonome d'un robot mobile" du Master 2 IARF et RODECO. Celui-ci permet, à ce jour, d'effectuer une navigation autonome  d'un Turtlebot dans un environnement connu, contenant des amers dont leur position et leur orientation sont connus. Ces indices visuels, visualisés par la kinect, capteur RGB-D, permettent de supprimer les erreurs systématiques de la localisation des capteurs proprioceptifs embarqués -- de l'odométrie. 
 
 La navigation s'effectue entre la position initiale, dont la position est connue ou dans la zone de visibilité d'un amer, et une position finale : 
 
+\begin{center}
 \begin{tabular}{c|c|c}
 Scénario & A & B \\ \hline
-Départ & Position absolue & Position inconnue mais dans une zone de visibilité d'un marqueur \\  \hline
-Arrivée & Position & Position 
-\end{tabular} \\
+Départ & Position initiale absolue & Position initiale inconnue mais dans une \\ 
+  &  & zone de visibilité d'un marqueur \\  \hline
+Arrivée & Position finale & Position finale 
+\end{tabular}\\
+\end{center}
 
 DESCR + deco\\
 \begin{tabular}{cl}
 B & Si pas de position en entrée  \\
   & Le robot effectue une recherche de marqueur dans son champs visuel \\
   & Tant que pas de marqueur en vue \\
-  & Le robot tourne de ? \\
-  & Il effectue un autre recherche de marqueur dans son champs visuel \\
+  & Le robot tourne sur lui même \\
+  & Il effectue une autre recherche de marqueur dans son champs visuel \\
 & \\
 A & Tant que le but est plus loin que le prochain marqueur dans sa direction \\
-  & Le robot se déplace jusqu’à la zone de visibilité du marqueur le plus proche dans la direction du but  \\
+  & Le robot se déplace jusqu'à la zone de visibilité du marqueur le plus proche dans la direction du but  \\
   & Le robot effectue une recherche de marqueur dans son champs visuel \\
   & Tant que pas de marqueur en vue  \\
-  & Le robot tourne de ?  \\
+  & Le robot tourne de sur lui même  \\
   & Il effectue un autre recherche de marqueur dans son champs visuel \\
-  & Le robot se déplace jusqu’au but  \\
+  & Le robot se déplace jusqu'au but  \\
 \end{tabular}
+
+Étant donné que la connaissance sur la visibilité d'un marqueur n'es pas encore opérationnelle, on considèrera que le robot se trouve toujours dans une zone visibilité. On placera alors le robot dans une zone de visibilité à chaque début de navigation en veillant aussi à donner une position initiale correcte.
 
 \section{Navigation avec amers 2D dans un environnement connu}
 \label{sec:navigation_avec_amers_2D_dans_un_environnement_connu}
