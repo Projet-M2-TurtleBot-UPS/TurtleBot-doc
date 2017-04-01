@@ -197,86 +197,34 @@ L'architecture globale de notre produit est décrite par le schéma suivant :
 \end{figure}
 
 
-\subsection{Détection et localisation}
-\label{sec:detection_et_localisation}
 
 
-
-
-\subsubsection{Détection}
+\subsection{Détection}
 \label{sec:detection}
 
-\subsubsection*{Utilisation}
-
-Nous détaillons ici les étapes nécessaires afin d'utiliser le noeud de détection. Ce noeud est lancé indépendamment des autres noeuds du système. 
-Le fichier ROS de launch permet de lancer le noeud.\\
-\textit{roslaunch localisation.launch}\\
-
-Ce fichier configure et lance la détection d'amer de type AR code à l'aide d'une bibliothèque spécialisée couplée à un nœud ROS. 
-Plusieurs paramètres dans ce fichier peuvent être configurés.
-\begin{itemize}
-\item $marker\_size$ : Largeur (cm) des marqueurs AR utilisés
-\item $cam\_image\_topic$ : Topic ROS du flux d'images de la caméra.
-\item $cam\_info\_topic$ : Topic ROS des infos propres à la caméra. C'est ici que les données de calibrage sont récupérées.
-\item $output\_frame$ : Repère dans lequel sera exprimé le résultat de la détection.\\
-\end{itemize}
-Des paramètres supplémentaires se trouvent dans le fichier $localication\_node.cpp$. Le changement de ces paramètre nécessite une compilation du noeud ROS.
-\begin{itemize}
-\item $DEBUG$ : Active ou non les sorties de debug. Si cette option est activée, les transformations intermediaires sont publiées.
-\item $TIMEOUT\_AR\_DETEC$ : Temps d'attente maximum pour la reception d'un marqueur. Ce paramètre est utile lors de l'utilisation en réseau. La latence provoque des retards dans la publication des transformées. Il est donc nécessaire de donner une marge de temps au système. Lors de l'utilisation en mode local cette valeur peut \^etre faible.
-\item $NB\_MARKER$ : Nombre de marqueurs total dans la scène.\\
-\end{itemize}
-
-Une fois le lancement effectué, l'utilisateur peut observé les comportement de ce noeud avec des sorties console.
-\begin{itemize}
-\item $GLOBAL\_SEARCH$ : La recherche de marqueur a été demandée.
-\item $ MARKER DETECTED: ID\_MARKER\_DETECTED$ : Identifiant du marqueur détecté.
-\item $LOOKING FOR TF: tf$ :Nom de la transformée attendue.\\
-\end{itemize}
-
-\textit{Remarque} : Les performances de la détection des marqueurs reposent sur une bonne calibration de la caméra.
-
-
-
-
-
-
-
-\newpage
 \subsubsection*{Fonctionnement}
-Afin de détecter les amers dans la scène nous avons recours à la brique ROS : $ar\_track\_alvar$. Cette brique est une interface qui permet d'intégrer à un projet ROS la librairie Alvar. Alvar est une librairie open source pour la détection de marqueur AR.
-Cette brique utilise le nuage de points 3D associé à la couleur pour identifier un marqueur. L'information de profondeur permet à l'algorithme de mieux repérer les plans des marqueurs dans la scène. Elle retourne l'identifiant, la position et l'orientation du marqueur dans la position de la $/camera\_rgb\_optical\_frame$, dans notre cas. La librairie fournie 55 AR tags et la possibilité d'entendre cette liste facilement. Dans notre cas, nous utilisons uniquement le noeud qui permet de lire plusieurs marqueurs, un par un, dans un même flux vidéo. 
+Afin de détecter les amers dans la scène, nous avons utilisons à la brique ROS : $ar\_track\_alvar$ qui utilisant la librairie open source Alvar pour la détection de marqueurs AR.
+Cette brique utilise le nuage de points 3D associé à la couleur pour identifier un marqueur. L'information de profondeur permet à l'algorithme de mieux repérer les plans des marqueurs dans la scène. Elle retourne l'identifiant, la position et l'orientation du marqueur dans le repère de la $/camera\_rgb\_optical\_frame$. La librairie fournie 55 AR tags et la possibilité d'étendre cette liste facilement. Dans notre cas, nous utilisons uniquement le noeud qui permet de lire les marqueur un par un (individual TODO)
 
-\lstset{language=XML}
-\begin{description}
-\item [Mise en place physique] : \\
+\subsubsection*{Mise en place physique} 
 Lors de notre projet nous avons utilisé des marqueurs de taille $16 \times 16$ cm. On place leur milieu à 31 cm du sol afin que l'axe caméra-marqueur soit le plus parallèle au sol possible.
-\item [Initialisation] : \\ Le nœud $ar\_track\_alvar$ s'initialise dans $localisation.launch$ avec les paramètres suivant : 
-\begin{lstlisting}
-<arg name="marker_size" default="16" />
-<arg name="max_new_marker_error" default="0.08" />
-<arg name="max_track_error" default="0.2" />
 
-<arg name="cam_image_topic" 
-	default="/camera/depth_registered/points" />
-<arg name="cam_info_topic" 		
-	default="/camera/depth_registered/camera_info" />
-<arg name="output_frame" default="/camera_rgb_optical_frame" />
-\end{lstlisting}
+\subsubsection*{Utilisation}
+ Le noeud de détection est lancé indépendamment des autres noeuds du système. Il s'initialise dans $localisation.launch$ avec les paramètres suivant : 
+\begin{itemize}
+\item $marker\_size$ : largeur (cm) des marqueurs AR utilisés
+\item $cam\_image\_topic$ : topic ROS du flux d'images de la caméra
+\item $cam\_info\_topic$ : topic ROS des infos propres à la caméra -- c'est ici que les données de calibrage sont récupérées
+\item $output\_frame$ : repère dans lequel sera exprimé le résultat de la détection -- $/camera\_rgb\_optical\_frame$ dans notre cas
+\end{itemize}
 
-\item [Lecture du contenu [?]] : \\
-	On peut écouter les ar\_track\_alvar\_msgs::AlvarMarkers que publie le nœud avec la commande : 
-	\begin{lstlisting} 
-	rostopic echo /ar_marker_pose
-	\end{lstlisting}
-\item [Performances et évolutions] : \\
-	L'orientation du markeur trouvé par $ar\_track\_alvar$ doit être : $\vec{z}$ la normale et $\vec{x}$ vers le haut. Il arrive, pour des problèmes inconnus (le réseau ?) que ce repère ne soit pas correctement capturé, avec par exemple, $\vec{y}$ vers le haut. Le robot, à la fin de la localisation se trouve alors couché. Il faudrait alors comprendre d'où vient le problème ou, sinon, ne pas prendre en compte les orientations aberrantes. 
-% La détection des marqueurs de $16 \times 16$ cm s'effectue jusqu'à 2m 25 avec une précision de 2 cm et jusqu'à 45\degres d'angle à 5\degres près. Il serait intéressant, à l'avenir, d'approfondir les résultats obtenus avec d'autres tailles si l'erreur est trop aléatoire, ou alors, intégrer un filtre de Kalman pour fusionner les données odométriques et les observations.
-
-DEGRES
-
-\end{description}
-
+\subsubsection*{Outputs}
+Le noeud publie les informations de détection dans des messages de types $ar\_track\_alvar\_msgs::AlvarMarkers$ sur le topic $/ar\_marker\_pose$. Il publie aussi la TF associée au marqueur vu dans le repère de la caméra.
+	
+\subsubsection*{Performances et évolutions}
+L'orientation du marqueur trouvé par $ar\_track\_alvar$ doit être : $\vec{z}$ la normale et $\vec{x}$ vers le haut. Il arrive, pour des problèmes inconnus (le réseau ?) que ce repère ne soit pas correctement capturé, avec par exemple, $\vec{y}$ vers le haut. Le robot, à la fin de la localisation se retrouve alors couché. Il faudrait alors comprendre d'où vient le problème ou sinon, ne pas prendre en compte ces orientations aberrantes. 
+	
+La détection des marqueurs de $16 \times 16$ cm s'effectue jusqu'à 2 m 25 avec une précision de 2 cm et jusqu'à 45 degrès d'angle à 5 degrès près. Il serait intéressant, à l'avenir, d'approfondir les résultats obtenus avec d'autres tailles si l'erreur est trop aléatoire, ou alors, intégrer un filtre de Kalman pour fusionner les données odométriques et les observations.
 
 \begin{figure}
 \center
@@ -285,70 +233,81 @@ DEGRES
 \end{figure}
 
 
-\subsubsection{Localisation}
+\subsection{Localisation}
 \label{sec:localision}
 
 \subsubsection*{Utilisation}
-La node de localisation est lancé gr\^ace à un ficher ROS de launch. Cependant, contrairement au noeud de détection, ce noeud ne se lance pas indépendamment des autres. Il est lancé avec l'ensemble du système de navigation avec la commande suivante.\\
-\textit{roslaunch navigation.launch}\\
+Le noeud de localisation est lancé gr\^ace à un ficher ROS de launch. Cependant, contrairement au noeud de détection, ce noeud ne se lance pas indépendamment des autres. Il est lancé avec l'ensemble du système de navigation avec la commande suivante : \textit{roslaunch navigation.launch}
 
-Ce fichier configure et lance le système de navigation qui comprend la node de localisation. 
-On trouve dans ce fichier des paramètres propre à la localisation pouvant être configurés.
+Ce fichier configure et lance le système de navigation qui comprend le noeud de localisation. On trouve dans ce fichier des paramètres propre à la localisation pouvant être configurés.
 
 \begin{itemize}
 \item $map\_file$ : Chemin de la carte utilisée pour la navigation. Notre système utilise le noeud ROS $map\_server$ pour le chargement de la carte.
-\item $marker\_tf\_publisher\_X$ : L'utilisateur renseigne ici, pour chaque marqueur, la transformée qui sera publiée pour le repérer sur la carte. L'orientation est renseignée avec un quaternion. \\
+\item $marker\_tf\_publisher\_X$ : L'utilisateur renseigne ici, pour chaque marqueur, la transformée qui sera publiée pour le repérer sur la carte. L'orientation est renseignée avec un quaternion. 
 \end{itemize}
 
-
-
-
-\noindent Avant toute chose, il est important de rappeler que quelque soit la situation :
+\subsubsection*{Rappels}
+Avant toute chose, il est important de rappeler que quelque soit la situation :
 \begin{itemize}
 \item $/map \rightarrow /odom \rightarrow /base\_link $ (\url{cf. http://www.ros.org/reps/rep-0105.html})
-\item ATTENTION AU REPERE MAP [?]
-\item /odom est le repère relatif de l'odométrie, assimilé certain, du robot et est placé au départ sur /map. Il est en quelque sorte le point de départ d'un déplacement. Etant donné que ce repère drift au cours du déplacement du robot, il peut être étonné. La localisation via un amer connu permet de placer le repère /odom au bon endroit, et de réinitialiser l'odométrie, ce qui place /base\_link au même endroit. C'est un localisation absolu.
+\item ATTENTION AU REPERE MAP TODO
+\item /odom est le repère relatif de l'odométrie, assimilé certain, du robot et est placé au départ sur /map. Il est en quelque sorte le point de départ d'un déplacement. Etant donné que ce repère drift au cours du déplacement du robot, il peut être éronné. La localisation via un amer connu permet de placer le repère /odom au bon endroit, et de réinitialiser l'odométrie, ce qui place /base\_link au même endroit. C'est une localisation absolue.
 \item chaque frame peut avoir plusieurs fils mais qu'un seul parent
-\item la transformé entre deux frames est décrite par deux attributs : 
+\item la transformée entre deux frames est décrite par deux attributs : 
   \begin{itemize}
   \item $m\_origin$ : Vector3 de translation 
   \item $m\_basis$ : Matrix3x3 de rotation
   \end{itemize}
 \end{itemize}
 
+\subsubsection{\textit{localisation\_node.cpp}}
+Ce nœud permet d'envoyer la nouvelle localisation du robot s'il détecte un marqueur. 
+
+\subsubsection*{Traitement}
+\noindent La recherche se déclenche uniquement et une seule fois quand la commande de haut niveau publie un $<$std\_msgs::Empty$>$ sur le topic $/nav/HLC/askForMarker$. 
+
+\noindent Dans le cas ou un marqueur est visible, voici le processus : 
 \begin{itemize}
-
-\item [localisation\_node.cpp] :
-
-Ce nœud permet d'envoyer la nouvelle localisation du robot si il détecte un marqueur. 
-
-\noindent La recherche se déclanche uniquement quand la commande haut niveau publie un $<$std\_msgs::Empty$>$ sur le topic $/nav/HLC/askForMarker$. \\
-
-Dans le cas ou un marqueur est visible : \\
-\noindent \underline{init} 
-/map $\rightarrow$ /odom $\rightarrow$ /baselink $\rightarrow$ /camera\_rgb\_frame $\rightarrow$ /camera\_rgb\_optical\_frame \\
-\noindent \underline{arrivée d'un marker} 
-/camera\_rgb\_optical\_frame $\rightarrow$ /ar\_marker\_0 \\
-\noindent \underline{traitement} \\
-\indent /baselink $\rightarrow$ /camera\_rgb\_frame $\rightarrow$ /camera\_rgb\_optical\_frame $\rightarrow$ /ar\_marker\_0 \\
-\indent on sait donc /ar\_marker\_0 $\rightarrow$ /baselink 
-= /marker\_0 $\rightarrow$ /baselink \\
-\indent sachant /map $\rightarrow$ /marker\_0, on sait /map $\rightarrow$ /baselink = /map  $\rightarrow$ /odom \\
-
-\noindent Cette transformation est envoyé sur $/new\_odom$ que l'on publie avec le publisher $odom\_pub$. On publie également l'id du marqueur vu sur $/nav/loca/markerSeen$ sous un $<$std\_msgs::Int16$>$. 
-
-Dans le cas où on ne voit rien on publie : -1 \\
-
-\item [localisation\_broadcaster\_node.cpp] :
-
-Ce nœud permet de tout le temps broadcaster la transfom entre /map et /odom. Il souscrit à la $<$geometry\_msgs::Transform$>$ /new\_odom, qui contient la "nouvelle" position certaine du robot. Dès que celle-ci est publiée, /odom actualise sa position et on réinitialise le nav\_msgs/Odometry : il devient notre nouveau référentiel.
+\item On sait à priori : /map $\rightarrow$ /odom $\rightarrow$ /baselink $\rightarrow$ /camera\_rgb\_frame $\rightarrow$ /camera\_rgb\_optical\_frame 
+\item A l'arrivée d'un marqueur, on a : /camera\_rgb\_optical\_frame $\rightarrow$ /ar\_marker\_ID 
+\item On remonte l'information : /baselink $\rightarrow$ /camera\_rgb\_frame $\rightarrow$ /camera\_rgb\_optical\_frame $\rightarrow$ /ar\_marker\_ID
+\item On sait donc : /ar\_marker\_0 $\rightarrow$ /baselink, qui est égal à /marker\_0 $\rightarrow$ /baselink 
+\item Sachant /map $\rightarrow$ /marker\_0, on sait /map $\rightarrow$ /baselink = /map  $\rightarrow$ /odom 
 \end{itemize}
+
+Cette transformation est envoyée sur $/new\_odom$ que l'on publie avec le publisher $odom\_pub$. On publie également l'identifiant du marqueur vu sur $/nav/loca/markerSeen$ sous un $<$std\_msgs::Int16$>$. 
+
+\noindent Dans le cas où on ne voit rien on publie : -1 
+
+\subsubsection*{Initialisation}
+\noindent Différents champs peuvent être paramétiser : 
+\begin{itemize}
+\item $DEBUG$ : Active ou non les sorties de debug. Si cette option est activée, les transformations intermédiaires sont publiées.
+\item $TIMEOUT\_AR\_DETEC$ : Temps d'attente maximum pour la réception d'un marqueur. Ce paramètre est utile lors de l'utilisation en réseau. La latence provoque des retards dans la publication des transformées. Il est donc nécessaire de donner une marge de temps au système. Lors de l'utilisation en mode local cette valeur peut \^etre faible.
+\item $NB\_MARKER$ : Nombre de marqueurs total dans la scène.
+\end{itemize}
+
+Une fois le lancement du noeud effectué, l'utilisateur peut observer son comportement avec des sorties console :
+\begin{itemize}
+\item $GLOBAL\_SEARCH$ : La recherche de marqueur a été demandée.
+\item $ MARKER DETECTED: ID\_MARKER\_DETECTED$ : Identifiant du marqueur détecté.
+\item $LOOKING FOR TF: tf$ : Nom de la transformée attendue.
+\end{itemize}
+
+\subsubsection*{Améliorations}
+Il serait préférable de récupérer les TFs /baselink $\rightarrow$ /camera\_rgb\_frame et /camera\_rgb\_frame $\rightarrow$ /camera\_rgb\_optical\_frame en dynamique plutôt qu'en statique, de même pour le nombre de marqueurs dans la scène.
+
+\subsubsection{\textit{localisation\_broadcaster\_node.cpp}}
+
+Ce nœud permet de tout le temps broadcaster la transformée entre $/map$ et $/odom$. Il souscrit à la $<geometry\_msgs::Transform>$ /new\_odom, qui contient la "nouvelle" position certaine du robot. Dès que celle-ci est publiée, $/odom$ actualise sa position et on réinitialise le $nav\_msgs/Odometry$ : il devient notre nouveau référentiel.
 
 \begin{figure}
 \center
 \includegraphics[scale=0.6]{figures/rqt_loca.png} 
 \caption{texte de la légende}	
 \end{figure}
+
+
 
 
 \subsection{Commande}
