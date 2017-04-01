@@ -83,7 +83,7 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
     \begin{tabular}{| l | l | l | l | l |}
     \hline
      \rowcolor{gray} Name & Major Version & Minor Version & Creation Date & Last version \\ \hline
-    User Manual - Navigation & A & 0 & 30/03/2017 & 30/03/2017 \\ 
+    User Manual - Navigation & A & 1 & 30/03/2017 & 1/04/2017 \\ 
     Between Markers &  &  &  &  \\ \hline
     \end{tabular}
 \end{center}
@@ -121,6 +121,7 @@ User Manual - Navigation Between Markers is distributed to all clients and exter
     \hline
      \rowcolor{gray} Version & Additions or modifications & Author & Date \\ \hline
     A.0 & Document creation & Bruno Dato & 30/01/2017\\ \hline
+    A.1 & Sections \ref{sec:Prerequisites} and \ref{sec:Navigation Between Markers} & Bruno Dato & 1/04/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -137,7 +138,7 @@ User Manual - Navigation Between Markers is distributed to all clients and exter
 
 \begin{itemize}
 \item[•] TurtleBot 2
-\item[•] AR markers ... (à compléter)
+\item[•] AR markers ... (TODO)
 \end{itemize}
 
 \subsection{Software}
@@ -157,7 +158,9 @@ You also need the following software :
 \item[•] GIT \href{https://git-scm.com/download/linux}{[Installation]} 
 \end{itemize}
 
-\subsection{Build workspace}
+\subsection{Workspace}
+
+\subsubsection{Build workspace}
 
 You need a ROS workspace (catkin workspace) to build our project before executing it. If you are running the ball search on the TurtleBot PC you have to create the workspace on the TurtleBot PC. In the case your are running it on a remote PC, you have to create the workspace on this PC.\\
 
@@ -183,7 +186,7 @@ Then, in .bashrc, add the following lines (it's normal if some of them are alrea
 \item[]  \begin{verbatim} export ROS_MASTER_URI=http://<IP_OF_TURTLEBOT>:11311  \end{verbatim}
 \end{itemize}
 
-\subsection{Download package}
+\subsubsection{Download package}
 
 Now, you need to download the package containing the source code. Place you in your workspace (catkin\_ws), and execute the following commands :
 
@@ -192,7 +195,7 @@ Now, you need to download the package containing the source code. Place you in y
 \item[]  \begin{verbatim}> git clone https://github.com/Projet-Navigation-UPS/TurtleBot-pkgs \end{verbatim}
 \end{itemize}
 
-\subsection{Build executables}
+\subsubsection{Build executables}
 
 Now that you have downloaded the source code, you just need to compile to build the executables files. Place you in your workspace (catkin\_ws) and run the command : 
 
@@ -200,11 +203,48 @@ Now that you have downloaded the source code, you just need to compile to build 
 \item[]  \begin{verbatim}> catkin_make \end{verbatim}
 \end{itemize}
 
-Several red lines must appear in the compilation description, meaning that the executables we need have been created.
+Several red lines must appear in the compilation description, it means that the executables we need have been created.
 
-\subsection{Map configuration}
+\subsection{Map and markers configuration}
 
-\subsection{Markers configuration}
+\subsubsection{Environment map}
+
+You need yo create the map of the environment in which your navigating if it is not already available in the folder \textbf{/catkin$\_$ws/src/TurtleBot-pkgs/turtlebot$\_$proj$\_$nav/map}. To create the map, we use the \textbf{turtlebot$\_$navigation} package which provides a SLAM mode (\href{http://wiki.ros.org/turtlebot_navigation/Tutorials/indigo/Build%20a%20map%20with%20SLAM}{Tutorial link}). After turning on the TurtleBot and its laptop, execute the following commands the TurtleBot laptop :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> roslaunch turtlebot_bringup minimal.launch \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_navigation gmapping_demo.launch \end{verbatim}
+\end{itemize}
+
+Then, on a remote computer, execute the visualization of the SLAM :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> roslaunch turtlebot_rviz_launchers view_navigation.launch \end{verbatim}
+\end{itemize}
+
+To make the robot move and explore the environment, execute :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> roslaunch turtlebot_teleop keyboard_teleop.launch --screen \end{verbatim}
+\end{itemize}
+
+Ounce the map is satisfying for the navigation, on another terminal you have to save it :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> rosrun map_server map_saver -f <PATH>/catkin_ws/src/TurtleBot-pkgs/turtlebot\end{verbatim}
+\item[]  \begin{verbatim}_proj_nav/map/my_map\end{verbatim}
+
+\end{itemize}
+
+\subsubsection{Markers disposition}
+
+\subsubsection{Graph of the markers}
+
+\subsubsection{Markers static transforms}
+
+\subsubsection{Visibility map}
+
+
 
 \newpage
 \section{Navigation Between Markers}
