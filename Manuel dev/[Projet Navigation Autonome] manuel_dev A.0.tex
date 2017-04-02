@@ -342,7 +342,7 @@ Le but de cette section est de créer et d'utiliser une carte de visibilité, un
 Nous expliquons ici comment la carte de visibilité est générée, à l'aide de $visib\_pgmwriter\_node.cpp$, et le mécanisme de la node $visib\_pgmreader\_node.cpp$, retournant le nombre d'amers visibles.
 
 \subsubsection{Génération de la carte de visibilité}
-Tout d'abord pour générer la carte de visibilité, il faut au préalablement avoir une carte de l'environnement -- créé virtuellement ou en utilisant la cartographie disponible sur le Turtlebot, utilisé dans le $map\_server$.
+Tout d'abord pour générer la carte de visibilité, il faut au préalablement avoir une carte de l'environnement. Cette carte est créée virtuellement ou en utilisant la cartographie disponible sur le Turtlebot, utilisé dans le $map\_server$.
 
 \begin{figure}[!h]
 \center
@@ -350,7 +350,7 @@ Tout d'abord pour générer la carte de visibilité, il faut au préalablement a
 \caption{Cartographie de l'environnement avec le Turtlebot}	
 \end{figure}
 
-Le node $visib\_pgmwriter\_node.cpp$ ne doit pas être modifié, toutes les configurations se font directement dans le fichier $visib\_init.cpp$. En effet, le node lance la fonction $Ecriture\_carte\_visib()$ qui crée un fichier au format PGM (TODO SITE INTERNET) (TODO enchainment) l'ensemble des amers définit dans le $graph.xml$ se trouvant dans le dossier $/rsc$. Donc pour une taille de carte donnée et pour les configurations effectuées correctement dans $visib\_init.cpp$  -- expliquées par la suite, il suffit de modifier la position et l'orientation de nos amers dans le $graph.xml$ (TODO pas encore introduit) pour que la nouvelle carte de visibilité soit générée. automatiquement en lançant à nouveau notre node $visib\_pgmwriter\_node.cpp$.\\
+Le node $visib\_pgmwriter\_node.cpp$ ne doit pas être modifié, toutes les configurations se font directement dans le fichier $visib\_init.cpp$. En effet, le node lance la fonction $Ecriture\_carte\_visib()$ qui crée dans un fichier au format PGM (Plain PGM : $http://netpbm.sourceforge.net/doc/pgm.html\#plainpgm$) l'ensemble des amers définit dans le $graph.xml$ se trouvant dans le dossier $/rsc$. Donc pour une taille de carte donnée et pour les configurations effectuées correctement dans $visib\_init.cpp$  expliquées par la suite, il suffit de modifier la position et l'orientation de nos amers dans le $graph.xml$ (voir partie 2.6.2) pour que la nouvelle carte de visibilité soit générée automatiquement en lançant à nouveau notre node $visib\_pgmwriter\_node.cpp$.\\
 
 \begin{figure}[!h]
 \center
@@ -368,37 +368,46 @@ Une fois notre carte générée, il faut pouvoir la visualiser sur Rviz et la su
 
 Au niveau de la configuration de $visib\_init.cpp$ dans la fonction $Ecriture\_carte\_visib()$, il faut modifier $int largeur=512;	 int hauteur=640;$ pour que la carte aie toujours les mêmes dimensions que la carte de notre environnement. $int nbr_amers=2;$ pour prendre en compte le nombre d'amers contenus dans $graph.xml$. Ensuite dans la boucle $for$ faisant la conversion de la position de mètre en pixels :
 
-(TODO DECO)
 $\\
 for(a=0;a<nbr\_amers;a++)\\
-	\{	\\
-		x[a]=(x1[a]+12.2)/0.05;\\
-		y[a]=-(y1[a]+13.8-32)/0.05;\\
-		alphamax[a]=pi/4;\\
+	\{ \\
+. \hspace{35pt}    x[a]=(x1[a]+12.2)/0.05;\\
+. \hspace{35pt}    y[a]=-(y1[a]+13.8-32)/0.05;\\
+. \hspace{35pt}    alphamax[a]=pi/4;\\
 	\}\\
 	$
 
+
 Avant tout, il faut savoir qu'on a 3 repères différents.\\ 
 - On a le repère du robot que l'on nomme R et possède la position en x et y du robot donc R (X,Y).\\
-- Le repère de la carte de l'environnement note R' qui a pour origine (-12.2 ; -13.8) (dans notre cas pour une carte 512x640) donc R' (X+12.2,Y+13.8).\\ (TODO REP?, À GÉNÉRALISER)
-- Ensuite on a le repère de notre carte de visibilité noté Rp qui est positionné en haut a gauche de la carte (vecteur u dans le même sens que x et vecteur v opposé au vecteur y) c'est pourquoi on peut écrire Rp(X+12.2,-(Y+13.8-32)).\\
+- Le repère de la carte de l'environnement note R' qui a pour origine (-12.2 ; -13.8) (dans notre cas pour une carte 512 x 640) donc R' (X+12.2, Y+13.8).\\ 
+- Ensuite on a le repère de notre carte de visibilité noté Rp qui est positionné en haut a gauche de la carte (vecteur u dans le même sens que x et vecteur v opposé au vecteur y) c'est pourquoi on peut écrire Rp (X+12.2, -(Y+13.8-32)).\\
 
-Explicitons maintenant les différentes valeurs utilisées : 0.05 correspond à la résolution qui se trouve dans le fichier de configuration .yaml dans $/map$. Ici 12.2 et 13.8 correspond à l'origine de la carte pour que la superposition des cartes soit correctes. En effet, si on laisse 0.0 et 0.0, la carte se générera à la base du robot sur Rviz donc on aura un décalage lors de la superposition (TODO à généraliser). C'est pourquoi dans le fichier $visib.yaml$, il faut aussi le configurer de cette manière :\\
+Explicitons maintenant les différentes valeurs utilisées : 0.05 correspond à la résolution qui se trouve dans le fichier de configuration .yaml dans $/map$. Ici 12.2 et 13.8 correspond à l'origine de la carte pour que la superposition des cartes soit correctes. En effet, si on laisse 0.0 et 0.0, la carte se générera à la base du robot sur Rviz donc on aura un décalage lors de la superposition. C'est pourquoi dans le fichier $visib.yaml$, il faut aussi le configurer de cette manière pour notre cas :\\
 $resolution: 0.050000\\
 origin: [-12.200000, -13.800000, 0.000000]\\
 $
 
-(TODO généralisation : il faut juste que les repères des deux map soient au même endroit du coup ...)
+Donc, cela permet de passer du repère du robot au repère de la carte pour placer nos marqueurs et créer notre carte de visibilité. Pour le moment les modifications se font manuellement, mais pour améliorer notre programme, il faudrait récupérer nos différentes valeurs (résolution, origine du repère, etc...) directement dans le fichier $.yaml$.\\
 
-Enfin, la valeur 32 correspond à la conversion pixel/mètres de la hauteur de notre fenêtre soit :\\ $640*0.05=32$.
+Enfin, la valeur 32 correspond à la conversion pixel/mètres de la hauteur de notre fenêtre en faisant :\\ $640*0.05=32$.\\
+\\
+Ainsi, on peut écrire :
 
-(TODO : comment tu la remplies, tu lexpliques apres mais faut le faire ici)
+$\\
+for(a=0;a<nbr\_amers;a++) ~\\
+	\{  ~\\
+. \hspace{35pt}    x[a]=(x1[a]+12.2)/0.05; ~\\
+. \hspace{35pt}    y[a]=-(y1[a]+13.8-32)/0.05; ~\\
+. \hspace{35pt}    alphamax[a]=pi/4; ~\\
+	\} ~\\
+	$
 
 \subsubsection{Noeud retournant le nombre d'amers visibles}
-Maintenant que nous possédons une carte de visibilité, le nombre d'amers visibles de la position du robot est renvoyé à l'aide de la node $visib\_pgmreader\_node.cpp$. Il lit le fichier PGM créé et renvoie la valeur du pixel pour une position (x,y) sur cette carte (TODO : position du robot @quel topic etc). (TODO :  faire une list, surtout que tas fais les valeur à lenvers donc c'est difficile à comprendre, et le 3 en 3) Si le pixel vaut 15 on est dans une zone blanche donc pas de marqueurs visibles. Pour un pixel de valeur 12, cela veut dire qu'on est dans le champ de visibilité d'un amer. Pour 9, 2 amers visibles et ainsi de suite. Dans notre cas on suppose qu'au maximum 4 amers sont visibles en même temps. 
-Si plus d'amers souhaite plus peuvent être visibles en même temps, il suffit d'augmenter la valeur maximale lors de l’écriture de la carte de visibilité. En effet, lors de la création de l’entête PGM, on définit la valeur maximale utilisée (dans notre cas 15).
+Maintenant que nous possédons une carte de visibilité, le nombre d'amers visibles de la position du robot est renvoyé à l'aide de la node $visib\_pgmreader\_node.cpp$. Il lit le fichier PGM créé et renvoie la valeur du pixel pour une position (x,y) sur cette carte (on utilise le topic MarkersVisibility). Si le pixel vaut 15 on est dans une zone blanche donc pas de marqueurs visibles. Pour un pixel de valeur 12, cela veut dire qu'on est dans le champ de visibilité d'un amer. Pour 9, 2 amers visibles. Pour 6, 3 amers visibles. Pour 3, 4 amers visibles. Ensuite pour 5 amers visibles, le pixel passe à 0, cependant on ne peut plus distinguer si le pixel est à 0 car 5 amers visibles ou bien car il s'agit du pixel correspondant à l'amer. C'est pourquoi dans notre cas, on suppose qu'au maximum 4 amers sont visibles en même temps. 
+Si on souhaite avoir plus d'amers visibles en même temps, il suffit d'augmenter la valeur maximale lors de l’écriture de la carte de visibilité. En effet, lors de la création de l’entête PGM, on définit la valeur maximale de nos pixels (dans notre cas 15).\\
 
-ATTENTION : nous n'avons pas réussi à la rendre fonctionnelle lors de notre intégration. Lors des tests avant intégration, la node suivante renvoyée bien le nombre d'amers visibles, cependant en l'intégrant, notre fonction $pgm\_imread(char *argv)$ ne stocke plus correctement les valeurs des données. Il faut donc la débugger avant qu'elle soit utilisée.
+ATTENTION : nous n'avons pas réussi à la rendre fonctionnelle lors de notre intégration. Lors des tests avant intégration, le node suivant renvoyé bien le nombre d'amers visibles, cependant en l'intégrant, notre fonction $pgm\_imread(char *argv)$ ne stocke plus correctement les valeurs des données. Il faut donc la débugger avant qu'elle soit utilisée.
 
 \newpage
 \subsection{Superviseur}
