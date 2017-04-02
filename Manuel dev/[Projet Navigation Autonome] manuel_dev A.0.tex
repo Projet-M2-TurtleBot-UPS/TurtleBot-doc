@@ -204,7 +204,7 @@ L'architecture globale de notre produit est décrite par le schéma suivant :
 
 \subsubsection*{Fonctionnement}
 Afin de détecter les amers dans la scène, nous avons utilisons à la brique ROS : $ar\_track\_alvar$ qui utilisant la librairie open source Alvar pour la détection de marqueurs AR.
-Cette brique utilise le nuage de points 3D associé à la couleur pour identifier un marqueur. L'information de profondeur permet à l'algorithme de mieux repérer les plans des marqueurs dans la scène. Elle retourne l'identifiant, la position et l'orientation du marqueur dans le repère de la $/camera\_rgb\_optical\_frame$. La librairie fournie 55 AR tags et la possibilité d'étendre cette liste facilement. Dans notre cas, nous utilisons uniquement le noeud qui permet de lire les marqueur un par un (individual TODO)
+Cette brique utilise le nuage de points 3D associé à la couleur pour identifier un marqueur. L'information de profondeur permet à l'algorithme de mieux repérer les plans des marqueurs dans la scène. Elle retourne l'identifiant, la position et l'orientation du marqueur dans le repère de la $/camera\_rgb\_optical\_frame$. La librairie fournie 55 marqueurs AR et la possibilité d'étendre cette liste facilement. Dans notre cas, nous utilisons uniquement le noeud qui permet de lire les marqueur un par un (individual tags). En effet il existe un autre noeud qui permet d'estimer une position en observant un ensemble de marqueurs (multi-tag bundles).
 
 \subsubsection*{Mise en place physique} 
 Lors de notre projet nous avons utilisé des marqueurs de taille $16 \times 16$ cm. On place leur milieu à 31 cm du sol afin que l'axe caméra-marqueur soit le plus parallèle au sol possible.
@@ -250,7 +250,7 @@ Ce fichier configure et lance le système de navigation qui comprend le noeud de
 Avant toute chose, il est important de rappeler que quelque soit la situation :
 \begin{itemize}
 \item $/map \rightarrow /odom \rightarrow /base\_link $ (\url{cf. http://www.ros.org/reps/rep-0105.html})
-\item ATTENTION AU REPERE MAP TODO
+\item Le repère $/map$ doit être correctement placé en position et en orientation puisque toute les transformations vont se faire à partir de celui-ci.
 \item /odom est le repère relatif de l'odométrie, assimilé certain, du robot et est placé au départ sur /map. Il est en quelque sorte le point de départ d'un déplacement. Etant donné que ce repère drift au cours du déplacement du robot, il peut être éronné. La localisation via un amer connu permet de placer le repère /odom au bon endroit, et de réinitialiser l'odométrie, ce qui place /base\_link au même endroit. C'est une localisation absolue.
 \item chaque frame peut avoir plusieurs fils mais qu'un seul parent
 \item la transformée entre deux frames est décrite par deux attributs : 
