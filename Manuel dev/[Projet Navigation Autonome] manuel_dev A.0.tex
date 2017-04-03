@@ -168,19 +168,18 @@ A & Tant que le but est plus loin que le prochain marqueur dans sa direction \\
   & Le robot se déplace jusqu'au but  \\
 \end{tabular}
 
-Étant donné que la connaissance sur la visibilité d'un marqueur n'es pas encore opérationnelle, on considèrera que le robot se trouve toujours dans une zone visibilité. On placera alors le robot dans une zone de visibilité à chaque début de navigation en veillant aussi à donner une position initiale correcte.
+Étant donné que la connaissance sur la visibilité d'un marqueur n'es pas encore opérationnelle, on considérera que le robot se trouve toujours dans une zone visibilité. On placera alors le robot dans une zone de visibilité à chaque début de navigation en veillant aussi à donner une position initiale correcte.
 
 \section{Navigation avec amers 2D dans un environnement connu}
 \label{sec:navigation_avec_amers_2D_dans_un_environnement_connu}
 
-La tâche de navigation autonome se découpe en cinq briques : ++ de textes résumé texte 
+La tâche de navigation autonome se découpe en cinq briques : 
 \begin{description}
-\item [Détection] qui permet de repérer les amers dans le champs de vision quand ils se présentent (cf. AR
-\item [Localisation] qui permet de savoir où se trouve le robot, en utilisant soit les données d'odométrie interne, soit les données d’observation (cf. NOUS
-\item [Trajectoire] qui permet de se déplacer en boucle fermée d'un point A à un point B (cf. NAV
-\item [Commande] "
-\item [Visibilité] qui permet de générer une carte contenant les positions des amers et leurs orientations ; et de renvoyer à partir de cette carte le nombre d'amers visibles.
-\item [Supervision] qui gère le bon déroulement de la tâche, le déplacement du point de départ au point d'arrivée (cf. 
+\item [Détection] qui permet de repérer les amers dans le champs de vision quand ils se présentent 
+\item [Localisation] qui permet de savoir où se trouve le robot, en utilisant soit les données d'odométrie interne, soit les données d’observation
+\item [Trajectoire] qui permet de se déplacer en boucle fermée d'un point A à un point B
+\item [Visibilité] qui permet de générer une carte contenant les positions des amers et leurs orientations ; et de renvoyer à partir de cette carte le nombre d'amers visibles
+\item [Supervision] qui gère le bon déroulement de la tâche, le déplacement du point de départ au point d'arrivée
 \end{description}
 
 
@@ -297,6 +296,22 @@ Une fois le lancement du noeud effectué, l'utilisateur peut observer son compor
 \subsubsection*{Améliorations}
 Il serait préférable de récupérer les TFs /baselink $\rightarrow$ /camera\_rgb\_frame et /camera\_rgb\_frame $\rightarrow$ /camera\_rgb\_optical\_frame en dynamique plutôt qu'en statique, de même pour le nombre de marqueurs dans la scène.
 
+\begin{figure}
+\center\noindent
+\includegraphics[scale=0.6]{figures/locaprocess.png} 
+\caption{Traitement général lors de la localisation}	
+\end{figure}
+
+\begin{figure}
+ \begin{minipage}[b]{.48\linewidth}
+\includegraphics[scale=0.5]{figures/locacbask.png} 
+  \caption{Callback de la demande de localision}
+ \end{minipage} \hfill
+ \begin{minipage}[b]{.46\linewidth}
+\includegraphics[scale=0.5]{figures/locacb2read.png} 
+  \caption{Callback du résulat de la détection}
+ \end{minipage}
+\end{figure}
 \subsubsection{\textit{localisation\_broadcaster\_node.cpp}}
 
 Ce nœud permet de tout le temps broadcaster la transformée entre $/map$ et $/odom$. Il souscrit à la $<geometry\_msgs::Transform>$ /new\_odom, qui contient la "nouvelle" position certaine du robot. Dès que celle-ci est publiée, $/odom$ actualise sa position et on réinitialise le $nav\_msgs/Odometry$ : il devient notre nouveau référentiel.
