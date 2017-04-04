@@ -123,6 +123,7 @@ User Manual - Navigation Between Markers is distributed to all clients and exter
     A.0 & Document creation & Bruno Dato & 30/01/2017\\ \hline
     A.1 & Sections \ref{sec:Prerequisites} and \ref{sec:Navigation Between Markers} & Bruno Dato & 1/04/2017\\ \hline
     A.2 & Visibility & Thibaut AGHNATIOS & 02/04/2017\\ \hline
+    A.3 & Graph of the markers & Thibaut AGHNATIOS & 04/04/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -243,7 +244,17 @@ Within our project we have used  $16 \times 16$ markers placed 3 m away minimum 
 
 \subsubsection{Graph of the markers}
 
-TODO
+To choose which marker (AR marker) to move when one has been detected and is still too far from the final goal to go directly to it, a graph representing all the markers defined in an XML format file. Each node of the graph has different properties:
+
+\begin{itemize}
+\item[•] Id: number corresponding to the AR marker;
+\item[•] Label: name of the node, each node corresponds to an AR marker;
+\item[•] PositionX: coordinate along the x-axis of the known environment map;
+\item[•] PositionY: coordinate along the y-axis of the known environment map;
+\item[•] Orientation: angle between the normal of the AR marker and the x-axis of the map (between 0 and 2$\pi$).
+\end{itemize}
+
+The numbers allow to be located in the graph when a marker is detected and find the next marker to be reached to continue the navigation. The coordinates $(x,y)$ of the markers make it possible to know the positions to be reached in the map. The orientation allow to command the robot to move in front and at a certain distance from the marker to avoid walls.
 
 \subsubsection{Markers static transforms}
 
