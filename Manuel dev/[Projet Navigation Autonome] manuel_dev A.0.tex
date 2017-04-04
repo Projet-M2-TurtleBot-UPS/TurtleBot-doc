@@ -357,7 +357,7 @@ Le but de cette section est de créer et d'utiliser une carte de visibilité, un
 Nous expliquons ici comment la carte de visibilité est générée, à l'aide de $visib\_pgmwriter\_node.cpp$, et le mécanisme de la node $visib\_pgmreader\_node.cpp$, retournant le nombre d'amers visibles.
 
 \subsubsection{Génération de la carte de visibilité}
-Tout d'abord pour générer la carte de visibilité, il faut au préalablement avoir une carte de l'environnement. Cette carte est créée virtuellement ou en utilisant la cartographie disponible sur le Turtlebot, utilisé dans le $map\_server$.
+Tout d'abord pour générer la carte de visibilité, il faut préalablement avoir une carte de l'environnement. Cette carte est créée à l'aide d'un logiciel de dessin ou en utilisant la cartographie disponible sur le Turtlebot $gmapping$.
 
 \begin{figure}[!h]
 \center
@@ -365,7 +365,7 @@ Tout d'abord pour générer la carte de visibilité, il faut au préalablement a
 \caption{Cartographie de l'environnement avec le Turtlebot}	
 \end{figure}
 
-Le node $visib\_pgmwriter\_node.cpp$ ne doit pas être modifié, toutes les configurations se font directement dans le fichier $visib\_init.cpp$. En effet, le node lance la fonction $Ecriture\_carte\_visib()$ qui crée dans un fichier au format PGM (Plain PGM : $http://netpbm.sourceforge.net/doc/pgm.html\#plainpgm$) l'ensemble des amers définit dans le $graph.xml$ se trouvant dans le dossier $/rsc$. Donc pour une taille de carte donnée et pour les configurations effectuées correctement dans $visib\_init.cpp$  expliquées par la suite, il suffit de modifier la position et l'orientation de nos amers dans le $graph.xml$ (voir partie 2.6.2) pour que la nouvelle carte de visibilité soit générée automatiquement en lançant à nouveau notre node $visib\_pgmwriter\_node.cpp$.\\
+Le node $visib\_pgmwriter\_node.cpp$ ne doit pas être modifié, toutes les configurations se font directement dans le fichier $visib\_init.cpp$. En effet, le node lance la fonction $Ecriture\_carte\_visib()$ qui crée dans un fichier au format PGM (Plain PGM : $http://netpbm.sourceforge.net/doc/pgm.html\#plainpgm$) l'ensemble des amers définis dans le $graph.xml$ se trouvant dans le dossier $/rsc$. Donc pour une taille de carte donnée et pour les configurations effectuées correctement dans $visib\_init.cpp$  expliquées par la suite, il suffit de modifier la position et l'orientation de nos amers dans le $graph.xml$ (voir partie 2.6.2) pour que la nouvelle carte de visibilité soit générée automatiquement en lançant à nouveau notre node $visib\_pgmwriter\_node.cpp$.\\
 
 \begin{figure}[!h]
 \center
@@ -373,7 +373,7 @@ Le node $visib\_pgmwriter\_node.cpp$ ne doit pas être modifié, toutes les conf
 \caption{Exemple d'une carte de visibilité}	
 \end{figure}
 
-Une fois notre carte générée, il faut pouvoir la visualiser sur Rviz et la superposée avec la carte de notre environnement pour qu'elle soit plus parlante. En lançant le $navigation.launch$ notre carte de visibilité est publiée sur le topic $\/markers\_visibility\_map$. Il suffit de l'ajouter directement sur Rviz en ajoutant celle-ci et en se plaçant sur le topic en question. Le résultat obtenu sur Rviz est le suivant :
+Une fois notre carte générée, il faut pouvoir la visualiser sur Rviz et la superposer avec la carte de notre environnement. En lançant le $navigation.launch$ notre carte de visibilité est publiée sur le topic $\/markers\_visibility\_map$. Il suffit de l'ajouter directement sur Rviz en ajoutant celle-ci et en se plaçant sur le topic en question. Le résultat obtenu sur Rviz est le suivant :
 
 \begin{figure}[!h]
 \center
@@ -381,7 +381,7 @@ Une fois notre carte générée, il faut pouvoir la visualiser sur Rviz et la su
 \caption{Superposition de nos cartes sur Rviz}	
 \end{figure}
 
-Au niveau de la configuration de $visib\_init.cpp$ dans la fonction $Ecriture\_carte\_visib()$, il faut modifier $int largeur=512;	 int hauteur=640;$ pour que la carte aie toujours les mêmes dimensions que la carte de notre environnement. $int nbr_amers=2;$ pour prendre en compte le nombre d'amers contenus dans $graph.xml$. Ensuite dans la boucle $for$ faisant la conversion de la position de mètre en pixels :
+Au niveau de la configuration de $visib\_init.cpp$ dans la fonction $Ecriture\_carte\_visib()$, il faut modifier \textit{int largeur=512;	 int hauteur=640;} pour que la carte ait toujours les mêmes dimensions que la carte de notre environnement. $int nbr\_amers=2;$ pour prendre en compte le nombre d'amers contenus dans $graph.xml$. Ensuite dans la boucle $for$ faisant la conversion de la position de mètre en pixels :
 
 $\\
 for(a=0;a<nbr\_amers;a++)\\
@@ -403,7 +403,7 @@ $resolution: 0.050000\\
 origin: [-12.200000, -13.800000, 0.000000]\\
 $
 
-Donc, cela permet de passer du repère du robot au repère de la carte pour placer nos marqueurs et créer notre carte de visibilité. Pour le moment les modifications se font manuellement, mais pour améliorer notre programme, il faudrait récupérer nos différentes valeurs (résolution, origine du repère, etc...) directement dans le fichier $.yaml$.\\
+Donc, cela permet de passer du repère du robot au repère de la carte pour placer nos marqueurs et créer notre carte de visibilité. Pour le moment les modifications se font manuellement, mais afin d'améliorer notre programme, il faudrait récupérer nos différentes valeurs (résolution, origine du repère, etc...) directement dans le fichier $.yaml$.\\
 
 Enfin, la valeur 32 correspond à la conversion pixel/mètres de la hauteur de notre fenêtre en faisant :\\ $640*0.05=32$.\\
 \\
@@ -430,11 +430,11 @@ ATTENTION : nous n'avons pas réussi à la rendre fonctionnelle lors de notre in
 
 \subsubsection{Comportement de la navigation}
 
-Le but du superviseur est de guider le robot pour qu'il atteigne un but de coordonnées $(x,y)$ dans la carte. Afin de gérer le comportement de la navigation à l'aide des amers, pour atteindre ce but précis, nous avons mis en place un nœud ROS de supervision : $hightLevelCommand\_node$. Ce nœud permet d'utiliser des commandes de haut niveau telles que \textit{chercher un amer} ou bien \textit{se déplacer vers un but}.\\
+Le but du superviseur est de guider le robot pour qu'il atteigne un but de coordonnées $(x,y)$ dans la carte. Afin de gérer le comportement de la navigation à l'aide d'amers, pour atteindre ce but précis, nous avons mis en place un nœud ROS de supervision : $hightLevelCommand\_node$. Ce nœud permet d'utiliser des commandes de haut niveau telles que \textit{chercher un amer} ou bien \textit{se déplacer vers un but}.\\
 
 (TODO : but absolu)
 
-On suppose alors qu'initialement, le robot est dans une position connue ou dans une des zones de visibilité. Si sa position est assez proche du but final suivant un seuil que l'on définira par la suite, on commande alors au robot de se déplacer directement vers le but. Si la position initiale est trop éloignée, on se déplace d'amer en amer pour atteindre l'amer qui est le plus proche du but final pour enfin se déplacer vers le but final. Tous les amers et les distances entre ces derniers sont représentés par un graphe, ainsi on utilise l'algorithme de plus court chemin Dijkstra pour déterminer vers quel amer se déplacer. Ce graphe est re-calculé à chaque fois que l'on voit un amer.\\
+On suppose alors qu'initialement, le robot est dans une position connue ou dans une des zones de visibilité. Si sa position est assez proche du but final suivant un seuil que l'on définira par la suite, on commande alors au robot de se déplacer directement vers le but. Si la position initiale est trop éloignée, on se déplace d'amer en amer pour atteindre l'amer qui est le plus proche du but final pour enfin se déplacer vers le but final. Tous les amers et les distances entre ces derniers sont représentés par un graphe, ainsi on utilise l'algorithme du plus court chemin Dijkstra pour déterminer vers quel amer se déplacer. Ce graphe est re-calculé à chaque fois que l'on voit un amer.\\
 
 Le comportement détaillé du superviseur est décrit par une machine à états décrite dans la figure \ref{HLC_MEF}.
 
@@ -446,14 +446,14 @@ Le comportement détaillé du superviseur est décrit par une machine à états 
 \label{HLC_MEF}
 \end{figure}
 
-Lors de la navigation, quatre signaux sonores permettent de connaître l'état de la navigation. Ils ont lieu lorsqu'un marqueur est détecté, lorsque le robot a atteint un but intermédiaire ou final et lorsque le robot décroche de sont suivi de trajectoire. Si le robot atteint sont but final avec une précision inférieure à celle demandée au lancement du superviseur, un son supplémentaire est joué.\\
+Lors de la navigation, quatre signaux sonores permettent de connaître l'état de la navigation. Ils ont lieu lorsqu'un marqueur est détecté, lorsque le robot a atteint un but intermédiaire ou final et lorsque le robot décroche de son suivi de trajectoire. Si le robot atteint sont but final avec une précision inférieure à celle demandée au lancement du superviseur, un son supplémentaire est joué.\\
 
 La recherche d'une zone de visibilité n'a pas encore été implémentée. Dans le cas où l'on connait la position initiale du robot dans la carte, il faudrait alors lui commander de se déplacer vers la zone de visibilité la plus proche et alors entamer la recherche de marqueur comme dans le scénario habituel. Dans le cas où cette position est inconnue, il faudrait tout d'abord mettre en place une détection d'obstacles pour pouvoir évoluer dans un environnement inconnu jusqu'à trouver un marqueur.
 
 \subsubsection{Graphe des amers}
 \label{sec:grapheDesAmers}
 
-Pour choisir vers quel amer (AR marqueur) se déplacer lorsque l'on en a détecté un et que l'on se trouve encore trop loin du but final pour de diriger directement vers celui-ci, on utilise un graphe représentant tous les marqueurs (figure \ref{graphe}) définis dans un fichier de format XML (figure \ref{graphe_xml}). Chaque nœud du graphe possède différentes propriétés : 
+Pour choisir vers quel amer (AR marqueur) se déplacer lorsque l'on en a détecté un et que l'on se trouve encore trop loin du but final pour se diriger directement vers celui-ci, on utilise un graphe représentant tous les marqueurs (figure \ref{graphe}) définis dans un fichier de format XML (figure \ref{graphe_xml}). Chaque nœud du graphe possède différentes propriétés : 
 
 \begin{itemize}
 \item[•] Id : numéro correspondant au marqueur AR ; 
