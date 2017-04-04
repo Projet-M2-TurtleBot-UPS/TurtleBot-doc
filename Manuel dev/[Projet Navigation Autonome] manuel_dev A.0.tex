@@ -350,7 +350,9 @@ Au début du projet une ébauche de commande a été réalisée. Celle-ci est si
 Cette ébauche ce trouve dans le fichier $commande\_node.cpp$ \\
 Cette node est lancée dans le fichier ROS de launch $navigation.launch$.\\
 
-La commande simple était à la base prévu pour la chercher d'une balle de couleur, une fois sa position repérée. Le but était de faire tourner le robot pour s'orienter face à la balle et ensuite d'avancer vers la balle. Nous avons alors repris cette commande pour exécuter les comportement de rechercher de marqueurs. On utilise alors seulement les rotations.
+La commande simple était à la base prévue pour la recherche d'une balle de couleur. Une fois sa position repérée par rapport au robot (angle et distance), le but était de faire tourner le robot pour s'orienter face à la balle et ensuite d'avancer vers la balle. Nous avons alors repris cette commande pour exécuter les comportements de recherche de marqueurs qui sont de simples rotations. 
+
+Une commande simple est lancée lorsque que le nœud de $command\_node$ reçoit un message $turtlebot\_proj\_nav::command$ que nous avons créé. Il est constitué de l'angle et la distance à parcourir ainsi des vitesses angulaires et linéaire à respecter durant les déplacements. Si la distance ou la vitesse linéaire demandée est nulle, seule la rotation est effectuée. Si l'angle ou la vitesse angulaire est nulle, seule la commande en ligne droite est effectuée. Le détail de la machiné à état de cette commande est disponible sur la figure \ref{commande_MEF}.
 
 \begin{figure}[!h]
 \centering\includegraphics[scale=0.4]{figures/commande_MEF.png}
