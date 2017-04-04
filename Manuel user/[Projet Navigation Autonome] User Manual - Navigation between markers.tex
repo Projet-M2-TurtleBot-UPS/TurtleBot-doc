@@ -83,7 +83,7 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
     \begin{tabular}{| l | l | l | l | l |}
     \hline
      \rowcolor{gray} Name & Major Version & Minor Version & Creation Date & Last version \\ \hline
-    User Manual - Navigation & A & 1 & 30/03/2017 & 1/04/2017 \\ 
+    User Manual - Navigation & A & 5 & 30/03/2017 & 5/04/2017 \\ 
     Between Markers &  &  &  &  \\ \hline
     \end{tabular}
 \end{center}
@@ -95,7 +95,9 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
     \begin{tabular}{| l | l | l | l |}
     \hline
     \rowcolor{gray} Redaction & Integration & Review & Validation \\ \hline
-    Bruno Dato & Bruno Dato & ?? & ?? \\  \hline
+    Bruno Dato & Bruno Dato & Bruno Dato & ?? \\  
+    Thibaut Aghnatios & Marine Bouchet &  &  \\  
+    Marine Bouchet &  & &  \\  \hline
     \end{tabular}
 \end{center}
 
@@ -122,8 +124,10 @@ User Manual - Navigation Between Markers is distributed to all clients and exter
      \rowcolor{gray} Version & Additions or modifications & Author & Date \\ \hline
     A.0 & Document creation & Bruno Dato & 30/01/2017\\ \hline
     A.1 & Sections \ref{sec:Prerequisites} and \ref{sec:Navigation Between Markers} & Bruno Dato & 1/04/2017\\ \hline
-    A.2 & Visibility & Thibaut AGHNATIOS & 02/04/2017\\ \hline
-    A.3 & Graph of the markers & Thibaut AGHNATIOS & 04/04/2017\\ \hline
+    A.2 & Section \ref{sec:visibilityMap} & Thibaut Aghnatios & 02/04/2017\\ \hline
+    A.3 & Section \ref{sec:graphOfTheMarkers} & Thibaut Aghnatios & 04/04/2017\\ \hline
+    A.4 & Sections \ref{sec:mapAndMarkersConfig} and \ref{sec:behaviourOfTheNavigation} & Marine Bouchet & 04/04/2017\\ \hline
+    A.5 & Review  & Bruno Dato & 05/04/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -140,7 +144,7 @@ User Manual - Navigation Between Markers is distributed to all clients and exter
 
 \begin{itemize}
 \item[•] TurtleBot 2
-\item[•] AR markers ... (TODO)
+\item[•] AR markers 
 \end{itemize}
 
 \subsection{Software}
@@ -154,10 +158,11 @@ To be able to use any TurtleBot 2 with all the basic features, you need to compl
 \end{itemize}
 
 
-You also need the following software :
+You also need the following software and additional package :
 
 \begin{itemize}
 \item[•] GIT \href{https://git-scm.com/download/linux}{[Installation]} 
+\item[•] Package $ar\_track\_alvar$ \begin{verbatim}> sudo apt-get install ros-indigo-ar-track-alvar \end{verbatim}
 \end{itemize}
 
 \subsection{Workspace}
@@ -208,10 +213,12 @@ Now that you have downloaded the source code, you just need to compile to build 
 Several red lines must appear in the compilation description, it means that the executables we need have been created.
 
 \subsection{Map and markers configuration}
+\label{sec:mapAndMarkersConfig}
 
 \subsubsection{Environment map}
 
-You need yo create the map of the environment within you navigate if it is not already available in the folder \textbf{/catkin$\_$ws/src/TurtleBot-pkgs/turtlebot$\_$proj$\_$nav/map}. To create the map, we use the \textbf{turtlebot$\_$navigation} package which provides a SLAM mode (\href{http://wiki.ros.org/turtlebot_navigation/Tutorials/indigo/Build%20a%20map%20with%20SLAM}{Tutorial link}). After turning on the TurtleBot and its laptop, execute the following commands the TurtleBot laptop :
+You need yo create the map of the environment within you navigate if it is not already available in the folder \textbf{/catkin$\_$ws/src/TurtleBot-pkgs/turtlebot$\_$proj$\_$nav/map}. To create the map, we use the \textbf{turtlebot$\_$navigation} package which provides a SLAM mode (\href{http://wiki.ros.org/turtlebot_navigation/Tutorials/indigo/Build%20a%20map%20with%20SLAM}{Tutorial link}).We recommend to put the robot in a parallel orientation with a wall to facilitate the future definitions of markers orientations. After turning on the TurtleBot and its laptop, execute the following commands the TurtleBot laptop :
+
 
 \begin{itemize}
 \item[]  \begin{verbatim}> roslaunch turtlebot_bringup minimal.launch \end{verbatim}
@@ -224,7 +231,7 @@ Then, on a remote computer, execute the visualization of the SLAM :
 \item[]  \begin{verbatim}> roslaunch turtlebot_rviz_launchers view_navigation.launch \end{verbatim}
 \end{itemize}
 
-To make the robot move and explore the environment, execute :
+To make the robot move thanks to your keyboard and explore the environment, execute :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> roslaunch turtlebot_teleop keyboard_teleop.launch --screen \end{verbatim}
@@ -240,11 +247,12 @@ Once the map is satisfying for the navigation, on another terminal you have to s
 
 \subsubsection{Markers disposition}
  
-Within our project we have used  $16 \times 16$ markers placed 3 m away minimum from each other. We put their centers 31cm above the ground so the kinect-marker is as paralel as possible to the ground.
+Within our project we have used  $16 \times 16$ markers placed 3 m away minimum from each other. We put their centers 31cm above the ground so the kinect-marker is as parallel as possible to the ground.\\
 
 \subsubsection{Graph of the markers}
+\label{sec:graphOfTheMarkers}
 
-To choose which marker (AR marker) to move when one has been detected and is still too far from the final goal to go directly to it, a graph representing all the markers defined in an XML format file. Each node of the graph has different properties:
+To choose towards which marker (AR marker) to move when one has been detected and is still too far from the final goal to go directly to it, we use a graph representing all the markers defined in an XML format file. Each node of the graph has different properties:
 
 \begin{itemize}
 \item[•] Id: number corresponding to the AR marker;
@@ -254,16 +262,22 @@ To choose which marker (AR marker) to move when one has been detected and is sti
 \item[•] Orientation: angle between the normal of the AR marker and the x-axis of the map (between 0 and 2$\pi$).
 \end{itemize}
 
-The numbers allow to be located in the graph when a marker is detected and find the next marker to be reached to continue the navigation. The coordinates $(x,y)$ of the markers make it possible to know the positions to be reached in the map. The orientation allow to command the robot to move in front and at a certain distance from the marker to avoid walls.
+The numbers allow the markers to be located in the graph. The coordinates $(x,y)$ of the markers make it possible to know the positions in the map. The orientation allow to command the robot to move in front and at a certain distance from the marker to avoid walls. For each marker that you will use in your navigation, you need to define a node with its properties and all its links with the others. The costs for then links have to be integers, you can use the distances between the marker in cm for example. \\
+
+You can use the visualizer RVIZ to get the positions and orientations of the markers in the map by display geometry poses in the map.
 
 \subsubsection{Markers static transforms publisher}
+\label{sec:markersStaticTransformsPublisher}
 
 In this section, you will need to modify $navigation.launch$.
 AR markers transforms need to be published. These transforms represent where the markers are in our scene in the system. Use one $static\_transform\_publisher$ for each marker. In the $args$ field put the position (x,y,z), the orientation (i,j,k,w), the transform parent (always $/map$) and the name of the marker transform ($/marker\_X$) of the marker.
 \\More info can be found at :\\
-\textit{wiki.ros.org/tf\#static\_transform\_publisher}
+\textit{wiki.ros.org/tf\#static\_transform\_publisher}\\
+
+Be careful, for each marker, the related mark must have its z-axis on the normal of the marker and its x-axis pointing upwards.
 
 \subsubsection{Visibility map}
+\label{sec:visibilityMap}
 
 First, to generate the visibility map, it is necessary to previously have a map of the environment. This map is created virtually or by using the mapping available on the Turtlebot, used in the $ map\_server $.\\
 
@@ -279,7 +293,7 @@ For a different map scale, see the developer manual.
 \section{Navigation Between Markers}
 \label{sec:Navigation Between Markers}
 
-First, you need to turn on the TurtleBot (there is a switch button on the side of the robot base). Then, turn on the TurtleBot PC. We will now launch all the ROS nodes that we need to run our application.
+First, turn on the TurtleBot (there is a switch button on the side of the robot base). Then, turn on the TurtleBot PC. We will now launch all the ROS nodes that we need to run our application.
 
 \subsection{On the TurtleBot PC}
 
@@ -294,17 +308,19 @@ If you are using the TurtleBot PC, open two terminals and chronologically execut
 
 \subsubsection{Navigation}
 
-	TODO
+To launch all the navigation node, execute the following command :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> roslaunch turtlebot_proj_nav navigation.launch \end{verbatim}
 \end{itemize}
 
+You can now see on the visualizer RVIZ the map, the TurtleBot and all the markers.
+
 \subsection{On a remote PC}
 
 \subsubsection{Basic features}
 
-To execute the navigation from a remote PC, fist you have to ssh to the TurtleBot PC to launch the minimal and vision features. Open a fist terminal and write the following commands :
+To execute the navigation from a remote PC, fist you have to ssh to the TurtleBot PC to launch the minimal and vision features. Open a first terminal and write the following commands :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> ssh turtlebot@<TURTLEBOTP_IP> \end{verbatim}
@@ -320,13 +336,16 @@ Then, in a second terminal :
 
 \subsubsection{Navigation}
 
-(TODO)
+To run the navigation nodes on a remote laptop execute the following commands :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> roslaunch turtlebot_proj_launch navigation.launch \end{verbatim}
 \end{itemize}
 
+You can now see on the visualizer RVIZ the map, the TurtleBot and all the markers.
+
 \subsection{Behaviour of the navigation}
+\label{sec:behaviourOfTheNavigation}
 
 The navigation takes place between an initial position, the real position of the robot, or in the visibility zone of a marker, and a final position:
 
