@@ -256,9 +256,12 @@ To choose which marker (AR marker) to move when one has been detected and is sti
 
 The numbers allow to be located in the graph when a marker is detected and find the next marker to be reached to continue the navigation. The coordinates $(x,y)$ of the markers make it possible to know the positions to be reached in the map. The orientation allow to command the robot to move in front and at a certain distance from the marker to avoid walls.
 
-\subsubsection{Markers static transforms}
+\subsubsection{Markers static transforms publisher}
 
-TODO
+In this section, you will need to modify $navigation.launch$.
+AR markers transforms need to be published. These transforms represent where the markers are in our scene in the system. Use one $static\_transform\_publisher$ for each marker. In the $args$ field put the position (x,y,z), the orientation (i,j,k,w), the transform parent (always $/map$) and the name of the marker transform ($/marker\_X$) of the marker.
+\\More info can be found at :\\
+\textit{wiki.ros.org/tf\#static\_transform\_publisher}
 
 \subsubsection{Visibility map}
 
