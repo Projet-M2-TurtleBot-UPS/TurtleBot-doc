@@ -121,11 +121,11 @@ Le rapport du projet est diffusé à l'ensemble des clients et des intervenants 
     \hline
      \rowcolor{gray} Version & Modification apportée & Auteur & Date \\ \hline
     A.0 & Création du document & Bruno Dato & 13/03/2017\\ \hline
-    A.1 & Sections \ref{sec:solution_mise_en_place}, \ref{sec:detection_et_localisation} et \ref{sec:introduction} & Marine Bouchet & 27/03/2017\\ \hline
-    A.2 & Section \ref{sec:detection_et_localisation} & Tristan Klempka & 28/03/2017\\ \hline
-    A.3 & Section \ref{sec:Visibilite} & Thibaut Aghnatios & 30/03/2017\\ \hline
-    A.4 & Sections \ref{sec:Commande} et \ref{sec:Superviseur} & Bruno Dato & 30/03/2017\\ \hline
-    A.5 & Section \ref{sec:Superviseur} & Bruno Dato & 31/03/2017\\ \hline
+    A.1 & ?? & Marine Bouchet & 27/03/2017\\ \hline
+    A.2 & ?? & Tristan Klempka & 28/03/2017\\ \hline
+    A.3 & Section \ref{sec:visibilite} & Thibaut Aghnatios & 30/03/2017\\ \hline
+    A.4 & Sections \ref{sec:commande} et \ref{sec:superviseur} & Bruno Dato & 30/03/2017\\ \hline
+    A.5 & Section \ref{sec:superviseur} & Bruno Dato & 31/03/2017\\ \hline
     A.6 & Section \ref{sec:introduction} & Bruno Dato & 1/04/2017\\ \hline
      
     \end{tabular}
@@ -177,10 +177,10 @@ La tâche de navigation autonome se découpe en cinq briques : ++ de textes rés
 \begin{description}
 \item [Détection] qui permet de repérer les amers dans le champs de vision quand ils se présentent (cf. AR
 \item [Localisation] qui permet de savoir où se trouve le robot, en utilisant soit les données d'odométrie interne, soit les données d’observation (cf. NOUS
-\item [Trajectoire] qui permet de se déplacer en boucle fermée d'un point A à un point B (cf. NAV
-\item [Commande] "
-\item [Visibilité] qui permet de générer une carte contenant les positions des amers et leurs orientations ; et de renvoyer à partir de cette carte le nombre d'amers visibles.
-\item [Supervision] qui gère le bon déroulement de la tâche, le déplacement du point de départ au point d'arrivée (cf. 
+\item [Trajectoire] qui permet de générer le chemin à suivre pour aller d'un point A à un point B (cf. NAV
+\item [Commande] qui permet d'assuer le suivi de trajectoire ou d'effectuer des commandes simples en boucle ouverte
+\item [Visibilité] qui permet de générer une carte contenant les positions des amers et leurs orientations ; et de renvoyer à partir de cette carte le nombre d'amers visibles 
+\item [Supervision] qui gère le bon déroulement de la tâche, le déplacement du point de départ au point d'arrivée 
 \end{description}
 
 
@@ -335,7 +335,7 @@ Cette node est lancée dans le fichier ROS de launch $navigation.launch$
 \end{figure}
 
 \subsection{Visibilité}
-\label{sec:Visibilite}
+\label{sec:visibilite}
 
 Le but de cette section est de créer et d'utiliser une carte de visibilité, une carte contenant l'ensemble des positions où le robot voit au moins un des amers, afin de retourner le nombre d'amers visibles pour une position donnée. L’intérêt de cette carte est de pouvoir suivre notre navigation d'amers en amers et de savoir si l'on se trouve dans un champ de visibilité pour lancer la détection et la localisation avec notre superviseur.
 
@@ -402,15 +402,15 @@ ATTENTION : nous n'avons pas réussi à la rendre fonctionnelle lors de notre in
 
 \newpage
 \subsection{Superviseur}
-\label{sec:Superviseur}
+\label{sec:superviseur}
 
 \subsubsection{Comportement de la navigation}
 
 Le but du superviseur est de guider le robot pour qu'il atteigne un but de coordonnées $(x,y)$ dans la carte. Afin de gérer le comportement de la navigation à l'aide des amers, pour atteindre ce but précis, nous avons mis en place un nœud ROS de supervision : $hightLevelCommand\_node$. Ce nœud permet d'utiliser des commandes de haut niveau telles que \textit{chercher un amer} ou bien \textit{se déplacer vers un but}.\\
 
-(TODO : but absolu)
+(TODO : but absolu : ça suffit pas "Le but du superviseur est de guider le robot pour qu'il atteigne un but de coordonnées $(x,y)$ dans la carte" ?)
 
-On suppose alors qu'initialement, le robot est dans une position connue ou dans une des zones de visibilité. Si sa position est assez proche du but final suivant un seuil que l'on définira par la suite, on commande alors au robot de se déplacer directement vers le but. Si la position initiale est trop éloignée, on se déplace d'amer en amer pour atteindre l'amer qui est le plus proche du but final pour enfin se déplacer vers le but final. Tous les amers et les distances entre ces derniers sont représentés par un graphe, ainsi on utilise l'algorithme de plus court chemin Dijkstra pour déterminer vers quel amer se déplacer. Ce graphe est re-calculé à chaque fois que l'on voit un amer.\\
+On suppose alors qu'initialement, le robot est dans une position connue et dans une des zones de visibilité car notre système ne permet pas à ce jour de le vérifier. Si sa position est assez proche du but final suivant un seuil que l'on définira par la suite, on commande alors au robot de se déplacer directement vers le but. Si la position initiale est trop éloignée, on se déplace d'amer en amer pour atteindre l'amer qui est le plus proche du but final pour enfin se déplacer vers le but final. Tous les amers et les distances entre ces derniers sont représentés par un graphe, ainsi on utilise l'algorithme de plus court chemin Dijkstra pour déterminer vers quel amer se déplacer. Ce graphe est re-calculé à chaque fois que l'on voit un amer.\\
 
 Le comportement détaillé du superviseur est décrit par une machine à états décrite dans la figure \ref{HLC_MEF}.
 
@@ -461,11 +461,11 @@ Pour mener à bien la navigation, le superviseur utilise la classe $HighLevelCom
 
 \begin{itemize}
 \item[•] \textbf{init(threshold)} : L'initialisation permet de définir, suivant le seuil (\textbf{threshold}) choisi en paramètre, si le robot est trop éloigné ou non du but final pour se servir des marqueurs durant la navigation. Si le robot est trop proche, la fonction \textbf{init} renvoie $-1$, le superviseur commandera alors au robot de se déplacer directement vers le but final à l'aide de la fonction \textbf{sendFinalGoal()}. Dans le cas contraire, la fonction cherche le marqueur le plus proche du but final, navigue jusqu'à celui-ci, avant d'envoyer la dernière commande vers le but final.
-\item[•] \textbf{seekMarker()} : Cette fonction permet de commander le comportement de la recherche d'un amer lorsque l'on se trouve dans une zone de visibilité. Tant que cette méthode est appelée et qu'aucun marqueur n'a été détecté, le robot tourne successivement sur lui-même de $\pi/4$, $-\pi/2$, $3\pi/4$, $-\pi$, $5\pi/4$, $-3\pi/2$ ou $7\pi/4$. Si aucun marqueur n'a été détecté après toutes les rotations, la recherche recommence. (TODO visib: juste avant on dit que ça marche pas)
+\item[•] \textbf{seekMarker()} : Cette fonction permet de commander le comportement de la recherche d'un amer. Tant que cette méthode est appelée et qu'aucun marqueur n'a été détecté, le robot tourne successivement sur lui-même de $\pi/4$, $-\pi/2$, $3\pi/4$, $-\pi$, $5\pi/4$, $-3\pi/2$ ou $7\pi/4$. Si aucun marqueur n'a été détecté après toutes les rotations, la recherche recommence.
 \item[•] \textbf{sendMarkerGoal(distanceToMarker)} : Cette méthode permet de commander au robot de se déplacer en face du marqueur suivant à atteindre pour suivre le plus court chemin vers le but final. La distance à respecter par rapport au marqueur est définie par le paramètre \textbf{distanceToMarker}. 
 \item[•] \textbf{sendFinalGoal()} : Cette fonction commande directement le robot vers le but final, choisi à l'instanciation de la classe $HighLevelCommand$.
 \item[•] \textbf{askForMarker()} :  Cette méthode permet de lancer une recherche visuelle de marqueur, effectuée par le nœud de localisation.
-\item[•] \textbf{finalGoal(threshold)} : Permet de jouer un signal sonore spécial lorsque la précision de la position finale du robot par rapport au but fixé est inférieure (TODO : précision inférieure ?) à un certain seuil, défini à l'aide du paramètre \textbf{threshold}.
+\item[•] \textbf{finalGoal(threshold)} : Permet de jouer un signal sonore spécial lorsque l'écart entre la position finale du robot et le but fixé est inférieur à un certain seuil, défini à l'aide du paramètre \textbf{threshold}.
 \end{itemize}
 
 \newpage
