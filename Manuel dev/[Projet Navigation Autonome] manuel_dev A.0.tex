@@ -348,7 +348,7 @@ Lors de la recherche d'un marqueur, nous reprenons la main et c'est la nœud $co
 
 Au début du projet une ébauche de commande a été réalisée. Celle-ci est simple, elle permet un déplacement en ligne droite et une rotation sur place. Cette commande est en boucle ouverte. Il peut \^etre intéressant de continuer ce travail afin de prendre en compte une correction odométrique notamment lors d'un évitement d'obstacle lorsque le système reprend la main sur la commande de suivi de trajectoire faite par la brique $move\_base$.\\
 Cette ébauche ce trouve dans le fichier $commande\_node.cpp$ \\
-Cette node est lancée dans le fichier ROS de launch $navigation.launch$.\\
+Ce nœud est lancé dans le fichier ROS de launch $navigation.launch$.\\
 
 La commande simple était à la base prévue pour la recherche d'une balle de couleur. Une fois sa position repérée par rapport au robot (angle et distance), le but était de faire tourner le robot pour s'orienter face à la balle et ensuite d'avancer vers la balle. Nous avons alors repris cette commande pour exécuter les comportements de recherche de marqueurs qui sont de simples rotations. 
 
@@ -365,7 +365,7 @@ Une commande simple est lancée lorsque que le nœud de $command\_node$ reçoit 
 
 Le but de cette section est de créer et d'utiliser une carte de visibilité, une carte contenant l'ensemble des positions où le robot voit au moins un des amers, afin de retourner le nombre d'amers visibles pour une position donnée. L’intérêt de cette carte est de pouvoir suivre notre navigation d'amers en amers et de savoir si l'on se trouve dans un champ de visibilité pour lancer la détection et la localisation avec notre superviseur.
 
-Nous expliquons ici comment la carte de visibilité est générée, à l'aide de $visib\_pgmwriter\_node.cpp$, et le mécanisme de la node $visib\_pgmreader\_node.cpp$, retournant le nombre d'amers visibles.
+Nous expliquons ici comment la carte de visibilité est générée, à l'aide de $visib\_pgmwriter\_node.cpp$, et le mécanisme du nœud $visib\_pgmreader\_node.cpp$, retournant le nombre d'amers visibles.
 
 \subsubsection{Génération de la carte de visibilité}
 Tout d'abord pour générer la carte de visibilité, il faut préalablement avoir une carte de l'environnement. Cette carte est créée à l'aide d'un logiciel de dessin ou en utilisant la cartographie disponible sur le Turtlebot $gmapping$.
@@ -376,7 +376,7 @@ Tout d'abord pour générer la carte de visibilité, il faut préalablement avoi
 \caption{Cartographie de l'environnement avec le Turtlebot}	
 \end{figure}
 
-Le node $visib\_pgmwriter\_node.cpp$ ne doit pas être modifié, toutes les configurations se font directement dans le fichier $visib\_init.cpp$. En effet, le node lance la fonction $Ecriture\_carte\_visib()$ qui crée dans un fichier au format PGM (Plain PGM : $http://netpbm.sourceforge.net/doc/pgm.html\#plainpgm$) l'ensemble des amers définis dans le $graph.xml$ se trouvant dans le dossier $/rsc$. Donc pour une taille de carte donnée et pour les configurations effectuées correctement dans $visib\_init.cpp$  expliquées par la suite, il suffit de modifier la position et l'orientation de nos amers dans le $graph.xml$ (voir partie 2.6.2) pour que la nouvelle carte de visibilité soit générée automatiquement en lançant à nouveau notre node $visib\_pgmwriter\_node.cpp$.\\
+Le nœud $visib\_pgmwriter\_node.cpp$ ne doit pas être modifié, toutes les configurations se font directement dans le fichier $visib\_init.cpp$. En effet, le nœud lance la fonction $Ecriture\_carte\_visib()$ qui crée dans un fichier au format PGM (Plain PGM : $http://netpbm.sourceforge.net/doc/pgm.html\#plainpgm$) l'ensemble des amers définis dans le $graph.xml$ se trouvant dans le dossier $/rsc$. Donc pour une taille de carte donnée et pour les configurations effectuées correctement dans $visib\_init.cpp$  expliquées par la suite, il suffit de modifier la position et l'orientation de nos amers dans le $graph.xml$ (voir partie 2.6.2) pour que la nouvelle carte de visibilité soit générée automatiquement en lançant à nouveau notre nœud $visib\_pgmwriter\_node.cpp$.\\
 
 \begin{figure}[!h]
 \center
@@ -429,11 +429,11 @@ for(a=0;a<nbr\_amers;a++) ~\\
 	\} ~\\
 	$
 
-\subsubsection{Noeud retournant le nombre d'amers visibles}
-Maintenant que nous possédons une carte de visibilité, le nombre d'amers visibles de la position du robot est renvoyé à l'aide de la node $visib\_pgmreader\_node.cpp$. Il lit le fichier PGM créé et renvoie la valeur du pixel pour une position (x,y) sur cette carte (on utilise le topic MarkersVisibility). Si le pixel vaut 15 on est dans une zone blanche donc pas de marqueurs visibles. Pour un pixel de valeur 12, cela veut dire qu'on est dans le champ de visibilité d'un amer. Pour 9, 2 amers visibles. Pour 6, 3 amers visibles. Pour 3, 4 amers visibles. Ensuite pour 5 amers visibles, le pixel passe à 0, cependant on ne peut plus distinguer si le pixel est à 0 car 5 amers visibles ou bien car il s'agit du pixel correspondant à l'amer. C'est pourquoi dans notre cas, on suppose qu'au maximum 4 amers sont visibles en même temps. 
+\subsubsection{Nœud retournant le nombre d'amers visibles}
+Maintenant que nous possédons une carte de visibilité, le nombre d'amers visibles de la position du robot est renvoyé à l'aide du nœud $visib\_pgmreader\_node.cpp$. Il lit le fichier PGM créé et renvoie la valeur du pixel pour une position (x,y) sur cette carte (on utilise le topic MarkersVisibility). Si le pixel vaut 15 on est dans une zone blanche donc pas de marqueurs visibles. Pour un pixel de valeur 12, cela veut dire qu'on est dans le champ de visibilité d'un amer. Pour 9, 2 amers visibles. Pour 6, 3 amers visibles. Pour 3, 4 amers visibles. Ensuite pour 5 amers visibles, le pixel passe à 0, cependant on ne peut plus distinguer si le pixel est à 0 car 5 amers visibles ou bien car il s'agit du pixel correspondant à l'amer. C'est pourquoi dans notre cas, on suppose qu'au maximum 4 amers sont visibles en même temps. 
 Si on souhaite avoir plus d'amers visibles en même temps, il suffit d'augmenter la valeur maximale lors de l’écriture de la carte de visibilité. En effet, lors de la création de l’entête PGM, on définit la valeur maximale de nos pixels (dans notre cas 15).\\
 
-ATTENTION : nous n'avons pas réussi à la rendre fonctionnelle lors de notre intégration. Lors des tests avant intégration, le node suivant renvoyé bien le nombre d'amers visibles, cependant en l'intégrant, notre fonction $pgm\_imread(char *argv)$ ne stocke plus correctement les valeurs des données. Il faut donc la débugger avant qu'elle soit utilisée.
+ATTENTION : nous n'avons pas réussi à rendre fonctionnelle cette brique lors de notre intégration. Lors des tests avant intégration, le nœud suivant renvoyait bien le nombre d'amers visibles, cependant en l'intégrant, notre fonction $pgm\_imread(char *argv)$ ne stocke plus correctement les valeurs des données. Il faut donc la débugger avant qu'elle soit utilisée.
 
 \newpage
 \subsection{Superviseur}
@@ -442,8 +442,6 @@ ATTENTION : nous n'avons pas réussi à la rendre fonctionnelle lors de notre in
 \subsubsection{Comportement de la navigation}
 
 Le but du superviseur est de guider le robot pour qu'il atteigne un but de coordonnées $(x,y)$ dans la carte. Afin de gérer le comportement de la navigation à l'aide d'amers, pour atteindre ce but précis, nous avons mis en place un nœud ROS de supervision : $hightLevelCommand\_node$. Ce nœud permet d'utiliser des commandes de haut niveau telles que \textit{chercher un amer} ou bien \textit{se déplacer vers un but}.\\
-
-(TODO : but absolu : ça suffit pas "Le but du superviseur est de guider le robot pour qu'il atteigne un but de coordonnées $(x,y)$ dans la carte" ?)
 
 On suppose alors qu'initialement, le robot est dans une position connue ou dans une des zones de visibilité. Si sa position est assez proche du but final suivant un seuil que l'on définira par la suite, on commande alors au robot de se déplacer directement vers le but. Si la position initiale est trop éloignée, on se déplace d'amer en amer pour atteindre l'amer qui est le plus proche du but final pour enfin se déplacer vers le but final. Tous les amers et les distances entre ces derniers sont représentés par un graphe, ainsi on utilise l'algorithme du plus court chemin Dijkstra pour déterminer vers quel amer se déplacer. Ce graphe est re-calculé à chaque fois que l'on voit un amer.\\
 
