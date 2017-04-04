@@ -441,7 +441,11 @@ Le but du superviseur est de guider le robot pour qu'il atteigne un but de coord
 
 (TODO : but absolu : ça suffit pas "Le but du superviseur est de guider le robot pour qu'il atteigne un but de coordonnées $(x,y)$ dans la carte" ?)
 
+<<<<<<< HEAD
+On suppose alors qu'initialement, le robot est dans une position connue et dans une des zones de visibilité car notre système ne permet pas à ce jour de le vérifier. Si sa position est assez proche du but final suivant un seuil que l'on définira par la suite, on commande alors au robot de se déplacer directement vers le but. Si la position initiale est trop éloignée, on se déplace d'amer en amer pour atteindre l'amer qui est le plus proche du but final pour enfin se déplacer vers le but final. Tous les amers et les distances entre ces derniers sont représentés par un graphe, ainsi on utilise l'algorithme de plus court chemin Dijkstra pour déterminer vers quel amer se déplacer. Ce graphe est re-calculé à chaque fois que l'on voit un amer.\\
+=======
 On suppose alors qu'initialement, le robot est dans une position connue ou dans une des zones de visibilité. Si sa position est assez proche du but final suivant un seuil que l'on définira par la suite, on commande alors au robot de se déplacer directement vers le but. Si la position initiale est trop éloignée, on se déplace d'amer en amer pour atteindre l'amer qui est le plus proche du but final pour enfin se déplacer vers le but final. Tous les amers et les distances entre ces derniers sont représentés par un graphe, ainsi on utilise l'algorithme du plus court chemin Dijkstra pour déterminer vers quel amer se déplacer. Ce graphe est re-calculé à chaque fois que l'on voit un amer.\\
+>>>>>>> 93cb91a18e4a13c9718c1374c7084d4169fe5578
 
 Le comportement détaillé du superviseur est décrit par une machine à états décrite dans la figure \ref{HLC_MEF}.
 
