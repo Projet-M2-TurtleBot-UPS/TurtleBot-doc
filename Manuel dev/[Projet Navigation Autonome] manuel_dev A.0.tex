@@ -126,7 +126,7 @@ Le rapport du projet est diffusé à l'ensemble des clients et des intervenants 
     A.3 & Section \ref{sec:Visibilite} & Thibaut Aghnatios & 30/03/2017\\ \hline
     A.4 & Sections \ref{sec:Commande} et \ref{sec:Superviseur} & Bruno Dato & 30/03/2017\\ \hline
     A.5 & Section \ref{sec:Superviseur} & Bruno Dato & 31/03/2017\\ \hline
-    A.6 & Section \ref{sec:introduction} & Bruno Dato & 1/04/2017\\ \hline
+    A.6 & Section \ref{sec:introduction} & Bruno Dato et Marine Bouchet & 1/04/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -151,7 +151,8 @@ Arrivée & Position finale & Position finale
 \end{tabular}\\
 \end{center}
 
-DESCR + deco\\
+\noindent Ses scenarii sont (B étant une extension de A) : \\
+
 \begin{tabular}{cl}
 B & Si pas de position en entrée  \\
   & Le robot effectue une recherche de marqueur dans son champs visuel \\
@@ -160,7 +161,8 @@ B & Si pas de position en entrée  \\
   & Il effectue une autre recherche de marqueur dans son champs visuel \\
 & \\
 A & Tant que le but est plus loin que le prochain marqueur dans sa direction \\
-  & Le robot se déplace jusqu'à la zone de visibilité du marqueur le plus proche dans la direction du but  \\
+  & Le robot se déplace jusqu'à la zone de visibilité du marqueur le plus \\
+  & . proche dans la direction du but  \\
   & Le robot effectue une recherche de marqueur dans son champs visuel \\
   & Tant que pas de marqueur en vue  \\
   & Le robot tourne de sur lui même  \\
@@ -178,6 +180,7 @@ La tâche de navigation autonome se découpe en cinq briques :
 \item [Détection] qui permet de repérer les amers dans le champs de vision quand ils se présentent 
 \item [Localisation] qui permet de savoir où se trouve le robot, en utilisant soit les données d'odométrie interne, soit les données d’observation
 \item [Trajectoire] qui permet de se déplacer en boucle fermée d'un point A à un point B
+\item [Commande] qui permet de suivre la trajectoire
 \item [Visibilité] qui permet de générer une carte contenant les positions des amers et leurs orientations ; et de renvoyer à partir de cette carte le nombre d'amers visibles
 \item [Supervision] qui gère le bon déroulement de la tâche, le déplacement du point de départ au point d'arrivée
 \end{description}
@@ -191,8 +194,8 @@ L'architecture globale de notre produit est décrite par le schéma suivant :
 
 \begin{figure}[h]
 \center
-% \includegraphics[scale=0.6]{figures/archi.png} 
-\caption{Architecture ROS}	
+\includegraphics[scale=0.5]{figures/archi.png} 
+\caption{Architecture actuelle}	
 \end{figure}
 
 
