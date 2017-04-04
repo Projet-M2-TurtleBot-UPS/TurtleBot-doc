@@ -127,7 +127,7 @@ Le manuel de développement est diffusé à l'ensemble des clients et des interv
     A.3 & Section \ref{sec:visibilite} & Thibaut Aghnatios & 30/03/2017\\ \hline
     A.4 & Sections \ref{sec:commande} et \ref{sec:superviseur} & Bruno Dato & 30/03/2017\\ \hline
     A.5 & Section \ref{sec:superviseur} & Bruno Dato & 31/03/2017\\ \hline
-    A.6 & Section \ref{sec:introduction} & Bruno Dato & 1/04/2017\\ \hline
+    A.6 & Section \ref{sec:introduction} & Bruno Dato et Marine Bouchet & 1/04/2017\\ \hline
     A.7 & Relecture & Bruno Dato & 4/04/2017\\ \hline
      
     \end{tabular}
@@ -153,20 +153,22 @@ Arrivée & Position finale & Position finale
 \end{tabular}\\
 \end{center}
 
+\noindent Ses scenarii sont (B étant une extension de A) : \\
 
 \begin{tabular}{cl}
 B & Si pas de position en entrée  \\
-  & Le robot effectue une recherche de marqueur dans son champs visuel \\
-  & Tant que pas de marqueur en vue \\
-  & Le robot tourne sur lui même \\
-  & Il effectue une autre recherche de marqueur dans son champs visuel \\
+  & \indent Le robot effectue une recherche de marqueur dans son champs visuel \\
+  & \indent Tant que pas de marqueur en vue \\
+  & \indent \indent Le robot tourne sur lui même \\
+  & \indent Il effectue une autre recherche de marqueur dans son champs visuel \\
 & \\
 A & Tant que le but est plus loin que le prochain marqueur dans sa direction \\
-  & Le robot se déplace jusqu'à la zone de visibilité du marqueur le plus proche dans la direction du but  \\
+  & \indent Le robot se déplace jusqu'à la zone de visibilité du marqueur le plus \\
+  & \indent \ldots proche dans la direction du but  \\
   & Le robot effectue une recherche de marqueur dans son champs visuel \\
   & Tant que pas de marqueur en vue  \\
-  & Le robot tourne de sur lui même  \\
-  & Il effectue un autre recherche de marqueur dans son champs visuel \\
+  & \indent Le robot tourne de sur lui même  \\
+  & \indent Il effectue un autre recherche de marqueur dans son champs visuel \\
   & Le robot se déplace jusqu'au but  \\
 \end{tabular}
 
@@ -194,8 +196,8 @@ L'architecture globale de notre produit est décrite par le schéma suivant :
 
 \begin{figure}[h]
 \center
-% \includegraphics[scale=0.6]{figures/archi.png} 
-\caption{Architecture ROS}	
+\includegraphics[scale=0.5]{figures/archi.png} 
+\caption{Architecture actuelle}	
 \end{figure}
 
 
