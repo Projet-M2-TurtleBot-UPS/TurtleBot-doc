@@ -325,7 +325,35 @@ Then, in a second terminal :
 
 \subsection{Behaviour of the navigation}
 
-(TODO)
+The navigation takes place between an initial position, the real position of the robot, or in the visibility zone of a marker, and a final position:
+
+\begin{center}
+\begin{tabular} {c | c | c}
+Scenario & A & B \\\hline
+Start & Absolute initial position & Unknown initial position but in a \\
+ & & visibility zone of a marker \\\hline
+ Arrival & Final Position & Final Position
+\end{tabular} \\
+\end{center}
+
+\noindent These scenarii are (B bis an extension of A): \\
+
+\begin{tabular} {cl}
+B & If no input position \\
+  & \indent The robot performs a marker search in its visual field \\
+  & \indent As long as no marker in view \\
+  & \indent \indent The robot turns on itself \\
+  & \indent \indent It performs another marker search in its visual field \\
+& \\
+A & As long as the goal is further than the next marker in the goal direction \\
+  & \indent The robot moves to the most visibility zone of the marker \\
+  & \indent \ldots close in the direction of the goal \\
+  & \indent The robot performs a marker search in its visual field \\
+  & \indent As long as there is no marker in view \\
+  & \indent \indent The robot turns on itself \\
+  & \indent \indent It performs another marker search in its visual field \\
+  & \indent The robot moves to the goal \\
+\end{tabular}
 
 \end{document}
 
