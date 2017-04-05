@@ -6,7 +6,7 @@
 \usepackage{amsfonts}
 \usepackage{graphicx}
 \usepackage{hyperref}
-\usepackage[nottoc, notlof, notlot]{tocbibind}
+\usepackage{listings}
 \hypersetup{colorlinks=true,citecolor=black,filecolor=black,linkcolor=black,urlcolor=black}
 \setlength{\parindent}{0.6cm} 
 \setlength{\parskip}{0.10cm}
@@ -126,9 +126,10 @@ Le manuel de développement est diffusé à l'ensemble des clients et des interv
     A.2 & Section \ref{sec:navigation_avec_amers_2D_dans_un_environnement_connu} & Tristan Klempka & 28/03/2017\\ \hline
     A.3 & Section \ref{sec:visibilite} & Thibaut Aghnatios & 30/03/2017\\ \hline
     A.4 & Sections \ref{sec:commande} et \ref{sec:superviseur} & Bruno Dato & 30/03/2017\\ \hline
+    A.5 & Relecture & Marine Bouchet & 31/03/2017\\ \hline
     A.5 & Section \ref{sec:superviseur} & Bruno Dato & 31/03/2017\\ \hline
     A.6 & Section \ref{sec:introduction} & Bruno Dato et Marine Bouchet & 1/04/2017\\ \hline
-    A.7 & Relecture & Bruno Dato & 4/04/2017\\ \hline
+    A.7 & Relecture & Bruno Dato et Marine Bouchet & 4/04/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -183,8 +184,8 @@ La tâche de navigation autonome se découpe en six briques :
 \item [Localisation] qui permet de savoir où se trouve le robot, en utilisant soit les données d'odométrie interne, soit les données d'observation
 \item [Trajectoire] qui permet de générer le chemin à suivre pour aller d'un point A à un point B
 \item [Commande] qui permet d'assurer le suivi de trajectoire ou d'effectuer des commandes simples en boucle ouverte
-\item [Visibilité] qui permet de générer une carte contenant les positions des amers et leurs orientations ; et de renvoyer à partir de cette carte le nombre d'amers visibles 
-\item [Supervision] qui gère le bon déroulement de la tâche, le déplacement du point de départ au point d'arrivée 
+\item [Visibilité] qui permet de générer une carte contenant les positions des amers et leurs orientations et de renvoyer à partir de cette carte le nombre d'amers visibles 
+\item [Supervision] qui gère le bon déroulement de la tâche : le déplacement du point de départ au point d'arrivée 
 \end{description}
 
 
@@ -208,7 +209,7 @@ L'architecture globale de notre produit est décrite par le schéma suivant :
 
 \subsubsection{Fonctionnement}
 
-Afin de détecter les amers dans la scène, nous utilisons à la brique ROS : $ar\_track\_alvar$ qui utilise la librairie open source Alvar pour la détection de marqueurs AR.
+Afin de détecter les amers dans la scène, nous utilisons la brique ROS : $ar\_track\_alvar$ de la librairie open source Alvar pour la détection de marqueurs AR.
 Cette brique utilise le nuage de points 3D associé à la couleur pour identifier un marqueur. L'information de profondeur permet à l'algorithme de mieux repérer les plans des marqueurs dans la scène. Elle retourne l'identifiant, la position et l'orientation du marqueur dans le repère de la $/camera\_rgb\_optical\_frame$. La librairie fournie 55 marqueurs AR et la possibilité d'étendre cette liste facilement. Dans notre cas, nous utilisons uniquement le nœud qui permet de lire les marqueurs un par un (individual tags). En effet il existe un autre nœud qui permet d'estimer une position en observant un ensemble de marqueurs (multi-tag bundles).
 
 \subsubsection{Mise en place physique} 
@@ -216,17 +217,17 @@ Lors de notre projet nous avons utilisé des marqueurs de taille $16 \times 16$ 
 
 \subsubsection{Utilisation}
 
- Le nœud de détection est lancé indépendamment des autres nœuds du système. Il s'initialise dans $localisation.launch$ avec les paramètres suivant : 
+Le nœud de détection est lancé indépendamment des autres nœuds du système. Il s'initialise dans $localisation.launch$ avec les paramètres suivant : 
 \begin{itemize}
 \item $marker\_size$ : largeur (cm) des marqueurs AR utilisés
 \item $cam\_image\_topic$ : topic ROS du flux d'images de la caméra
 \item $cam\_info\_topic$ : topic ROS des informations propres à la caméra -- c'est ici que les données de calibrage sont récupérées
-\item $output\_frame$ : repère dans lequel sera exprimé le résultat de la détection -- $/camera\_rgb\_optical\_frame$ dans notre cas
+\item $output\_frame$ : repère dans lequel sera exprimé le résultat de la détection \\ $/camera\_rgb\_optical\_frame$ dans notre cas
 \end{itemize}
 
 \subsubsection{Sorties}
 
-Le nœud publie les informations de détection dans des messages de types $ar\_track\_alvar\_msgs::AlvarMarkers$ sur le topic $/ar\_marker\_pose$. Il publie aussi la TF associée au marqueur vu dans le repère de la caméra.
+Le nœud publie les informations de détection dans des messages de type $ar\_track\_alvar\_msgs::AlvarMarkers$ sur le topic $/ar\_marker\_pose$. Il publie aussi la TF associée au marqueur vu dans le repère de la caméra.
 	
 \subsubsection{Performances et évolutions}
 
@@ -248,10 +249,9 @@ La détection des marqueurs de $16 \times 16$ cm s'effectue jusqu'à 2 m 25 avec
 Le nœud de localisation est lancé gr\^ace à un ficher ROS de launch. Cependant, contrairement au nœud de détection, ce nœud ne se lance pas indépendamment des autres. Il est lancé avec l'ensemble du système de navigation avec la commande suivante : \textit{roslaunch turtlebot$\_$proj$\_$nav navigation.launch}
 
 Ce fichier configure et lance le système de navigation qui comprend le nœud de localisation. On trouve dans ce fichier des paramètres propre à la localisation pouvant être configurés.
-
 \begin{itemize}
 \item $map\_file$ : Chemin de la carte utilisée pour la navigation. Notre système utilise le nœud ROS $map\_server$ pour le chargement de la carte.
-\item $marker\_tf\_publisher\_X$ : L'utilisateur renseigne ici, pour chaque marqueur, la transformée qui sera publiée pour le repérer sur la carte. L'orientation est renseignée avec un quaternion. 
+\item $marker\_tf\_publisher\_X$ : L'utilisateur renseigne ici, pour chaque marqueur, la transformée qui sera publiée pour le repérer sur la carte. L'orientation, dans le repère de la map, est renseignée avec un quaternion. 
 \end{itemize}
 
 \subsubsection{Rappels}
@@ -259,9 +259,9 @@ Avant toute chose, il est important de rappeler que quelque soit la situation :
 \begin{itemize}
 \item $/map \rightarrow /odom \rightarrow /base\_link $ (\url{cf. http://www.ros.org/reps/rep-0105.html})
 \item Le repère $/map$ doit être correctement placé en position et en orientation puisque toute les transformations vont se faire à partir de celui-ci.
-\item /odom est le repère relatif de l'odométrie, assimilé certain, du robot et est placé au départ sur /map. Il est en quelque sorte le point de départ d'un déplacement. Étant donné que ce repère dérive au cours du déplacement du robot, il peut être erroné. La localisation via un amer connu permet de placer le repère /odom au bon endroit, et de réinitialiser l'odométrie, ce qui place /base\_link au même endroit. C'est une localisation absolue.
-\item chaque frame peut avoir plusieurs fils mais qu'un seul parent
-\item la transformée entre deux frames est décrite par deux attributs : 
+\item /odom est le repère relatif de l'odométrie du robot, assimilé certain, et est placé au départ sur /map. Il est en quelque sorte le point de départ d'un déplacement. Étant donné que ce repère dérive au cours du déplacement du robot, il peut être erroné. La localisation via un amer connu permet de placer le repère /odom au bon endroit, et de réinitialiser l'odométrie, ce qui place /base\_link au même endroit. C'est une localisation absolue.
+\item Chaque frame peut avoir plusieurs fils mais qu'un seul parent
+\item La transformée entre deux frames est décrite par deux attributs : 
   \begin{itemize}
   \item $m\_origin$ : Vector3 de translation 
   \item $m\_basis$ : Matrix3x3 de rotation
@@ -285,7 +285,7 @@ Ce nœud permet d'envoyer la nouvelle localisation du robot s'il détecte un mar
 
 Cette transformation est envoyée sur $/new\_odom$ que l'on publie avec le publisher $odom\_pub$. On publie également l'identifiant du marqueur vu sur $/nav/loca/markerSeen$ sous un $<$std\_msgs::Int16$>$. 
 
-\noindent Dans le cas où on ne voit rien on publie : -1 
+\noindent Dans le cas où on ne voit rien on publie : -1
 
 \subsubsection{Initialisation}
 \noindent Différents champs peuvent être paramétrés : 
@@ -323,7 +323,7 @@ Il serait préférable de récupérer les TFs /baselink $\rightarrow$ /camera\_r
 \end{figure}
 \subsubsection{\textit{localisation\_broadcaster\_node.cpp}}
 
-Ce nœud permet de tout le temps diffuser la transformée entre $/map$ et $/odom$. Il souscrit à la $<geometry\_msgs::Transform>$ /new\_odom, qui contient la "nouvelle" position certaine du robot. Dès que celle-ci est publiée, $/odom$ actualise sa position et on réinitialise le $nav\_msgs/Odometry$ : il devient notre nouveau référentiel.
+Ce nœud permet de tout le temps diffuser la transformée entre $/map$ et $/odom$. Il souscrit à la $<geometry\_msgs::Transform>$ /new\_odom, qui contient la "nouvelle" position certaine du robot. Dès que celle-ci est publiée, le repère $/odom$ est actualisé et on réinitialise le $nav\_msgs/Odometry$ : il devient notre nouveau référentiel.
 
 \begin{figure}
 \center
@@ -350,9 +350,9 @@ Au début du projet une ébauche de commande a été réalisée. Celle-ci est si
 Cette ébauche ce trouve dans le fichier $commande\_node.cpp$ \\
 Ce nœud est lancé dans le fichier ROS de launch $navigation.launch$.\\
 
-La commande simple était à la base prévue pour la recherche d'une balle de couleur. Une fois sa position repérée par rapport au robot (angle et distance), le but était de faire tourner le robot pour s'orienter face à la balle et ensuite d'avancer vers la balle. Nous avons alors repris cette commande pour exécuter les comportements de recherche de marqueurs qui sont de simples rotations. 
+La commande simple était à la base prévue pour la recherche d'une balle de couleur. Une fois sa position repérée par rapport au robot (angle et distance), le but était de faire tourner le robot pour l'orienter face à la balle et ensuite d'avancer vers la balle. Nous avons alors repris cette commande pour exécuter les comportements de recherche de marqueurs qui sont de simples rotations. 
 
-Une commande simple est lancée lorsque que le nœud de $command\_node$ reçoit un message $turtlebot\_proj\_nav::command$ que nous avons créé. Il est constitué de l'angle et la distance à parcourir ainsi des vitesses angulaires et linéaire à respecter durant les déplacements. Si la distance ou la vitesse linéaire demandée est nulle, seule la rotation est effectuée. Si l'angle ou la vitesse angulaire est nulle, seule la commande en ligne droite est effectuée. Le détail de la machiné à état de cette commande est disponible sur la figure \ref{commande_MEF}.
+Une commande simple est lancée lorsque que le nœud de $command\_node$ reçoit un message $turtlebot\_proj\_nav::command$ que nous avons créé. Il est constitué de l'angle et la distance à parcourir ainsi des vitesses angulaire et linéaire à respecter durant les déplacements. Si la distance ou la vitesse linéaire demandée est nulle, seule la rotation est effectuée. Si l'angle ou la vitesse angulaire est nulle, seule la commande en ligne droite est effectuée. Le détail de la machine à états de cette commande est disponible sur la figure \ref{commande_MEF}.
 
 \begin{figure}[!h]
 \centering\includegraphics[scale=0.4]{figures/commande_MEF.png}
@@ -363,7 +363,7 @@ Une commande simple est lancée lorsque que le nœud de $command\_node$ reçoit 
 \subsection{Visibilité}
 \label{sec:visibilite}
 
-Le but de cette section est de créer et d'utiliser une carte de visibilité, une carte contenant l'ensemble des positions où le robot voit au moins un des amers, afin de retourner le nombre d'amers visibles pour une position donnée. L’intérêt de cette carte est de pouvoir suivre notre navigation d'amers en amers et de savoir si l'on se trouve dans un champ de visibilité pour lancer la détection et la localisation avec notre superviseur.
+Le but de cette section est de créer et d'utiliser une carte de visibilité, une carte contenant l'ensemble des positions où le robot voit au moins un des amers, afin de retourner le nombre d'amers visibles pour une position donnée. L’intérêt de cette carte est de pouvoir suivre notre navigation d'amer en amer et de savoir si l'on se trouve dans un champ de visibilité pour lancer la détection et la localisation avec notre superviseur.
 
 Nous expliquons ici comment la carte de visibilité est générée, à l'aide de $visib\_pgmwriter\_node.cpp$, et le mécanisme du nœud $visib\_pgmreader\_node.cpp$, retournant le nombre d'amers visibles.
 
@@ -384,7 +384,7 @@ Le nœud $visib\_pgmwriter\_node.cpp$ ne doit pas être modifié, toutes les con
 \caption{Exemple d'une carte de visibilité}	
 \end{figure}
 
-Une fois notre carte générée, il faut pouvoir la visualiser sur Rviz et la superposer avec la carte de notre environnement. En lançant le $navigation.launch$ notre carte de visibilité est publiée sur le topic $\/markers\_visibility\_map$. Il suffit de l'ajouter directement sur Rviz en ajoutant celle-ci et en se plaçant sur le topic en question. Le résultat obtenu sur Rviz est le suivant :
+Une fois notre carte générée, il faut pouvoir la visualiser sur Rviz en la superposant avec la carte de notre environnement. En lançant le $navigation.launch$ notre carte de visibilité est publiée sur le topic $\/markers\_visibility\_map$. Il suffit de l'ajouter directement sur Rviz en ajoutant celle-ci et en se plaçant sur le topic en question. Le résultat obtenu sur Rviz est le suivant :
 
 \begin{figure}[!h]
 \center
@@ -393,47 +393,45 @@ Une fois notre carte générée, il faut pouvoir la visualiser sur Rviz et la su
 \end{figure}
 
 Au niveau de la configuration de $visib\_init.cpp$ dans la fonction $Ecriture\_carte\_visib()$, il faut modifier \textit{int largeur=512;	 int hauteur=640;} pour que la carte ait toujours les mêmes dimensions que la carte de notre environnement. $int nbr\_amers=2;$ pour prendre en compte le nombre d'amers contenus dans $graph.xml$. Ensuite dans la boucle $for$ faisant la conversion de la position de mètre en pixels :
+\begin{lstlisting}
+for(a=0;a<nbr\_amers;a++) {
+   x[a]=(x1[a]+12.2)/0.05;
+   y[a]=-(y1[a]+13.8-32)/0.05;
+   alphamax[a]=pi/4;
+}
+\end{lstlisting}
 
-$\\
-for(a=0;a<nbr\_amers;a++)\\
-	\{ \\
-. \hspace{35pt}    x[a]=(x1[a]+12.2)/0.05;\\
-. \hspace{35pt}    y[a]=-(y1[a]+13.8-32)/0.05;\\
-. \hspace{35pt}    alphamax[a]=pi/4;\\
-	\}\\
-	$
+\noindent Avant tout, il faut savoir qu'on a 3 repères différents.
+\begin{itemize}
+\item On a le repère du robot, R et possède la position en x et y du robot donc R (X,Y).
+\item Le repère de la carte de l'environnement note R' qui a pour origine (-12.2 ; -13.8) (dans notre cas pour une carte 512 x 640) donc R' (X+12.2, Y+13.8).
+\item Ensuite, on a le repère de notre carte de visibilité noté Rp qui est positionné en haut a gauche de la carte (vecteur u dans le même sens que x et vecteur v opposé au vecteur y) c'est pourquoi on peut écrire Rp (X+12.2, -(Y+13.8-32)).
+\end{itemize}
 
-
-Avant tout, il faut savoir qu'on a 3 repères différents.\\ 
-- On a le repère du robot que l'on nomme R et possède la position en x et y du robot donc R (X,Y).\\
-- Le repère de la carte de l'environnement note R' qui a pour origine (-12.2 ; -13.8) (dans notre cas pour une carte 512 x 640) donc R' (X+12.2, Y+13.8).\\ 
-- Ensuite on a le repère de notre carte de visibilité noté Rp qui est positionné en haut a gauche de la carte (vecteur u dans le même sens que x et vecteur v opposé au vecteur y) c'est pourquoi on peut écrire Rp (X+12.2, -(Y+13.8-32)).\\
 
 Explicitons maintenant les différentes valeurs utilisées : 0.05 correspond à la résolution qui se trouve dans le fichier de configuration .yaml dans $/map$. Ici 12.2 et 13.8 correspond à l'origine de la carte pour que la superposition des cartes soit correctes. En effet, si on laisse 0.0 et 0.0, la carte se générera à la base du robot sur Rviz donc on aura un décalage lors de la superposition. C'est pourquoi dans le fichier $visib.yaml$, il faut aussi le configurer de cette manière pour notre cas :\\
-$resolution: 0.050000\\
+$$resolution: 0.050000    ; 
 origin: [-12.200000, -13.800000, 0.000000]\\
-$
+$$
 
 Donc, cela permet de passer du repère du robot au repère de la carte pour placer nos marqueurs et créer notre carte de visibilité. Pour le moment les modifications se font manuellement, mais afin d'améliorer notre programme, il faudrait récupérer nos différentes valeurs (résolution, origine du repère, etc...) directement dans le fichier $.yaml$.\\
 
-Enfin, la valeur 32 correspond à la conversion pixel/mètres de la hauteur de notre fenêtre en faisant :\\ $640*0.05=32$.\\
-\\
-Ainsi, on peut écrire :
+Enfin, la valeur 32 correspond à la conversion pixel/mètres de la hauteur de notre fenêtre en faisant : $$640*0.05=32$$
 
-$\\
-for(a=0;a<nbr\_amers;a++) ~\\
-	\{  ~\\
-. \hspace{35pt}    x[a]=(x1[a]+12.2)/0.05; ~\\
-. \hspace{35pt}    y[a]=-(y1[a]+13.8-32)/0.05; ~\\
-. \hspace{35pt}    alphamax[a]=pi/4; ~\\
-	\} ~\\
-	$
+\noindent Ainsi, on peut écrire :
+\begin{lstlisting}
+for(a=0;a<nbr\_amers;a++) {
+   x[a]=(x1[a]+12.2)/0.05;  
+   y[a]=-(y1[a]+13.8-32)/0.05;  
+   alphamax[a]=pi/4;  
+}
+\end{lstlisting}
 
 \subsubsection{Nœud retournant le nombre d'amers visibles}
-Maintenant que nous possédons une carte de visibilité, le nombre d'amers visibles de la position du robot est renvoyé à l'aide du nœud $visib\_pgmreader\_node.cpp$. Il lit le fichier PGM créé et renvoie la valeur du pixel pour une position (x,y) sur cette carte (on utilise le topic MarkersVisibility). Si le pixel vaut 15 on est dans une zone blanche donc pas de marqueurs visibles. Pour un pixel de valeur 12, cela veut dire qu'on est dans le champ de visibilité d'un amer. Pour 9, 2 amers visibles. Pour 6, 3 amers visibles. Pour 3, 4 amers visibles. Ensuite pour 5 amers visibles, le pixel passe à 0, cependant on ne peut plus distinguer si le pixel est à 0 car 5 amers visibles ou bien car il s'agit du pixel correspondant à l'amer. C'est pourquoi dans notre cas, on suppose qu'au maximum 4 amers sont visibles en même temps. 
-Si on souhaite avoir plus d'amers visibles en même temps, il suffit d'augmenter la valeur maximale lors de l’écriture de la carte de visibilité. En effet, lors de la création de l’entête PGM, on définit la valeur maximale de nos pixels (dans notre cas 15).\\
+Maintenant que nous possédons une carte de visibilité, le nombre d'amers visibles de la position du robot est renvoyé à l'aide du nœud $visib\_pgmreader\_node.cpp$. Il lit le fichier PGM créé et renvoie la valeur du pixel pour une position (x,y) sur cette carte (on utilise le topic $MarkersVisibility$). Si le pixel vaut $15$ on est dans une zone blanche donc pas de marqueurs visibles. Pour un pixel de valeur $12$, cela veut dire qu'on est dans le champ de visibilité d'un amer. Pour $9$, 2 amers visibles. Pour $6$, 3 amers visibles. Pour $3$, 4 amers visibles. Ensuite pour 5 amers visibles, le pixel passe à $0$, cependant on ne peut plus distinguer si le pixel est à $0$ car 5 amers visibles ou bien car il s'agit du pixel correspondant à l'amer. C'est pourquoi dans notre cas, on suppose qu'au maximum 4 amers sont visibles en même temps. 
+Si on souhaite avoir plus d'amers visibles en même temps, il suffit d'augmenter la valeur maximale lors de l’écriture de la carte de visibilité. En effet, lors de la création de l’en-tête PGM, on définit la valeur maximale de nos pixels (dans notre cas $15$).\\
 
-ATTENTION : nous n'avons pas réussi à rendre fonctionnelle cette brique lors de notre intégration. Lors des tests avant intégration, le nœud suivant renvoyait bien le nombre d'amers visibles, cependant en l'intégrant, notre fonction $pgm\_imread(char *argv)$ ne stocke plus correctement les valeurs des données. Il faut donc la débugger avant qu'elle soit utilisée.
+ATTENTION : nous n'avons pas réussi à rendre fonctionnelle cette brique lors de notre intégration. Lors des tests avant intégration, le nœud suivant renvoyait bien le nombre d'amers visibles, cependant en l'intégrant, notre fonction $pgm\_imread(char *argv)$ ne stocke plus correctement les valeurs des données. Il faut donc la débugger pour qu'elle soit utilisable.
 
 \newpage
 \subsection{Superviseur}
@@ -441,9 +439,9 @@ ATTENTION : nous n'avons pas réussi à rendre fonctionnelle cette brique lors d
 
 \subsubsection{Comportement de la navigation}
 
-Le but du superviseur est de guider le robot pour qu'il atteigne un but de coordonnées $(x,y)$ dans la carte. Afin de gérer le comportement de la navigation à l'aide d'amers, pour atteindre ce but précis, nous avons mis en place un nœud ROS de supervision : $hightLevelCommand\_node$. Ce nœud permet d'utiliser des commandes de haut niveau telles que \textit{chercher un amer} ou bien \textit{se déplacer vers un but}.\\
+Le but du superviseur est de guider le robot pour qu'il atteigne un but de coordonnées $(x,y)$ dans la carte. Afin de gérer le comportement de la navigation à l'aide d'amers, pour atteindre ce but précis, nous avons mis en place un nœud ROS de supervision : $hightLevelCommand\_node$. Ce nœud permet d'utiliser des commandes de haut niveau telles que \textit{chercher un amer} ou bien \textit{se déplacer vers un but}.
 
-On suppose alors qu'initialement, le robot est dans une position connue ou dans une des zones de visibilité. Si sa position est assez proche du but final suivant un seuil que l'on définira par la suite, on commande alors au robot de se déplacer directement vers le but. Si la position initiale est trop éloignée, on se déplace d'amer en amer pour atteindre l'amer qui est le plus proche du but final pour enfin se déplacer vers le but final. Tous les amers et les distances entre ces derniers sont représentés par un graphe, ainsi on utilise l'algorithme du plus court chemin Dijkstra pour déterminer vers quel amer se déplacer. Ce graphe est re-calculé à chaque fois que l'on voit un amer.\\
+On suppose alors qu'initialement, le robot est dans une position connue ou dans une des zones de visibilité. Si sa position est assez proche du but final suivant un seuil que l'on définira par la suite, on commande alors au robot de se déplacer directement vers le but. Si la position initiale est trop éloignée, on se déplace d'amer en amer pour atteindre l'amer qui est le plus proche du but final pour enfin se déplacer vers le but final. Tous les amers et les distances entre ces derniers sont représentés par un graphe, ainsi on utilise l'algorithme du plus court chemin Dijkstra pour déterminer vers quel amer se déplacer. Ce graphe est re-calculé à chaque fois que l'on voit un amer.
 
 Le comportement détaillé du superviseur est décrit par une machine à états décrite dans la figure \ref{HLC_MEF}.
 
@@ -455,7 +453,7 @@ Le comportement détaillé du superviseur est décrit par une machine à états 
 \label{HLC_MEF}
 \end{figure}
 
-Lors de la navigation, quatre signaux sonores permettent de connaître l'état de la navigation. Ils ont lieu lorsqu'un marqueur est détecté, lorsque le robot a atteint un but intermédiaire ou final et lorsque le robot décroche de son suivi de trajectoire. Si le robot atteint sont but final avec une précision inférieure à celle demandée au lancement du superviseur, un son supplémentaire est joué.\\
+Lors de la navigation, quatre signaux sonores permettent de connaître l'état de la navigation. Ils ont lieu lorsqu'un marqueur est détecté, lorsque le robot a atteint un but intermédiaire ou final et lorsque le robot décroche de son suivi de trajectoire. Si le robot atteint sont but final avec une précision inférieure à celle demandée au lancement du superviseur, un son supplémentaire est joué.
 
 La recherche d'une zone de visibilité n'a pas encore été implémentée. Dans le cas où l'on connait la position initiale du robot dans la carte, il faudrait alors lui commander de se déplacer vers la zone de visibilité la plus proche et alors entamer la recherche de marqueur comme dans le scénario habituel. Dans le cas où cette position est inconnue, il faudrait tout d'abord mettre en place une détection d'obstacles pour pouvoir évoluer dans un environnement inconnu jusqu'à trouver un marqueur.
 
@@ -463,7 +461,6 @@ La recherche d'une zone de visibilité n'a pas encore été implémentée. Dans 
 \label{sec:grapheDesAmers}
 
 Pour choisir vers quel amer (AR marqueur) se déplacer lorsque l'on en a détecté un et que l'on se trouve encore trop loin du but final pour se diriger directement vers celui-ci, on utilise un graphe représentant tous les marqueurs (figure \ref{graphe}) définis dans un fichier de format XML (figure \ref{graphe_xml}). Chaque nœud du graphe possède différentes propriétés : 
-
 \begin{itemize}
 \item[•] Id : numéro correspondant au marqueur AR ; 
 \item[•] Label : nom du nœud, chaque nœud correspond à un marqueur AR ; 
@@ -471,7 +468,6 @@ Pour choisir vers quel amer (AR marqueur) se déplacer lorsque l'on en a détect
 \item[•] PositionY : coordonnée selon l'axe y de la carte connue de l'environnement; 
 \item[•] Orientation : angle entre la normale du marqueur AR et l'axe x de la carte (entre 0 et 2$\pi$).
 \end{itemize}
-
 Les numéros permettent de se situer dans le graphe lorsque l'on détecte un marqueur et ainsi trouver le marqueur suivant à atteindre pour continuer la navigation. Les coordonnées $(x,y)$ des marqueurs permettent de connaître les positions à atteindre dans la carte. L'orientation permet de commander au robot de se déplacer en face et à une certaine distance du marqueur pour ne pas foncer dans un mur.
 
 \begin{figure}[!h]
@@ -517,9 +513,9 @@ Afin de communiquer avec les différents nœuds, le nœud de supervision $hightL
 \subsubsection{Lancement du superviseur}
 \label{sec:LancementDuSuperviseur}
 
-Une fois la configuration minimale et les nœuds de navigation lancés, on lance le superviseur dans un terminal à l'aide de la commande suivante :\\
+Une fois la configuration minimale et les nœuds de navigation lancés, on lance le superviseur dans un terminal à l'aide de la commande suivante :
 
-\textbf{rosrun turtlebot$\_$proj$\_$nav highLevelCommand$\_$node X$\_$GOAL Y$\_$GOAL XY$\_$THRESHOLD XY$\_$PRECISION DISTANCE$\_$TO$\_$MARKERS}\\
+\indent \indent \indent \textit{rosrun turtlebot$\_$proj$\_$nav highLevelCommand$\_$node X$\_$GOAL Y$\_$GOAL \\ \indent \indent \indent \indent  XY$\_$THRESHOLD XY$\_$PRECISION DISTANCE$\_$TO$\_$MARKERS}
 
 \noindent avec les paramètres suivant : 
 \begin{itemize}
@@ -532,9 +528,6 @@ Une fois la configuration minimale et les nœuds de navigation lancés, on lance
 Le superviseur affiche alors sur la console, l'action qui est en cours et dans quel état correspondant il se trouve.
 
 
-\newpage
-\section{Conclusion}
-\label{sec:conclusion}
 
 \newpage
 \listoffigures
