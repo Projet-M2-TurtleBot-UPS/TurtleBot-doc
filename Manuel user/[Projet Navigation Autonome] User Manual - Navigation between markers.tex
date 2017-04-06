@@ -83,7 +83,7 @@ Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm]
     \begin{tabular}{| l | l | l | l | l |}
     \hline
      \rowcolor{gray} Name & Major Version & Minor Version & Creation Date & Last version \\ \hline
-    User Manual - Navigation & A & 5 & 30/03/2017 & 5/04/2017 \\ 
+    User Manual - Navigation & A & 5 & 30/03/2017 & 6/04/2017 \\ 
     Between Markers &  &  &  &  \\ \hline
     \end{tabular}
 \end{center}
@@ -127,7 +127,7 @@ User Manual - Navigation Between Markers is distributed to all clients and exter
     A.2 & Section \ref{sec:visibilityMap} & Thibaut Aghnatios & 02/04/2017\\ \hline
     A.3 & Section \ref{sec:graphOfTheMarkers} & Thibaut Aghnatios & 04/04/2017\\ \hline
     A.4 & Sections \ref{sec:mapAndMarkersConfig} and \ref{sec:behaviourOfTheNavigation} & Marine Bouchet & 04/04/2017\\ \hline
-    A.5 & Review  & Bruno Dato & 05/04/2017\\ \hline
+    A.5 & Review  & Bruno Dato & 06/04/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -153,8 +153,11 @@ To be able to use any TurtleBot 2 with all the basic features, you need to compl
 
 \begin{itemize}
 \item[•] \href{http://wiki.ros.org/turtlebot/Tutorials/indigo/Turtlebot%20Installation}{Turtlebot Installation} 
+\item[ ] \begin{verbatim} http://wiki.ros.org/turtlebot/Tutorials/indigo/Turtlebot%20Installation \end{verbatim}
 \item[•] \href{http://wiki.ros.org/turtlebot/Tutorials/indigo/PC%20Installation}{PC Installation} 
+\item[ ] \begin{verbatim} http://wiki.ros.org/turtlebot/Tutorials/indigo/PC%20Installation \end{verbatim}
 \item[•] \href{http://wiki.ros.org/turtlebot/Tutorials/indigo/Network%20Configuration}{Network Configuration} 
+\item[ ] \begin{verbatim} http://wiki.ros.org/turtlebot/Tutorials/indigo/Network%20Configuration \end{verbatim}
 \end{itemize}
 
 
@@ -162,14 +165,17 @@ You also need the following software and additional package :
 
 \begin{itemize}
 \item[•] GIT \href{https://git-scm.com/download/linux}{[Installation]} 
-\item[•] Package $ar\_track\_alvar$ \begin{verbatim}> sudo apt-get install ros-indigo-ar-track-alvar \end{verbatim}
+\item[ ] \begin{verbatim} https://git-scm.com/download/linux \end{verbatim}
+\item[•] Package $ar\_track\_alvar$ 
+\item[ ] \begin{verbatim}> sudo apt-get install ros-indigo-ar-track-alvar \end{verbatim}
 \end{itemize}
 
 \subsection{Workspace}
+\label{sec:workspace}
 
 \subsubsection{Build workspace}
 
-You need a ROS workspace (catkin workspace) to build our project before executing it. If you are running the ball search on the TurtleBot PC you have to create another workspace on the TurtleBot PC. In the case your are running it on a remote PC, you have to create the workspace on this PC.\
+You need a ROS workspace (catkin workspace) to build our project before executing it. If you are running the navigation between markers on the TurtleBot PC you have to create a workspace on the TurtleBot PC. In the case your are running it on a remote PC, you have to create the workspace on this PC.\\
 
 Place you where you want to build the workspace and execute the following commands :
 
@@ -188,14 +194,14 @@ Then, in $\sim/.bashrc$, add the following lines (it is normal if some of them a
 \item[]  \begin{verbatim} export TURTLEBOT_3D_SENSOR=kinect \end{verbatim}
 \item[]  \begin{verbatim} #ROS Version \end{verbatim}
 \item[]  \begin{verbatim} source /opt/ros/indigo/setup.bash \end{verbatim}
-\item[]  \begin{verbatim} source <YOUR_PATH>/catkin_ws/devel/setup.bash \end{verbatim}
+\item[]  \begin{verbatim} source <WORKSPACE_PATH>/catkin_ws/devel/setup.bash \end{verbatim}
 \item[]  \begin{verbatim} #Select corresponding TurtleBot on your network \end{verbatim}
 \item[]  \begin{verbatim} export ROS_MASTER_URI=http://<IP_OF_TURTLEBOT>:11311  \end{verbatim}
 \end{itemize}
 
 \subsubsection{Download package}
 
-Now, you need to download the package containing the source code. Place you in your workspace (catkin\_ws), and execute the following commands :
+Now, you need to clone the package containing the source code. Place you in your workspace (catkin\_ws), and execute the following commands :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> cd src \end{verbatim}
@@ -210,14 +216,22 @@ Now that you have downloaded the source code, you just need to compile to build 
 \item[]  \begin{verbatim}> catkin_make \end{verbatim}
 \end{itemize}
 
-Several red lines must appear in the compilation description, it means that the executables we need have been created.
+Several red lines must appear in the compilation description, it means that the executables we need have been created. If you encounter error at the first compilation, try it a second time. If errors persist, delete the workspace and start over from section \ref{sec:workspace}. 
 
 \subsection{Map and markers configuration}
 \label{sec:mapAndMarkersConfig}
 
 \subsubsection{Environment map}
 
-You need yo create the map of the environment within you navigate if it is not already available in the folder \textbf{/catkin$\_$ws/src/TurtleBot-pkgs/turtlebot$\_$proj$\_$nav/map}. To create the map, we use the \textbf{turtlebot$\_$navigation} package which provides a SLAM mode (\href{http://wiki.ros.org/turtlebot_navigation/Tutorials/indigo/Build%20a%20map%20with%20SLAM}{Tutorial link}).We recommend to put the robot in a parallel orientation with a wall to facilitate the future definitions of markers orientations. After turning on the TurtleBot and its laptop, execute the following commands the TurtleBot laptop :
+You need yo create the map of the environment within you navigate if it is not already available in the folder \textbf{/catkin$\_$ws/src/TurtleBot-pkgs/turtlebot$\_$proj$\_$nav/map}. To create the map, we use the \textbf{turtlebot$\_$navigation} package which provides a SLAM mode :
+
+\begin{itemize}
+\item[•] \href{http://wiki.ros.org/turtlebot_navigation/Tutorials/indigo/Build%20a%20map%20with%20SLAM}{SLAM tutorial link} 
+\item[ ] \begin{verbatim} http://wiki.ros.org/turtlebot_navigation/Tutorials/indigo/Build%20a%20map%20 \end{verbatim} 
+\begin{verbatim} with%20SLAM \end{verbatim}
+\end{itemize}
+
+We recommend to put the robot in a parallel orientation with a wall to facilitate the future definitions of markers orientations. After turning on the TurtleBot and its laptop, execute in different terminals the following commands the TurtleBot laptop :
 
 
 \begin{itemize}
@@ -225,7 +239,7 @@ You need yo create the map of the environment within you navigate if it is not a
 \item[]  \begin{verbatim}> roslaunch turtlebot_navigation gmapping_demo.launch \end{verbatim}
 \end{itemize}
 
-Then, on a remote computer, execute the visualization of the SLAM :
+Then, on a remote computer where the $.bashrc$ is configured, execute the visualization of the SLAM :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> roslaunch turtlebot_rviz_launchers view_navigation.launch \end{verbatim}
@@ -237,12 +251,11 @@ To make the robot move thanks to your keyboard and explore the environment, exec
 \item[]  \begin{verbatim}> roslaunch turtlebot_teleop keyboard_teleop.launch --screen \end{verbatim}
 \end{itemize}
 
-Once the map is satisfying for the navigation, on another terminal you have to save it :
+You can then control the robot with the keyboard and explore you environement. Once the map is satisfying for the future navigation, on another terminal you have to save it :
 
 \begin{itemize}
-\item[]  \begin{verbatim}> rosrun map_server map_saver -f <PATH>/catkin_ws/src/TurtleBot-pkgs/turtlebot\end{verbatim}
-\item[]  \begin{verbatim}_proj_nav/map/my_map\end{verbatim}
-
+\item[]  \begin{verbatim}> rosrun map_server map_saver -f <WORKSPACE_PATH>/catkin_ws/src/TurtleBot-pk\end{verbatim}
+\item[]  \begin{verbatim}gs/turtlebot_proj_nav/map/my_map\end{verbatim}
 \end{itemize}
 
 \subsubsection{Markers disposition}
@@ -252,36 +265,65 @@ Within our project we have used  $16 \times 16$ markers placed 3 m away minimum 
 \subsubsection{Graph of the markers}
 \label{sec:graphOfTheMarkers}
 
-To choose towards which marker (AR marker) to move when one has been detected and is still too far from the final goal to go directly to it, we use a graph representing all the markers defined in an XML format file. Each node of the graph has different properties:
+To choose towards which marker (AR marker) to move, we use a graph representing all the markers defined in an XML format file, $graph.xml$ :
+
+\begin{verbatim} <WORKSPACE_PATH>/catkin_ws/src/TurtleBot-pkgs/turtlebot_proj_nav/rsc/graph.xml\end{verbatim}
+
+Each node of the graph has different properties :
 
 \begin{itemize}
-\item[•] Id: number corresponding to the AR marker;
-\item[•] Label: name of the node, each node corresponds to an AR marker;
-\item[•] PositionX: coordinate along the x-axis of the known environment map;
-\item[•] PositionY: coordinate along the y-axis of the known environment map;
-\item[•] Orientation: angle between the normal of the AR marker and the x-axis of the map (between 0 and 2$\pi$).
+\item[•] $Id$: number corresponding to the AR marker;
+\item[•] $Label$: name of the node, each node corresponds to an AR marker;
+\item[•] $PositionX$: coordinate along the x-axis of the known environment map;
+\item[•] $PositionY$: coordinate along the y-axis of the known environment map;
+\item[•] $Orientation$: angle between the normal of the AR marker and the x-axis of the map (between 0 and 2$\pi$).
 \end{itemize}
 
-The numbers allow the markers to be located in the graph. The coordinates $(x,y)$ of the markers make it possible to know the positions in the map. The orientation allow to command the robot to move in front and at a certain distance from the marker to avoid walls. For each marker that you will use in your navigation, you need to define a node with its properties and all its links with the others. The costs for then links have to be integers, you can use the distances between the marker in cm for example. \\
+The $Id$ allow a marker to be located in the graph. The coordinates $(PositionX,PositionY)$ of the markers make it possible to know the positions in the map. $Orientation$ allows to command the robot to move in front and at a certain distance from the marker to avoid walls.\\
 
-You can use the visualizer RVIZ to get the positions and orientations of the markers in the map by display geometry poses in the map.
+For each marker that you will use in your navigation, you need to define a node with its properties and all its links with the others. The costs for the links have to be integers, you can use the distances between the marker in cm for example. \\
+
+For each marker, between the tags $<Nodes>$ and $</Nodes>$, add a line of this type : 
+
+\begin{verbatim} <Node Id=" " Label=" "  PositionX=" " PositionY=" " Orientation=" "/> \end{verbatim}
+
+For each link, between the tags $<Links>$ and $</Links>$, add a line of this type : 
+
+\begin{verbatim} <Link Source=" " Target=" " Cost=" "  /> \end{verbatim}
+
+You can use the visualizer RVIZ to get the positions and orientations of the markers in the map by displaying geometry poses in the map. A geometry pose will give you a position $(x,y,z)$ and an orientation in quaternions $(x,y,z,w)$ that will have to convert to obtain the orientation you need.
 
 \subsubsection{Markers static transforms publisher}
 \label{sec:markersStaticTransformsPublisher}
 
-In this section, you will need to modify $navigation.launch$.
-AR markers transforms need to be published. These transforms represent where the markers are in our scene in the system. Use one $static\_transform\_publisher$ for each marker. In the $args$ field put the position (x,y,z), the orientation (i,j,k,w), the transform parent (always $/map$) and the name of the marker transform ($/marker\_X$) of the marker.
-\\More info can be found at :\\
-\textit{wiki.ros.org/tf\#static\_transform\_publisher}\\
+In this section, you will need to modify $navigation.launch$ :
 
-Be careful, for each marker, the related mark must have its z-axis on the normal of the marker and its x-axis pointing upwards.
+\begin{verbatim} <PATH>/catkin_ws/src/TurtleBot-pkgs/turtlebot_proj_nav/launch/navigation.launch\end{verbatim}
+
+AR markers transforms need to be published. These transforms represent where the markers are in our scene in the system. Use one $static\_transform\_publisher$ for each marker. In the $args$ field put the position (x,y,z), the orientation (qx,qy,qz,qw), the transform parent (always $/map$) and the name of the marker transform ($/marker\_X$) of the marker. Thus, for each marker, you have to add a line of this type to $navigation.launch$ :
+
+\begin{verbatim}
+<node pkg="tf" type="static_transform_publisher" name="marker_tf_publisher_<ID>" 
+\end{verbatim}
+\begin{verbatim}
+args="x y z qx qy qz qw map marker_1 100" />
+\end{verbatim}
+
+Be careful, for each marker, the related mark must have its z-axis on the normal of the marker and its x-axis pointing upwards. 
+
+More info can be found at :
+
+\begin{itemize}
+\item[•] \href{http://wiki.ros.org/tf\#static\_transform\_publisher}{TF documentation} 
+\item[ ] \begin{verbatim} http://wiki.ros.org/tf\#static\_transform\_publisher \end{verbatim}
+\end{itemize}
 
 \subsubsection{Visibility map}
 \label{sec:visibilityMap}
 
-First, to generate the visibility map, it is necessary to previously have a map of the environment. This map is created virtually or by using the mapping available on the Turtlebot, used in the $ map\_server $.\\
+To generate the visibility map, it is necessary to previously create a map of the environment like we did.
 
-The node $ visib\_pgmwriter\_node.cpp $ must not be modified, all configurations are done directly in the $ visib\_init.cpp $ file. Indeed, the node launchs the function $ Writing\_map\_visib() $ that creates in a PGM file (Plain PGM: $ http://netpbm.sourceforge.net/doc/pgm.html\#plainpgm $) all markers defined in the $ graph.xml $ located in the $ rsc $ folder. So for a given map size and for the configurations performed correctly in $ visib\_init.cpp $, just change the position and orientation of our markers in the $ graph.xml $ so that the new visibility map is automatically generated by running our $ visib\_pgmwriter\_node.cpp $ node again. \\
+For a given map size and for the configurations performed correctly in $ visib\_init.cpp $, make sure that $graph.xml$ is up date with all the markers you are using and then to generate the new visibility map, run $visib\_pgmwriter\_node$ :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> rosrun turtlebot_proj_nav visib_pgmwriter_node.cpp \end{verbatim}
@@ -308,7 +350,7 @@ If you are using the TurtleBot PC, open two terminals and chronologically execut
 
 \subsubsection{Navigation}
 
-To launch all the navigation node, execute the following command :
+To launch all the navigation nodes, execute the following command :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> roslaunch turtlebot_proj_nav navigation.launch \end{verbatim}
@@ -316,11 +358,33 @@ To launch all the navigation node, execute the following command :
 
 You can now see on the visualizer RVIZ the map, the TurtleBot and all the markers.
 
-\subsection{On a remote PC}
+\subsubsection{Supervisor}
+
+To run the supervisor of the navigation, execute the following command :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> rosrun turtlebot_proj_nav hightLevelCommand_node X_GOAL Y_GOAL XY_THRESHOLD  \end{verbatim}
+\item[]  \begin{verbatim} XY_PRECISION DISTANCE_TO_MARKERS \end{verbatim}
+\end{itemize}
+
+\noindent with the following parameter : 
+
+\begin{itemize}
+\item[•] \textbf{X$\_$GOAL} et \textbf{Y$\_$GOAL} : coordinates $(x,y)$ of the final goal on the map we want the robot to reach ; 
+\item[•] \textbf{XY$\_$THRESHOLD} : threshold from which the markers are not used for navigation ; 
+\item[•] \textbf{XY$\_$PRECISION} : precision constraint required for the final sound signal to be played or not ; 
+\item[•] \textbf{DISTANCE$\_$TO$\_$MARKERS} : The distance to the markers that the robot must respect when moving from marker to marker.
+\end{itemize}
+
+The supervisor will then display on the terminal the action running and the corresponding state of the finite state machine who is in charge of supervising the navigation.
+
+\subsection{From a remote PC}
+
+You can run the application from a remote PC which means that it will be still executed on the TurtleBot PC but the displays will be on the remote PC.
 
 \subsubsection{Basic features}
 
-To execute the navigation from a remote PC, fist you have to ssh to the TurtleBot PC to launch the minimal and vision features. Open a first terminal and write the following commands :
+To execute the navigation on the TurtleBot PC from a remote PC, fist you have to ssh to the TurtleBot PC to launch the minimal and vision features. Open a first terminal and write the following commands :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> ssh turtlebot@<TURTLEBOTP_IP> \end{verbatim}
@@ -336,13 +400,30 @@ Then, in a second terminal :
 
 \subsubsection{Navigation}
 
-To run the navigation nodes on a remote laptop execute the following commands :
+To run the navigation nodes from a remote PC execute the following commands :
 
 \begin{itemize}
-\item[]  \begin{verbatim}> roslaunch turtlebot_proj_launch navigation.launch \end{verbatim}
+\item[]  \begin{verbatim}> ssh -X turtlebot@<TURTLEBOTP_IP> \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_bringup navigation.launch \end{verbatim}
 \end{itemize}
 
-You can now see on the visualizer RVIZ the map, the TurtleBot and all the markers.
+You can now see on the visualizer RVIZ the map, the TurtleBot and all the markers. You can also run the navigation on the remote PC by not doing the ssh but you can encounter network problems.
+
+\subsubsection{Supervisor}
+
+To run the supervisor from a remote PC, execute the following command :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> ssh -X turtlebot@<TURTLEBOTP_IP> \end{verbatim}
+\item[]  \begin{verbatim}> rosrun turtlebot_proj_nav hightLevelCommand_node X_GOAL Y_GOAL XY_THRESHOLD  \end{verbatim}
+\item[]  \begin{verbatim} XY_PRECISION DISTANCE_TO_MARKERS \end{verbatim}
+\end{itemize}
+
+The supervisor will then display on the terminal the action running and the corresponding state of the finite state machine who is in charge of supervising the navigation.\\
+
+You can also run the supervisor on the remote PC if you don't ssh on TurtleBot PC.
+
+
 
 \subsection{Behaviour of the navigation}
 \label{sec:behaviourOfTheNavigation}
@@ -376,6 +457,17 @@ A & As long as the goal is further than the next marker in the goal direction \\
   & \indent \indent It performs another marker search in its visual field \\
   & \indent The robot moves to the goal \\
 \end{tabular}
+
+
+Since the knowledge on the visibility of a marker is not yet operational, it will be considered that the robot is always in a visibility zone. The robot as to be placed in a visibility area at each start of navigation, taking care to give a correct initial position.\\
+
+Thus, depending on the parameters chosen launching the supervisor, the robot will :
+
+\begin{itemize}
+\item[1] Move directly to the final goal $X\_GOAL$ and $Y\_GOAL$ if the distance between the current position and the final goal is less than  $XY\_THRESHOLD$ , a special signal sound is played is the distance between the final goal and the current final position is less than   $XY\_PRECISION$ .
+\item[2] If not, while it doesn't find a marker, it will search for one until it detects one (sound signal). Then depending on which marker allows the robot to get closer to the final goal, it will move in front of this marker at a distance defined by $DISTANCE\_TO\_MARKERS$. This behavior will be repeated until the closest marker to the final goal is detected. When it is, the behavior 1 occurs.
+\end{itemize}
+
 
 \end{document}
 
