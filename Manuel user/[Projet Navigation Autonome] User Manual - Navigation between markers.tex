@@ -83,7 +83,7 @@ Reconnaissance des Formes \\ Master 2 Robotique : Décision et Commande}\\[3cm]
     \begin{tabular}{| l | l | l | l | l |}
     \hline
      \rowcolor{gray} Name & Major Version & Minor Version & Creation Date & Last version \\ \hline
-    User Manual - Navigation & A & 6 & 30/03/2017 & 07/04/2017 \\ 
+    User Manual - Navigation & A & 7 & 30/03/2017 & 07/04/2017 \\ 
     Between Markers &  &  &  &  \\ \hline
     \end{tabular}
 \end{center}
@@ -95,7 +95,7 @@ Reconnaissance des Formes \\ Master 2 Robotique : Décision et Commande}\\[3cm]
     \begin{tabular}{| l | l | l | l |}
     \hline
     \rowcolor{gray} Redaction & Integration & Review & Validation \\ \hline
-    Thibaut AGHNATIOS & Marine BOUCHET & Thibaut AGHNATIOS & ?? \\  
+    Thibaut AGHNATIOS & Marine BOUCHET & Thibaut AGHNATIOS & Bruno DATO \\  
     Marine BOUCHET & Bruno DATO & Bruno DATO  &  \\  
     Bruno DATO &  & &  \\  \hline
     \end{tabular}
@@ -129,6 +129,7 @@ User Manual - Navigation Between Markers is distributed to all clients and exter
     A.4 & Sections \ref{sec:mapAndMarkersConfig} and \ref{sec:behaviourOfTheNavigation} & Marine BOUCHET & 04/04/2017\\ \hline
     A.5 & Review  & Bruno DATO & 06/04/2017\\ \hline
     A.6 & Review  & Thibaut AGHNATIOS & 07/04/2017\\ \hline
+    A.7 & Validation  & Bruno DATO & 07/04/2017\\ \hline
      
     \end{tabular}
 \end{center}
@@ -190,7 +191,7 @@ Place you where you want to build the workspace and execute the following comman
 
 \newpage
 
-Then, in $\sim/.bashrc$, add the following lines (it is normal if some of them are already there) :
+Then, only on the remote PC, in $\sim/.bashrc$, make sure to have this following lines :
 
 \begin{itemize}
 \item[]  \begin{verbatim} #Initialisation Turtlebot kinect \end{verbatim}
@@ -219,14 +220,14 @@ Now that you have downloaded the source code, you just need to compile to build 
 \item[]  \begin{verbatim}> catkin_make \end{verbatim}
 \end{itemize}
 
-Several red lines must appear in the compilation description, it means that the executables we need have been created. If you encounter error at the first compilation, try it a second time. If errors persist, delete the workspace and start over from section \ref{sec:workspace}. 
+Several red lines must appear in the compilation description, it means that the executables we need have been created. If you encounter errors at the first compilation, try it a second time. If errors persist, delete the workspace and start over from section \ref{sec:workspace}. 
 
 \subsection{Map and markers configuration}
 \label{sec:mapAndMarkersConfig}
 
 \subsubsection{Environment map}
 
-You need yo create the map of the environment within you navigate if it is not already available in the folder \textbf{/catkin$\_$ws/src/TurtleBot-pkgs/turtlebot$\_$proj$\_$nav/map}. To create the map, we use the \textbf{turtlebot$\_$navigation} package which provides a SLAM mode :
+You need yo create the map of the environment within you navigate if it is not already available in the folder \textbf{$<$WORKSPACE\_PATH$>$/catkin$\_$ws/src/TurtleBot-pkgs/turtlebot$\_$proj$\_$nav} \textbf{/map}. To create the map, we use the \textbf{turtlebot$\_$navigation} package which provides a SLAM mode :
 
 \begin{itemize}
 \item[•] \href{http://wiki.ros.org/turtlebot_navigation/Tutorials/indigo/Build%20a%20map%20with%20SLAM}{SLAM tutorial link} 
@@ -263,7 +264,7 @@ You can then control the robot with the keyboard and explore you environement. O
 
 \subsubsection{Markers disposition}
  
-Within our project we have used  $16 \times 16$ markers placed 3 m away minimum from each other. We put their centers 31 cm above the ground so the kinect-marker is as parallel as possible to the ground.\\
+Within our project we have used  $16 \times 16$ markers placed 3 m away minimum from each other. We put their centers 31 cm above the ground so the kinect-marker is as parallel as possible to the ground.
 
 \subsubsection{Graph of the markers}
 \label{sec:graphOfTheMarkers}
@@ -282,7 +283,7 @@ Each node of the graph has different properties :
 \item[•] $Orientation$: angle between the normal of the AR marker and the x-axis of the map (between 0 and 2$\pi$).
 \end{itemize}
 
-The $Id$ allow a marker to be located in the graph. The coordinates $(PositionX,PositionY)$ of the markers make it possible to know the positions in the map. $Orientation$ allows to command the robot to move in front and at a certain distance from the marker to avoid walls.\\
+The $Id$ allows a marker to be located in the graph. The coordinates $(PositionX,PositionY)$ of the markers make it possible to know the positions in the map. $Orientation$ allows to command the robot to move in front and at a certain distance from the marker to avoid walls.\\
 
 For each marker that you will use in your navigation, you need to define a node with its properties and all its links with the others. The costs for the links have to be integers, you can use the distances between the marker in cm for example. \\
 
@@ -328,13 +329,13 @@ More info can be found at :
 
 To generate the visibility map, it is necessary to previously create a map of the environment like we did.
 
-For a given map size and for the configurations performed correctly in $ visib\_init.cpp$ (number of markers, minimal and maximal range), make sure that $graph.xml$ is up to date with all the markers you are using and then to generate the new visibility map, run $visib\_pgmwriter\_node$ :
+For a given map size and for the configurations performed correctly in $ visib\_init.cpp$ (number of markers), make sure that $graph.xml$ is up to date with all the markers you are using and then to generate the new visibility map, run $visib\_pgmwriter\_node$ :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> rosrun turtlebot_proj_nav visib_pgmwriter_node.cpp \end{verbatim}
 \end{itemize}
 
-For a different map scale, see the developer manual.
+For a different map from the one in place (aip\_map), see the developer manual.
 
 \newpage
 \section{Navigation Between Markers}
@@ -354,6 +355,7 @@ If you are using the TurtleBot PC, open two terminals and chronologically execut
 \end{itemize}
 
 \subsubsection{Navigation}
+\label{sec:navigation}
 
 To launch all the navigation nodes, execute the following command :
 
@@ -361,9 +363,17 @@ To launch all the navigation nodes, execute the following command :
 \item[]  \begin{verbatim}> roslaunch turtlebot_proj_nav navigation.launch \end{verbatim}
 \end{itemize}
 
-You can now see on the visualizer RVIZ the map, the TurtleBot and all the markers.
+You can now see on the visualizer RVIZ the map, the TurtleBot and all the markers. It is possible to get an error on the RVIZ node, if so, execute again the previous command. You can't easily define the initial position of the TurtleBot on the map thanks to this command :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> rostopic pub -r 10 /new_odom geometry_msgs/Transform '{translation:  {x: \end{verbatim}
+\item[]  \begin{verbatim} 0.0, y: 0.0, z: 0.0}, rotation: {x: 0.0,y: 0.0,z: 0.0, w: 1.0}}' \end{verbatim}
+\end{itemize}
+
+This command constantly publishes the position (0.0, 0.0, 0.0) and the orientation in quaternions (0.0, 0.0, 0.0, 1.0) in the map. You have to end it doing $CTRL+C$ before running the supervisor.
 
 \subsubsection{Supervisor}
+\label{sec:supervisor}
 
 To run the supervisor of the navigation, execute the following command :
 
@@ -412,7 +422,7 @@ To run the navigation nodes from a remote PC execute the following commands :
 \item[]  \begin{verbatim}> roslaunch turtlebot_bringup navigation.launch \end{verbatim}
 \end{itemize}
 
-You can now see on the visualizer RVIZ the map, the TurtleBot and all the markers. You can also run the navigation on the remote PC by not doing the ssh but you can encounter network problems.
+You can now see on the visualizer RVIZ the map, the TurtleBot and all the markers. You can also run the navigation on the remote PC by not doing the ssh but you can encounter network problems. To define a different initial position, see section \ref{sec:navigation}.
 
 \subsubsection{Supervisor}
 
@@ -424,7 +434,7 @@ To run the supervisor from a remote PC, execute the following command :
 \item[]  \begin{verbatim} XY_PRECISION DISTANCE_TO_MARKERS \end{verbatim}
 \end{itemize}
 
-The supervisor will then display on the terminal the action running and the corresponding state of the finite state machine who is in charge of supervising the navigation.\\
+The parameter of the launch are explained section \ref{sec:supervisor}. The supervisor will then display on the terminal the action running and the corresponding state of the finite state machine who is in charge of supervising the navigation.\\
 
 You can also run the supervisor on the remote PC if you don't ssh on TurtleBot PC.
 
@@ -433,44 +443,18 @@ You can also run the supervisor on the remote PC if you don't ssh on TurtleBot P
 \subsection{Behaviour of the navigation}
 \label{sec:behaviourOfTheNavigation}
 
-The navigation takes place between an initial position, the real position of the robot, or in the visibility zone of a marker, and a final position:
-
-\begin{center}
-\begin{tabular} {c | c | c}
-Scenario & A & B \\\hline
-Start & Absolute initial position & Unknown initial position but in a \\
- & & visibility zone of a marker \\\hline
- Arrival & Final Position & Final Position
-\end{tabular} \\
-\end{center}
-
-\noindent These scenarii are (B bis an extension of A): \\
-
-\begin{tabular} {cl}
-B & If no input position \\
-  & \indent The robot performs a marker search in its visual field \\
-  & \indent As long as no marker in view \\
-  & \indent \indent The robot turns on itself \\
-  & \indent \indent It performs another marker search in its visual field \\
-& \\
-A & As long as the goal is further than the next marker in the goal direction \\
-  & \indent The robot moves to the most visibility zone of the marker \\
-  & \indent \ldots close in the direction of the goal \\
-  & \indent The robot performs a marker search in its visual field \\
-  & \indent As long as there is no marker in view \\
-  & \indent \indent The robot turns on itself \\
-  & \indent \indent It performs another marker search in its visual field \\
-  & \indent The robot moves to the goal \\
-\end{tabular}
-
-
-Since the knowledge on the visibility of a marker is not yet operational, it will be considered that the robot is always in a visibility zone. The robot as to be placed in a visibility area at each start of navigation, taking care to give a correct initial position.\\
+The navigation takes place between an initial position, the real position of the robot and a final position the user defines running the supervisor. Since the knowledge on the visibility of a marker is not yet operational, it will be considered that the robot is always in a visibility zone. The robot as to be placed in a visibility area at each start of navigation, taking care to give a correct initial position (cf section \ref{sec:navigation}).\\
 
 Thus, depending on the parameters chosen launching the supervisor, the robot will :
 
 \begin{itemize}
-\item[1] Move directly to the final goal $X\_GOAL$ and $Y\_GOAL$ if the distance between the current position and the final goal is less than  $XY\_THRESHOLD$ , a special signal sound is played is the distance between the final goal and the current final position is less than   $XY\_PRECISION$ .
-\item[2] If not, while it doesn't find a marker, it will search for one until it detects one (sound signal). Then depending on which marker allows the robot to get closer to the final goal, it will move in front of this marker at a distance defined by $DISTANCE\_TO\_MARKERS$. This behavior will be repeated until the closest marker to the final goal is detected. When it is, the behavior 1 occurs.
+\item[1] Move directly to the final goal $X\_GOAL$ and $Y\_GOAL$ if the distance between the current position and the final goal is less than  $XY\_THRESHOLD$, a special signal sound is played if the distance between the final goal and the current final position is less than $XY\_PRECISION$ .
+\item[2] If not, while it doesn't find a marker, it will search for one until it detects one (sound signal). Then depending on which marker allows the robot to get closer to the final goal, it will move in front of this marker at a relative distance defined by $DISTANCE\_TO\_MARKERS$. Ounce the robot has reached an intermediate goal which is a new marker visibility zone, another sound is played. This behavior will be repeated until the closest marker to the final goal is detected. When it is, the TurtleBot directly moves to the final goal $X\_GOAL$ and $Y\_GOAL$ and a special sound is played if the distance between the final goal and the current final position is less than $XY\_PRECISION$ .
 \end{itemize}
+
+During the navigation, the marker detection can be bad which results in an erroneous location : the robot literally "lies" on the map of RVIZ and a wrong command is sent to the robot. In this case, immediately stop the supervisor and the navigation launches and start again.
+
+
+
 
 \end{document}
