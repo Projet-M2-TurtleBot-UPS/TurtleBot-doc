@@ -1,0 +1,98 @@
+\documentclass[a4wide,10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{enumitem}
+\setlist{noitemsep}
+\usepackage{color}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage[compact]{titlesec}
+\titlespacing*{\section}{0pt}{6pt}{6pt}
+\titlespacing*{\subsection}{0pt}{6pt}{6pt}
+
+\begin{document}
+\thispagestyle{empty}
+
+\begin{center}
+\LARGE \bfseries  Compte-rendu de réunion numéro 6 \\
+\large \bfseries  Date : Mercredi 8 mars 2017
+
+\vspace{0.33cm}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ p{2.2cm}  p{13.6cm} }
+\textbf{Objectif(s)} &  Réunion de planification du sprint et des livrables \\
+\textbf{Participants} & Michaël LAUER, Michel TAIX, Marine BOUCHET, Bruno DATO, Thibaut AGHNATIOS, Tristan KLEMPKA, Thibault LAGOUTE \\ 
+\textbf{Auteur} & Marine Bouchet  \\
+\end{tabular}
+\end{center}
+
+\section*{Sujets abordés}
+
+Nous avons discuté de l'avancement du projet et de ce qu'il était possible de réaliser dans le temps restant pour les différentes briques :
+
+\begin{itemize}
+\item Détection
+\item Localisation 
+\item Trajectoire
+\item Commande et Odométrie
+\item Commande haut-niveau
+\end{itemize}
+
+Pour finir, nous avons évoqué la premiere étape du projet, l'oral et le stand.
+
+
+\section*{Existant et Tâches à réaliser}
+Nous sommes convenus des différentes parties à concevoir pour chaque brique.
+
+\subsection*{Localisation et Détection}
+
+La détection des amers se fait via la bibliothèque AR\_TRACK\_ALVAR.
+Elle permet facilement de retourner l'id et la position, dans le repere caméra du repère lié a l'objet (param extrinsèques). 
+Il est important de notifier que cette bibliothèque permet aussi de lire plusieurs ar\_markers sur une même image -- cette fonctionnalité est à implémenter. 
+
+Après cette étape, nous determinons l'emplacement de notre robot dans le repère local du  marker reconnu afin de connaitre sa position dans le repère global de la map. Cette étape marche actuellement avec un seul marker et est en cours de généralisation. 
+
+Plusieurs décisions et observations ont été faites :
+
+\begin{itemize}
+\item Une série de tests sur les limites de la bibliothèque détection des ar\_marker (distance min, max et angle de visibilté maximum) ainsi que la confiance en la position relative retournée pour un marker détecté.
+\item Réfléchir à la possibilité d'un filtre de Kalman qui faciliterait le process d'intégration des observations visuelles -- et, en utilisant la brique déjà faites navigation\_stack. 
+Il s'agira notement de définir le vecteur d'états cachés : $(x, y, \theta, v, dv, ddv)$ du robot. 
+Faire des observations à l'arrêt -- STATIC LOOK, pour rendre le filtre linéaire, en perdant les paramètres de vitesses, serait plus facile.
+Pour la prédiction de la position, quand on ne voit pas d'amers, nous éviterons de faire des estimations trop souvent pour éviter d'accumuler trop erreurs : $periode > 100 ms$ par exemple (adapté à la vitesse du robot).  
+\item Une carte de visibilité des amers devra être produite afin de savoir, pour chaque position s'il est possibles de voir un ou des amers -- avec les paramètres du premier point. 
+\item On positionnera les amers à la même hauteur que la caméra pour passer en deux dimensions. 
+\end{itemize}
+
+
+\subsection*{Commande Haut Niveau, Trajectoire et Commande/Odométrie}
+
+Le robot se déplace actuellement dans une carte avec des obstacles connus. Il suit une trajectoire pour atteindre un but prédéfi dans la brique navigation\_stack avec les paramètres adéquats dans la limite de l'odométrie et des roues. 
+Des tests ont été réalisés pour l'évitement d'obstacles et les passages entre les portes. 
+
+Plusieurs décisions et observations ont été faites :
+
+\begin{itemize}
+\item Pour l'odométrie, l'erreur systématique de chacune des roues est à définir en testant en ligne droite (grande pour réduire l'impact de l'erreur du démarrage -- nous ne contrôlons l'accélération) et en cerle. L'erreur quand le robot tourne devra être géré en définissant la vitesse la plus adéquate, ni trop grande ni trop petite, pour éviter à la fois les sauts et le patinage. Un rapport devra être fourni.
+\item La brique navigation\_stack ne permet pas de gérer les obstacles non connues, dynamique. Il va falloir, dès que le cas se présente, reprendre la main, et utiliser une brique de navigation locale que nous devrons coder pour éviter cet obstacle -- simplement dans un premier temps (exemple, tourner à droite pour le contourner) et un algorithme de "table top" dans un deuxième temps.
+\item la navigation se fera d'un point vers un amer -- dans le champs de vision de l'amer en question plus précisément. S'il ne le voit pas, il tourne sur lui même et s'arrête pour récuperer la position relative de celui-ci. Si deux amer peuvent être détectés, il en détècte un, se tourne et détècte le deuxième.
+\item A l'initialisation nous admettrons que la position du robot sera soit connue, soit dans l'angle de vue d'un amer. 
+\end{itemize}
+
+
+\section*{Autres}
+
+\subsection*{Première étape}
+Pour le tp de "recherche balle", il faudra essayer d'effectuer la recherche en boucle fermée et le rendre le plus robuste possible.
+
+\subsection*{Gestion de projet et Présentation}
+Le bilan de projet devra être court, détaillé et contenir une vidéo. Un manuel d'utilision sera fourni et le code commenté. Un oral blanc sera réalisé et les diapositives envoyées avant la présentation. Le début de la dernière semaine sera consacrées à ses tâches ainsi qu'à la préparation du stand pour la journée EEA. 
+
+\subsection*{\color{red}{Prochaine réunion : Mardi 21 mars 2017 entre 10h et 12h}}
+\subsection*{\color{red}{Oral : Mecredi 22 mars 2017 après-midi}}
+\subsection*{\color{red}{Stand : Jeudi 23 mars 2017 après-midi}}
+\end{document}

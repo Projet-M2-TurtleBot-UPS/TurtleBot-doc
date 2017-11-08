@@ -1,0 +1,265 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.2in]{geometry}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[nottoc, notlof, notlot]{tocbibind}
+\hypersetup{colorlinks=true,citecolor=black,filecolor=black,linkcolor=black,urlcolor=black}
+\setlength{\parindent}{0.6cm} 
+\setlength{\parskip}{0.10cm}
+\usepackage[automark]{scrpage2}
+\usepackage{color, colortbl}
+\usepackage[table]{xcolor}
+\usepackage{verbatim}
+
+
+\pagestyle{scrheadings}
+
+\ihead[]{Navigation Team}
+\ohead[]{User Manual - Ball Search}
+
+
+
+\begin{document}
+\pagestyle {plain}
+
+\begin{titlepage}
+
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} 
+
+\center
+
+\textsc{\Large Université Paul Sabatier}\\[1cm] 
+\includegraphics[scale=0.3]{UPS.jpg}\\[0.6cm] 
+
+
+\textsc{Master Intelligence Artificielle et \\ 
+Reconnaissance des Formes \\ Master Robotique : Décision et Commande}\\[3cm] 
+
+\HRule \\[0.4cm]
+{ \huge \bfseries User Manual - Ball Search}\\[0.4cm] 
+\LARGE Mobile Robot Navigation
+
+\HRule \\[1.5cm]
+ 
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Authors:}\\
+\href{mailto:thibaut.aghnatios@laposte.net}{Thibaut \textsc{Aghnatios} }  \\
+\href{mailto:bouchetmarinee@gmail.com}{Marine \textsc{Bouchet} } \\
+\href{mailto:bruno.dato.meneses@gmail.com}{Bruno \textsc{Dato} } \\
+\href{mailto:klempka.tristan@gmail.com}{Tristan \textsc{Klempka} } \\
+\href{mailto:lagoute.31@gmail.com}{Thibault \textsc{Lagoute} }  
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Tutors:} \\
+\href{mailto:lerasle@laas.fr}{Frédéric \textsc{Lerasle}}\\
+\href{mailto:michael.lauer@laas.fr}{Michaël \textsc{Lauer}} \\
+\href{mailto:taix@laas.f}{Michel \textsc{Taix}}
+\end{flushright}
+\end{minipage}\\[5cm]
+
+
+\large 10 January 2017
+ 
+
+\end{titlepage}
+
+\newpage
+
+
+\subsection*{Document tracking}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l | l |}
+    \hline
+     \rowcolor{gray} Name & Major Version & Minor Version & Creation Date & Last version \\ \hline
+    User Manual - Ball Search & A & 5 & 10/01/2017 & 07/04/2017 \\ \hline
+    \end{tabular}
+\end{center}
+
+
+\subsection*{Document authors}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    \rowcolor{gray} Redaction & Integration & Review & Validation \\ \hline
+    Bruno Dato & Bruno Dato & Marine Bouchet & Bruno Dato \\  \hline
+    \end{tabular}
+\end{center}
+
+\subsection*{Document validation}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+     \rowcolor{gray} Validation & Name & Date & Visa \\ \hline
+    & & & \\
+     \hline
+    \end{tabular}
+\end{center}
+
+\subsection*{Broadcast list}
+
+User Manual - Ball Search is distributed to all clients and external stakeholders.
+
+\subsection*{Review history}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+     \rowcolor{gray} Version & Additions or modifications & Author & Date \\ \hline
+    A.0 & Document creation & Bruno Dato & 10/01/2017\\ \hline
+    A.1 & Section \ref{sec:Prerequisites} and \ref{sec:Run Ball Search}  & Bruno Dato & 11/01/2017\\ \hline
+    A.2 & Section \ref{sec:Run Ball Search}  & Bruno Dato & 12/01/2017\\ \hline
+    A.3 & Minor updates  & Bruno Dato & 30/03/2017\\ \hline
+    A.4 & Review  & Marine Bouchet & 30/03/2017\\ \hline
+    A.5 & Validation  & Bruno Dato & 07/04/2017\\ \hline
+     
+    \end{tabular}
+\end{center}
+
+\newpage
+\tableofcontents
+\newpage
+	
+
+\section{Prerequisites}
+\label{sec:Prerequisites}
+
+\subsection{Equipment}
+
+\begin{itemize}
+\item[•] TurtleBot 2
+\item[•] Red balls\footnote{The color can be changed in the code in ballSearch\_node.cpp line 53} (diameter $\sim$ 10.5 cm)
+\end{itemize}
+
+\subsection{Software}
+
+To be able to use any TurtleBot 2 with all the basic features, you need to complete the following tutorials :
+
+\begin{itemize}
+\item[•] \href{http://wiki.ros.org/turtlebot/Tutorials/indigo/Turtlebot%20Installation}{Turtlebot Installation} 
+\item[•] \href{http://wiki.ros.org/turtlebot/Tutorials/indigo/PC%20Installation}{PC Installation} 
+\item[•] \href{http://wiki.ros.org/turtlebot/Tutorials/indigo/Network%20Configuration}{Network Configuration} 
+\end{itemize}
+
+
+You also need the following software :
+
+\begin{itemize}
+\item[•] GIT \href{https://git-scm.com/download/linux}{[Installation]} 
+\end{itemize}
+
+\subsection{Build workspace}
+
+You need a ROS workspace (catkin workspace) to build our project before executing it. If you are running the ball search on the TurtleBot PC you have to create the workspace on the TurtleBot PC. In the case your are running it on a remote PC, you have to create the workspace on this PC.\\
+
+Place you where you want to build the workspace and execute the following commands :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> mkdir -p /catkin_ws/src \end{verbatim}
+\item[]  \begin{verbatim}> cd /catkin_ws/src \end{verbatim}
+\item[]  \begin{verbatim}> catkin_init_workspace \end{verbatim}
+\item[]  \begin{verbatim}> cd .. \end{verbatim}
+\item[]  \begin{verbatim}> catkin_make \end{verbatim}
+\end{itemize}
+
+Then, only on a remote PC, in .bashrc, make sure to have the following lines :
+
+\begin{itemize}
+\item[]  \begin{verbatim} #Initialisation Turtlebot kinect \end{verbatim}
+\item[]  \begin{verbatim} export TURTLEBOT_3D_SENSOR=kinect \end{verbatim}
+\item[]  \begin{verbatim} #ROS Version \end{verbatim}
+\item[]  \begin{verbatim} source /opt/ros/indigo/setup.bash \end{verbatim}
+\item[]  \begin{verbatim} source <YOUR_PATH>/catkin_ws/devel/setup.bash \end{verbatim}
+\item[]  \begin{verbatim} #Select corresponding TurtleBot on your network \end{verbatim}
+\item[]  \begin{verbatim} export ROS_MASTER_URI=http://<IP_OF_TURTLEBOT>:11311  \end{verbatim}
+\end{itemize}
+
+\subsection{Download package}
+
+Now, you need to download the package containing the source code. Place you in your workspace (catkin\_ws), and execute the following commands :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> cd src \end{verbatim}
+\item[]  \begin{verbatim}> git clone https://github.com/Projet-Navigation-UPS/TurtleBot-pkgs \end{verbatim}
+\end{itemize}
+
+\subsection{Build executables}
+
+Now that you have downloaded the source code, you just need to compile to build the executables files. Place you in your workspace (catkin\_ws) and run the command : 
+
+\begin{itemize}
+\item[]  \begin{verbatim}> catkin_make \end{verbatim}
+\end{itemize}
+
+Three red lines must appear in the compilation description, meaning that the three executables we need have been created.
+
+\newpage
+\section{Run Ball Search}
+\label{sec:Run Ball Search}
+
+First, you need to turn on the TurtleBot (there is a switch button on the side of the robot base). Then, turn on the TurtleBot PC. We will now launch all the ROS nodes that we need to run our application.
+
+\subsection{On the TurtleBot PC}
+
+\subsubsection{Basic features}
+
+If you are using the TurtleBot PC, open two terminals and chronologically execute the following commands to activate the minimal features and the vision features, one on each terminal :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> roslaunch turtlebot_bringup minimal.launch \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_bringup 3dsensor.launch \end{verbatim}
+\end{itemize}
+
+\subsubsection{Ball search}
+
+Ounce you have place the robot in an environment with no obstacles and no red objects except the ball which should be at maximum distance of 1.80 m. On a third terminal, you can now launch the research of the ball executing the following command :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> roslaunch turtlebot_proj_nav ballSearch.launch \end{verbatim}
+\end{itemize}
+
+\subsection{On a remote PC}
+
+\subsubsection{Basic features}
+
+To execute the ball search from a remote PC, fist you have to ssh to the TurtleBot PC to launch the minimal and vision features. Open a fist terminal and write the following commands :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> ssh turtlebot@<TURTLEBOTP_IP> \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_bringup minimal.launch \end{verbatim}
+\end{itemize}
+
+Then, in a second terminal :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> ssh turtlebot@<TURTLEBOTP_IP> \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_bringup 3dsensor.launch \end{verbatim}
+\end{itemize}
+
+\subsubsection{Ball search}
+
+Like previously, ounce you have place the robot in an environment with no obstacles and no red objects except the ball which should be at maximum distance of 1.80 m. On a third terminal, you can now launch the research of the ball executing the following command without having to ssh the TurtleBot PC:
+
+\begin{itemize}
+\item[]  \begin{verbatim}> roslaunch turtlebot_proj_launch ballSearch.launch \end{verbatim}
+\end{itemize}
+
+\subsection{Behaviour of the search}
+
+Ounce ballSearch is launched, you can see on your screen the video stream of the RGB TurtleBot's camera and the treatment on that stream that allows to detect the ball. If there is no ball in front of the robot, it will scan the environment to find one. If it hasn't find anything after the scan, it will abandon the search. If it finds a ball, it will get closer to to ball by first sniping to focus on the ball if it has to, and them moving towards the ball. Ounce a ball is found, the robot is done.
+
+\end{document}
+

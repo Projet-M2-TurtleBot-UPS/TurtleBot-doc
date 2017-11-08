@@ -1,0 +1,70 @@
+\documentclass[a4wide,10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{enumitem}
+\setlist{noitemsep}
+\usepackage{color}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage[compact]{titlesec}
+\titlespacing*{\section}{0pt}{6pt}{6pt}
+\titlespacing*{\subsection}{0pt}{6pt}{6pt}
+
+\begin{document}
+\thispagestyle{empty}
+
+\begin{center}
+\LARGE \bfseries  Compte-rendu de réunion numéro [4] \\
+\large \bfseries  Date : [Jeudi 12 janvier 2017]
+
+\vspace{0.33cm}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ p{2.2cm}  p{13.6cm} }
+\textbf{Objectif(s)} & [Validation du premier prototype avec une démonstration et présentation de la seconde étape]  \\
+\textbf{Participants} & [Michaël LAUER, Michel TAIX, Marine BOUCHET, Bruno DATO, Thibaut AGHNATIOS, Tristan KLEMPKA, Thibault LAGOUTE] \\ 
+\textbf{Auteur} & [Thibault LAGOUTE]  \\
+\end{tabular}
+\end{center}
+
+\section*{Sujets abordés}
+
+Nous avons présenté un premier prototype et discuté des améliorations à ajouter avec les clients présents. De plus, ils nous ont conseillé et donné leur avis sur l'étape 2.
+
+
+\section*{Démonstration}
+
+
+Lors de la réunion 4, nous avons présenter l'avancement du TP1 par une démonstration. Rappellons que le but de la manipulation est la détection d'une balle de couleur et avancement jusqu'à une distance de 20cm de cette dernière. \\  
+	
+
+\section*{Correction du TP1}
+
+Suite à l'expèrience, il a fallut ajouter ou modifier des fonctions pour le bon déroulement du TP1 et la sécurité du robot:
+
+\begin{itemize}
+\item amélioration de la détection de la balle avec la compacité
+\item détection de la chute du robot
+\item détection d'obstacle proche du Turtlebot(10cm)
+\item arrêt du Turtlebot à 50cm de la balle
+\item faire le TP1 avec une boucle fermée 
+\item calcul des paramètres de l'odométrie
+\end{itemize}
+
+\section*{Mise en place Etape 2}
+
+De plus, nous avons discuter de la plannification et du cahier des charges de l'étape 2 pour le déplacement d'amer(2D Qrcode). Le robot devra se déplacer d'amer en amer jusqu'à un amer final.
+
+
+\section*{Décision(s) prise(s)}
+
+Nous avons décidé de passer directement à l'étape 2, en remettant à plutard l'ajustement du TP1, et d'oublier l'état de l'Art.\\
+Des tests et un premier rapport sur l'odométrie seront réalisés.
+
+
+\subsection*{\color{red}{Prochaine réunion : Vendredi 20 janvier 2017 (14h-15h)}}
+
+\end{document}
