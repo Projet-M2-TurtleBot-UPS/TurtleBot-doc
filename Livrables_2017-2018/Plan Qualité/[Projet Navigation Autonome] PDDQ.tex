@@ -191,6 +191,13 @@ Le projet est décomposé tout le long de l'année en tranches W, de 3 et 4 sema
 \end{tabular}
 \end{table}
 
+\subsubsection{Objectif}
+
+Actuellement le robot peut se déplacer dans une salle et estimer à peu près sa position sur une carte préétablie en utilisant des amers (AR-code).
+Les objectifs du projet vont, dans un premier temps, être de pouvoir asservir le robot sur l’AR-code, d’améliorer l’estimation de la localisation du robot via le filtre de Kalman et qu’il puisse réaliser des déplacements dans un environnement comprenant plusieurs salles.
+Nous allons également nous intéresser à la façon dont la carte représentant l’environnement du robot est créée (jusqu’ici elle était préétablie) et allons essayer de rendre la création et la mise à jour de la carte dynamique. Ceci notamment pour que le robot soit capable de détecter des obstacles qui ne sont pas sur la carte initiale de l’environnement.
+
+
 \subsubsection{Entrées}
 \begin{itemize}
 \renewcommand{\labelitemi}{\mbox{\ooalign{$\checkmark$\cr\hidewidth$\square$\hidewidth\cr}}}
@@ -286,9 +293,9 @@ Pour chaque sprint, la période initiale permettra de faire le point sur les él
 
 Scrum se différencie des autres méthodes de développement par ses avantages qui font de ce procédé une réponse à certains problèmes fréquemment rencontrés dans le développement logiciel. Pour éviter l’effet tunnel, la communication restera permanente entre les membres de l’équipe mais aussi entre l’équipe et le client, permettant une meilleure coopération à l’intérieur de l’équipe Scrum. 
 
-\begin{figure}[h]
+\begin{figure}[!h]
   \centering
-\noindent\includegraphics[width=\textwidth]{scrum.png} 
+  \noindent\includegraphics[width=\textwidth]{scrum.png} 
   \caption{Schéma Méthode Scrum}
 \end{figure}
 
@@ -326,33 +333,40 @@ L’arbre produit de notre projet de navigation est décomposé en cinq parties 
 \item [Action] : Concerne toutes les fonctions correspondant au domaine de la commande robotisée permettant le respect des consignes (atteindre un amer, …), la réalisation des mouvements, et les contraintes cinématiques. On parlera aussi de l’odométrie.
 \end{description}
 
-\begin{figure}[h]
+\begin{figure}[!h]
   \centering
-\noindent\centerline{\includegraphics[scale=0.4]{Arbre_produit.png}}
+  \noindent\centerline{\includegraphics[scale=0.3]{Arbre_produit.png}}
   \caption{Arbre Produit}
 \end{figure}
 
 \newpage
 \section{RoadMap}
 
-\begin{center}
-  \noindent\centerline{\includegraphics[scale=0.55]{Roadmap.png}}
-  \\FIGURE 3 - Roadmap
-\end{center}
+\begin{figure}[!h]
+  \noindent\centerline{\includegraphics[scale=0.5]{Roadmap.png}}
+  \caption{Roadmap}
+\end{figure}
 
 \newpage
 \section{Planning}
 \label{sec:planning}
 
-\subsection{Lôt de tâches}
+\subsection{Backlog}
 
-Un lot de tâches, ou \textit{Work Breakdown Structure}, est une décomposition hiérarchique des tâches à effectuer dans un projet. Il permet à la fois d'avoir une représentation visuelle du travail restant à réaliser, mais aussi d'évaluer rapidement l'avancement de chacune des tâches.
+Un \textit{backlog} est une liste de fonctionnalités ou de tâches jugées nécessaires et suffisantes pour la réalisation satisfaisante du projet.
+Il permet à la fois d'avoir une représentation visuelle du travail restant à réaliser, mais aussi d'évaluer rapidement l'avancement de chacune des tâches.
+
+\begin{figure}[!h]
+  \centering
+\noindent\centerline{\includegraphics[scale=0.3]{Backlog.png}}
+  \caption{Backlog de la Release1}
+\end{figure}
 
 \subsection{Planning général}
 
-\begin{figure}[h]
+\begin{figure}[!h]
   \centering
-\noindent\centerline{\includegraphics[scale=0.35]{Gantt.png}}
+\noindent\centerline{\includegraphics[scale=0.3]{Gantt.png}}
   \caption{Gantt du projet}
 \end{figure}
 
@@ -423,7 +437,7 @@ Le projet et les résultats obtenus seront décrits dans le bilan et exprimés l
 L'organisation de notre projet suit une configuration Agile.
 Nous avons réparti les rôles dans l'équipe afin de respecter cette organisation :
 \begin{itemize}
-\item Scrum Master (Who's the boss ?) : Responsable du processus de développement.
+\item Scrum Master (Pierre Beauhaire) : Responsable du processus de développement.
 \item Product Owner (Hugo Brefel) : Il représente le client au sein de notre équipe. Il dirige l'ordre de développement des fonctionnalités en maximisant la satisfaction du client.
 \item Équipe de développement : Ensemble des membres du projet.
 \end{itemize}
@@ -593,13 +607,14 @@ L’analyse des risques projet se doit d’être menée dès le tout début de l
 Les risques seront synthétisés et classés dans un tableau avec pour chacun sa définition, sa probabilité,
 sa gravité, ses causes et effets, ainsi que les actions préventives et correctives à mettre en oeuvre pour y pallier. On définira ainsi la criticité de chaque risque.\\
 
-\begin{center}
-\noindent\centerline{\includegraphics[scale=0.5]{Analyse_des_risques1.png}}
-\noindent\centerline{\includegraphics[scale=0.5]{Analyse_des_risques2.png}}
-  \\FIGURE 4 - Analyse des risques
-\end{center}
+\begin{figure}[!h]
+  \centering
+  \noindent\centerline{\includegraphics[scale=0.4]{Analyse_des_risques.png}}
+  \caption{Analyse des risques}
+\end{figure}
 
 
+\newpage
 \section*{ANNEXE}
 
 \noindent\includegraphics[width=\textwidth]{tmp-cr.png} 
