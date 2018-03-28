@@ -20,8 +20,8 @@
 
 \pagestyle{scrheadings}
 
-\ihead[]{TurtlebotTeam}
-\ohead[]{Manuel Utilisateur - Navigation Autonome e Robot Mobile}
+\ihead[]{TurtleTeam}
+\ohead[]{Manuel Utilisateur - Navigation Autonome de Robot Mobile}
 
 
 \begin{document}
@@ -196,7 +196,7 @@ Ensuite, seulement sur le PC externe, dans $.bashrc$, soyez sûrs d'avoir les li
 \end{itemize}
 
 \subsubsection{Téléchargement du code}
-\label{sec:TelechargementCode}
+
 Pour pouvoir télécharger le code source du projet, placez-vous dans votre workspace (catkin\_ws) et exécutez la commande :
 
 \begin{itemize}
@@ -271,7 +271,23 @@ Construisez la carte en faisant se déplacer le robot. Une fois que la carte vou
 \subsubsection{Disposition des ARs}
 
 Pour notre projet, nous utilisons des ARs de taille $10cm \times 10cm$ placés de sorte que les cônes de visibilité des amers recouvrent la majeure partie de l'environnement. Ainsi, si le robot est perdu et tourne sur lui-même, il devrait pouvoir voir au moins un amer. Nous plaçons les amers de sorte que le centre d'un AR code se situe à 31cm de hauteur pour que les rayons envoyés par la kinect soient parallèles au sol. \\
-Il est possible de modifier la taille des amers, en modifiant le fichier \upshape \emph{alvar.launch}, situé dans 
+Il est possible de modifier la disposition des amers dans l'environnement, en modifiant le fichier \upshape \emph{navigation.launch}, situé dans 
+\textbf{$<$WORKSPACE\_PATH$>$/catkin$\_$ws/src/turtlebot$\_$visual$\_$navigation/launch} 
+
+On peut spécifier la position et l'orientation d'un amer de la manière suivante :
+\begin{itemize}
+\item[]  \begin{verbatim}<node pkg="tf" type="static_transform_publisher" name="marker_tf_publisher_0" \end{verbatim}
+\item[] \begin{verbatim} args="-4.309 -1.589 0.31 0.0 0.0 0.0 1.0 map marker_0 100" /> \end{verbatim}
+\end{itemize}
+où $args$ permet de spécifier la position $(x,y,z)$ et l'orientation en quaternion $(x,y,z,w)$ de l'amer.
+Pour plus de détails, voir le lien suivant :
+\begin{verbatim}
+http://wiki.ros.org/tf
+\end{verbatim}
+
+
+
+Il est également possible de modifier la taille des amers, en modifiant le fichier \upshape \emph{alvar.launch}, situé dans 
 \textbf{$<$WORKSPACE\_PATH$>$/catkin$\_$ws/src/turtlebot$\_$visual$\_$navigation/launch} \\
 Il est préférable de lancer le fichier \upshape \emph{alvar.launch} directement depuis le PC TurtleBot.
 
@@ -281,11 +297,11 @@ Il est préférable de lancer le fichier \upshape \emph{alvar.launch} directemen
 
 Nous utilisons un logiciel d'interface graphique appelé RViz. Il nous permet de visualiser la trajectoire du robot. Pour lancer RViz, il faut exécuter la commande suivante :
 \begin{itemize}
-\item[] \begin{verbatim}> roslaunch turtlebot_visual_navigation navigation.launch \end{verbatim}\\
+\item[] \begin{verbatim}> roslaunch turtlebot_visual_navigation navigation.launch \end{verbatim}
 \end{itemize}
+\begin{figure}
 Pour configurer RViz, il faut d'abord le lancer. Lorsqu'il est lancé, il faut ajouter les modules voulus en cliquant sur le bouton \upshape \emph{Add}. \\
-\newpage
-\begin{figure}[h]
+
  \center
  \includegraphics[scale=0.5]{Add.png}
  \caption{Bouton Add}
@@ -293,7 +309,7 @@ Pour configurer RViz, il faut d'abord le lancer. Lorsqu'il est lancé, il faut a
 Il faut également enregistrer sa configuration en faisant un \upshape \emph{Ctrl+S}.
 
 
-
+\newpage
 \section{Navigation}
 \label{sec:Navigation}
 
@@ -301,8 +317,7 @@ Tout d'abord, allumez le TurtleBot (il y a un bouton sur le côté de la base du
 
 \subsection{Sur le PC TurtleBot}
 
-Il faut d'abord télécharger tout le code source de notre projet sur le PC Turtlebot \ref{sec:TelechargementCode}.
-
+Il faut d'abord télécharger tout le code source de notre projet sur le PC Turtlebot (voir section 1.3.2).
 
 \subsubsection{Fonctionnalités basiques}
 \label{sec:navigation2}
@@ -326,10 +341,9 @@ Pour lancer notre programme, il faut tout d'abord lancer RViz, puis lancer l'ex�
 
 Vous pouvez maintenant voir l'interface de RViz, le TurtleBot ainsi que tous les markers.
 Pour faire se déplacer le TurtleBot, il suffit de créer un 2D Nav Goal en cliquant sur le bouton du même nom. On positionne ensuite le NavGoal directement sur la carte.\\
-
-\begin{figure}[h]
+\begin{figure}
  \center
- \includegraphics[scale=0.6]{2DNavGoal.png}
+ \includegraphics[scale=0.5]{2DNavGoal.png}
  \caption{Bouton 2D Nav Goal}
 \end{figure}
 
@@ -372,10 +386,9 @@ On se connecte ensuite au PC Turtlebot et on lance notre programme grâce aux co
 
 Vous pouvez maintenant voir l'interface de RViz, le TurtleBot ainsi que tous les markers.
 Pour faire se déplacer le TurtleBot, il suffit de créer un 2D Nav Goal en cliquant sur le bouton du même nom. On positionne ensuite le NavGoal directement sur la carte.\\
-
-\begin{figure}[h]
+\begin{figure}
  \center
- \includegraphics[scale=0.7]{2DNavGoal.png}
+ \includegraphics[scale=0.5]{2DNavGoal.png}
  \caption{Bouton 2D Nav Goal}
 \end{figure}
 
