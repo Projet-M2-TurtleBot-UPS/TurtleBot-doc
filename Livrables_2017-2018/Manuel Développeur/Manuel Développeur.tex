@@ -1,0 +1,293 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\hypersetup{colorlinks=true,citecolor=black,filecolor=black,linkcolor=black,urlcolor=black}
+\setlength{\parindent}{0.6cm} 
+\setlength{\parskip}{0.10cm}
+\usepackage[automark]{scrpage2}
+\usepackage{color, colortbl}
+\usepackage[table]{xcolor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[french]{babel}
+\usepackage{comment}
+\usepackage{Tabbing}
+\usepackage{gensymb}
+
+\pagestyle{scrheadings}
+
+\ihead[]{TurtleTeam}
+\ohead[]{Manuel Développeur - Navigation Autonome de Robot Mobile}
+
+
+\begin{document}
+\pagestyle {plain}
+
+\begin{titlepage}
+
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} 
+
+\center
+
+\textsc{\Large Université Paul Sabatier Toulouse III}\\[1cm] 
+\includegraphics[scale=0.3]{figures/UPS.jpg}\\[0.6cm] 
+
+
+\textsc{Master 2 Intelligence Artificielle et \\ 
+Reconnaissance des Formes \\ Master 2 Robotique : Décision et Commande}\\[3cm] 
+
+\HRule \\[0.4cm]
+{ \huge \bfseries Navigation Autonome de Robot Mobile}\\[0.4cm] 
+\LARGE Manuel Développeur
+\HRule \\[1.5cm]
+ 
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Auteurs:}\\
+\href{mailto:beauhaire.pierre@gmail.com}{Pierre \textsc{Beauhaire} }  \\
+\href{mailto:brefel.hugo@gmail.com}{Hugo \textsc{Brefel} }  \\
+\href{mailto:salaheddineghamri@gmail.com}{Salah Eddine \textsc{Ghamri} } \\
+\href{mailto:sylvain31g@free.fr}{Sylvain \textsc{Guillaume} } \\
+\href{mailto:luc.rubio.lr@gmail.com}{Luc \textsc{Rubio} } 
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Tuteurs:} \\
+\href{mailto:michael.lauer@laas.fr}{Michaël \textsc{LAUER}} \\
+\href{mailto:lerasle@laas.fr}{Frédéric \textsc{LERASLE}}\\
+\href{mailto:taix@laas.f}{Michel \textsc{TAIX}}
+\end{flushright}
+\end{minipage}\\[5cm]
+
+\large Mars 2018
+ 
+
+\end{titlepage}
+
+\newpage
+
+
+\subsection*{Suivi du document}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l | l |}
+    \hline
+     \rowcolor{gray} Nom du document & Version & Date de création \\ \hline
+     Navigation Autonome & 1 & 22/03/2018 \\
+     de Robot Mobile - & & \\
+    Manuel développeur & & \\ \hline
+    \end{tabular}
+\end{center}
+
+
+\subsection*{Auteurs du document}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    \rowcolor{gray} Rédaction & Relecture \\ \hline
+    Pierre Beauhaire & Pierre Beauhaire \\ 
+    Luc Rubio & Luc Rubio \\ 
+     & Sylvain Guillaume \\ 
+     & Hugo Brefel \\ 
+     & Salah Eddine Ghamri \\  \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+     \rowcolor{gray} Validation & Nom & Date & Visa \\ \hline
+    & & & \\
+     \hline
+    \end{tabular}
+\end{center}
+
+\subsection*{Liste de diffusion}
+
+Le manuel développeur est diffusé à l'ensemble des clients.
+
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\label{sec:introduction}
+
+Ce manuel donne les informations nécessaires à l'utilisation et à l'évolution du projet "Navigation autonome d'un robot mobile" du Master 2 IARF et RODECO. Celui-ci permet, à ce jour, d'effectuer une navigation autonome d'un Turtlebot dans un environnement connu, contenant des amers dont leur position et leur orientation sont connues. Ces indices visuels, visualisés par la kinect et le capteur RGB-D, permettent de supprimer les erreurs systématiques de localisation effectuée par les capteurs proprioceptifs embarqués -- de l'odométrie.
+
+La navigation s'effectue entre une position initiale et une position finale : 
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c}
+Scénario & A & B & C & D \\ \hline
+Départ & Position initiale & Position initiale & Position initiale & Position initiale \\ 
+ & inconnue & inconnue & inconnue & inconnue \\ \hline
+Localisation & Sans & Avec & Sans & Avec \\ \hline
+Obstacles & Sans & Sans & Avec & Avec \\ \hline
+Arrivée & Position finale & Position finale  & Position finale & Position finale
+\end{tabular}\\
+\end{center}
+
+\noindent Ces scénarios sont : \\
+
+\begin{tabbing}
+
+\hspace{1cm}\=
+A\hspace{1cm}\=
+Init\\\>\>\hspace{0.6cm}\=
+	Traitements sur la carte\\\>\>\>
+	Génération du graphe connexe représentant les lieux accessibles\\\>\>\>
+	Calcul d'une trajectoire\\\>\>
+Suivi de trajectoire jusqu'à la position finale\\\\
+\>B\>
+Init\\\>\>\>
+	Traitements sur la carte\\\>\>\>
+	Génération du graphe connexe représentant les lieux accessibles\\\>\>\>
+	Calcul d'une trajectoire\\\>\>
+Recherche d'un amer en tournant sur lui-même\\\>\>
+Si aucun amer en vue\\\>\>\>
+	Message d'erreur et arrêt du programme\\\>\>
+Si un amer est trouvé\\\>\>\>
+	Asservissement sur l'amer\\\>\>
+	Suivi de trajectoire jusqu'à la position finale avec relocalisation sur les amers rencontrés\\\\
+
+
+\>C\>
+Init\\\>\>\>
+	Traitements sur la carte\\\>\>\>
+	Génération du graphe connexe représentant les lieux accessibles\\\>\>\>
+	Calcul d'une trajectoire\\\>\>
+Recherche d'un amer en tournant sur lui-même\\\>\>
+Si aucun amer en vue\\\>\>\>
+	Message d'erreur et arrêt du programme\\\>\>
+Si un amer est trouvé\\\>\>\>
+	Asservissement sur l'amer\\\>\>\>
+	Suivi de trajectoire jusqu'à la position finale\\\>\>
+Si un obstacle est rencontré\\\>\>\>
+	Le robot s'arrête\\\>\>\>
+	L'obstacle est ajouté sur la carte\\\>\>\>
+	Le robot tourne de 180\degree\\\>\>\>
+	Une nouvelle trajectoire est calculée\\\>\>
+Suivi de trajectoire jusqu'à la position finale\\\\\\\\
+
+
+\>D\>
+Init\\\>\>\>
+	Traitements sur la carte\\\>\>\>
+	Génération du graphe connexe représentant les lieux accessibles\\\>\>\>
+	Calcul d'une trajectoire\\\>\>
+Recherche d'un amer en tournant sur lui-même\\\>\>
+Si aucun amer en vue\\\>\>\>
+	Message d'erreur et arrêt du programme\\\>\>
+Si un amer est trouvé\\\>\>\>
+	Asservissement sur l'amer\\\>\>\>
+	Suivi de trajectoire jusqu'à la position finale avec relocalisation sur les amers rencontrés\\\>\>
+Si un obstacle est rencontré\\\>\>\>
+	Le robot s'arrête\\\>\>\>
+	L'obstacle est ajouté sur la carte\\\>\>\>
+	Le robot tourne de 180\degree\\\>\>\>
+	Une nouvelle trajectoire est calculée\\\>\>
+Suivi de trajectoire jusqu'à la position finale avec relocalisation sur les amers rencontrés\\\\
+	
+\end{tabbing}
+
+
+Étant donné que le robot doit voir des AR-Codes pour pouvoir se relocaliser, on considère que suffisamment d'amers auront été placés dans l'environnement de navigation, afin que quelque soit l'endroit où se trouve le robot, il puisse visualiser au moins un amer en tournant sur lui-même.
+
+
+\section{Navigation avec amers 2D dans un environnement connu}
+\label{sec:navigation_avec_amers_2D_dans_un_environnement_connu}
+
+La tâche de navigation autonome se découpe en sept briques : 
+\begin{description}
+\item [Traitements sur la carte de l'environnement] qui effectue des traitements sur la carte.
+\item [Recherche d'amers et Asservissement] qui permet de rechercher un amer en faisant tourner le robot sur lui-même, et de s'asservir dessus, afin d'assurer une relocalisation précise du robot dans l'environnement.
+\item [Génération de trajectoire] qui permet de générer et afficher le graphe de connexité pour se déplacer dans l'environnement ainsi que la trajectoire du robot.
+\item [Déplacement] qui réalise un suivi de trajectoire d'un point Start à un point Goal.
+\item [Relocalisation] qui permet au robot de connaître sa position de manière précise dans l'environnement, notamment durant le déplacement.
+\item [Fonctions Annexes] qui regroupe des fonctions utiles pour le développement.
+\item [Main] qui décrit la machine à états utilisé par le robot et appelle tous les autres blocs.
+\end{description}
+
+
+Le fichier $navigation.launch$ regroupe toutes les informations essentielles au projet. Il permet de lancer plusieurs noeuds (ici des fonctionnalités) nécessaires à la navigation du robot avec les bons paramètres.
+
+
+\subsection{Traitements sur la carte et génération de trajectoire}
+\label{sec:traitements}
+
+Pour pouvoir visualiser la carte de l'AIP sur RViz, nous avons d'abord construit une carte en faisant se déplacer le robot. La carte est sauvegardée dans le dossier $map$ de notre projet. Elle est lancée par le fichier $navigation.launch$.\\
+Pour visualiser de manière précise le déplacement du TurtleBot sur RViz, il faut tout d'abord effectuer quelques traitements d'images : dilatation des obstacles de la taille du robot pour éviter des collisions, association du robot à un point. Ces traitements sont effectués dans le fichier $Image\_Processing$, ce qui met à jour la carte sur RViz.\\
+Le fichier $Map\_Gui$ permet d'afficher toutes les informations liées aux marqueurs : repère lié au marqueur, meilleur point de visu d'un marqueur (points rouges sur RViz), cônes de visibilité..., et la classe $Set\_Marker$ permet de les récupérer depuis le fichier $navigation.launch$.\\
+Toutes les informations liées à la carte comme sa taille, sa résolution, ou la structure de la carte peuvent être récupérées dans le fichier $Map\_node$.\\\\
+
+
+\subsection{Recherche d'amer et Asservissement}
+\label{sec:recherche}
+
+Avant tout déplacement jusqu'au point Goal, le robot doit d'abord se localiser précisément dans l'environnement. Pour cela, on va utiliser la détection d'amers.
+
+\subsubsection{Fonctionnement}
+Afin de détecter les amers dans la scène, nous utilisons la brique ROS : $ar\_track\_alvar$ de la librairie open source Alvar pour la détection de marqueurs AR.
+Cette brique utilise le nuage de points 3D associé à la couleur pour identifier un marqueur. L'information de profondeur permet à l'algorithme de mieux repérer les plans des marqueurs dans la scène. Elle retourne l'identifiant, la position et l'orientation du marqueur dans le repère de la $/camera\_rgb\_optical\_frame$. La librairie fournie 55 marqueurs AR et la possibilité d'étendre cette liste facilement. Dans notre cas, nous utilisons uniquement le nœud qui permet de lire les marqueurs un par un (individual tags). En effet il existe un autre nœud qui permet d'estimer une position en observant un ensemble de marqueurs (multi-tag bundles).
+
+\subsubsection{Mise en place physique} 
+Lors de notre projet nous avons utilisé des marqueurs de taille $10 \times 10$ cm. On place leur milieu à 31 cm du sol afin que l'axe caméra-marqueur soit le plus parallèle au sol possible.
+
+\subsubsection{Sorties}
+Le nœud publie les informations de détection dans des messages de type $ar\_track\_alvar\_msgs::AlvarMarkers$ sur le topic $/ar\_marker\_pose$. Il publie aussi la TF associée au marqueur vu dans le repère de la caméra.
+	
+\subsubsection{Performances et évolutions}
+L'orientation du marqueur trouvée par $ar\_track\_alvar$ doit être : $\vec{z}$ la normale et $\vec{x}$ vers le haut.
+	
+La détection des marqueurs de $10 \times 10$ cm s'effectue jusqu'à 3 m  avec une précision de 3 cm et jusqu'à 60 degrés d'angle à 3 degrés près. Un filtre de Kalman a été intégré pour fusionner les données odométriques et les observations, dans le but de réduire l'erreur.
+
+\subsubsection{Comportement du robot}
+Le robot va donc tourner sur lui-même jusqu'à détecter un amer dans son champ de vision. Cette fonctionnalité est implémentée dans les fichiers $Recherche$ et $Recherche\_Main$. La classe $Recherche$ n'a pas été appelée directement dans le $main$ car les publications et écoutes de topic ne fonctionnaient pas. Une classe $Recherche\_Main$ a donc été créée pour pallier à ce problème.
+
+
+\subsection{Génération de trajectoire}
+\label{sec:generation}
+
+Pour pouvoir suivre une trajectoire, le robot doit d'abord générer cette dernière. Pour cela, on utilise la classe $Point\_Cloud$ qui va nous permettre de générer les nœuds du graphe, représentant les points de passage possibles pour le robot. Ces nœuds sont des structures de données représentées dans la classe $Target$. La classe $Line$ est utilisé par la classe $Graph$ pour relier les nœuds entre eux (en prenant en compte l'environnement de travail, et donc les obstacles). La classe $Graph$ effectue ensuite un algorithme A* sur le graphe ainsi généré pour déterminer la trajectoire optimale du robot pour atteindre le point Goal. On utilise également la classe $Set\_Start\_Point$ afin d'initialiser le point de départ de la trajectoire en fonction de la position du robot, et la classe $Goal$ pour récupérer la position et l'orientation rentrée par l'utilisateur pour sélectionner un point d'arrivée.
+
+
+\subsection{Déplacement}
+\label{sec:deplacement}
+
+Maintenant que la trajectoire du robot est déterminée, on va envoyer la commande de mouvement à la base mobile du robot. Pour cela, on utilise une loi de commande décrite dans le fichier $Follow\_Path$. Ce fichier intègre également une fonctionnalité de détection d'obstacles.\\
+Lors du déplacement, il est également possible que le robot entre en collision avec un obstacle. Un arrêt d'urgence a donc été implémenté dans la classe $Bumper$.
+
+
+\subsection{Relocalisation}
+\label{sec:relocalisation}
+
+Les amers rencontrés pendant le déplacement du robot sont utilisés afin de permettre au robot de se relocaliser précisément dans l'environnement. Pour cela, nous utilisons le module $alvar$ (cf. Manuel Utilisateur) qui permet de connaître la position du robot par rapport aux amers, ainsi que l'identifiant de l'amer observé. On doit ensuite passer les position et orientation du robot dans le repère monde. On utilise ainsi la classe $Vo\_Broadcast$ qui publie ensuite cette situation au module $Kalman$ (cf. Manuel Utilisateur).
+
+
+\subsection{Fonctions annexes}
+\label{sec:fonctions_annexes}
+
+La classe $Toolbox$ fournit des outils mathématiques utiles, comme la distance entre 2 points du graphes, le produit scalaire entre 2 vecteurs ou encore l'angle orienté formé par 2 vecteurs.
+
+
+\subsection{Main}
+\label{sec:main}
+
+Le $main$ de notre projet est implémenté sous forme de machine à états. Il est décrit dans le fichier $Main$.
+
+
+\end{document}
