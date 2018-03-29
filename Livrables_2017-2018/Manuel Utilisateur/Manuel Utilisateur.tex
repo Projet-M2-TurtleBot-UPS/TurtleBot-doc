@@ -213,7 +213,7 @@ Maintenant que le code source est téléchargé, il vous faut compiler pour cré
 \end{itemize}
 
 Une ligne verte doit apparaître, ainsi qu'une ligne rouge.
-Un \upshape \emph{[100\%]} indique que la compilation est terminée et a fonctionné. 
+Un \upshape \emph{[100\%]} indique que la compilation a fonctionné et est terminée. 
 
 \subsection{Configuration de la carte et des marqueurs}
 \label{sec:mapAndMarkersConfig}
@@ -236,7 +236,7 @@ Nous recommandons de placer le robot avec une orientation parallèle à un mur p
 \end{itemize}
 
 \newpage
-Si vous souhaitez exécuter ces commandes depuis un PC externe, il convient d'abord de se connecter au TurtleBot avec les commandes suivantes :
+Si vous souhaitez exécuter ces commandes depuis un PC externe, il convient d'abord de se connecter au TurtleBot avec la commande suivante :
 \begin{itemize}
 \item[] \begin{verbatim}> ssh turtlebot@<IP_OF_TURTLEBOT> \end{verbatim}
 \end{itemize}
@@ -255,7 +255,7 @@ Ensuite, sur un PC externe où le $.bashrc$ est correctement configuré, exécut
 \item[]  \begin{verbatim}> roslaunch turtlebot_rviz_launchers view_navigation.launch \end{verbatim}
 \end{itemize}
 
-Pour faire bouger le robot grâce au clavier et explorer l'environnement, exécutez dans un nouveau terminal la commande :
+Pour faire bouger le robot grâce au clavier et explorer l'environnement, exécutez dans un nouveau terminal (avec le $.bashrc$ configuré) la commande :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> roslaunch turtlebot_teleop keyboard_teleop.launch --screen \end{verbatim}
@@ -271,7 +271,7 @@ Construisez la carte en faisant se déplacer le robot. Une fois que la carte vou
 \subsubsection{Disposition des ARs}
 
 Pour notre projet, nous utilisons des ARs de taille $10cm \times 10cm$ placés de sorte que les cônes de visibilité des amers recouvrent la majeure partie de l'environnement. Ainsi, si le robot est perdu et tourne sur lui-même, il devrait pouvoir voir au moins un amer. Nous plaçons les amers de sorte que le centre d'un AR code se situe à 31cm de hauteur pour que les rayons envoyés par la kinect soient parallèles au sol. \\
-Il est possible de modifier la disposition des amers dans l'environnement, en modifiant le fichier \upshape \emph{navigation.launch}, situé dans 
+Il est possible de modifier la disposition des amers dans l'environnement, en modifiant le fichier \upshape \emph{navigation.launch}, situé dans\\ 
 \textbf{$<$WORKSPACE\_PATH$>$/catkin$\_$ws/src/turtlebot$\_$visual$\_$navigation/launch} 
 
 On peut spécifier la position et l'orientation d'un amer de la manière suivante :
@@ -292,19 +292,20 @@ Il est également possible de modifier la taille des amers, en modifiant le fich
 Il est préférable de lancer le fichier \upshape \emph{alvar.launch} directement depuis le PC TurtleBot.
 
 
-\subsubsection{Visibility map}
-\label{sec:visibilityMap}
+\subsubsection{Interface RViz}
+\label{sec:interface}
 
 Nous utilisons un logiciel d'interface graphique appelé RViz. Il nous permet de visualiser la trajectoire du robot. Pour lancer RViz, il faut exécuter la commande suivante :
 \begin{itemize}
 \item[] \begin{verbatim}> roslaunch turtlebot_visual_navigation navigation.launch \end{verbatim}
 \end{itemize}
-\begin{figure}
+
 Pour configurer RViz, il faut d'abord le lancer. Lorsqu'il est lancé, il faut ajouter les modules voulus en cliquant sur le bouton \upshape \emph{Add}. \\
 
- \center
- \includegraphics[scale=0.5]{Add.png}
- \caption{Bouton Add}
+\begin{figure}[!h]
+  \centering
+  \noindent\includegraphics[scale=0.5]{Add.png} 
+  \caption{Bouton Add}
 \end{figure}
 Il faut également enregistrer sa configuration en faisant un \upshape \emph{Ctrl+S}.
 
@@ -322,11 +323,12 @@ Il faut d'abord télécharger tout le code source de notre projet sur le PC Turt
 \subsubsection{Fonctionnalités basiques}
 \label{sec:navigation2}
 
-Si vous utilisez le PC TurtleBot, ouvrez deux terminaux et exécutez chacune des commandes suivantes sur un terminal différent, pour activer les fonctionnalités minimales et de vision :
+Si vous utilisez le PC TurtleBot, ouvrez trois terminaux et exécutez chacune des commandes suivantes sur un terminal différent, pour activer les fonctionnalités minimales et de vision, et pour lancer le filtre de Kalman :
 
 \begin{itemize}
 \item[]  \begin{verbatim}> roslaunch turtlebot_bringup minimal.launch \end{verbatim}
 \item[]  \begin{verbatim}> roslaunch turtlebot_visual_navigation alvar.launch \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_visual_navigation Kalman.launch \end{verbatim}
 \end{itemize}
 
 \subsubsection{Navigation}
@@ -341,21 +343,20 @@ Pour lancer notre programme, il faut tout d'abord lancer RViz, puis lancer l'ex�
 
 Vous pouvez maintenant voir l'interface de RViz, le TurtleBot ainsi que tous les markers.
 Pour faire se déplacer le TurtleBot, il suffit de créer un 2D Nav Goal en cliquant sur le bouton du même nom. On positionne ensuite le NavGoal directement sur la carte.\\
-\begin{figure}
- \center
- \includegraphics[scale=0.5]{2DNavGoal.png}
- \caption{Bouton 2D Nav Goal}
+\begin{figure}[!h]
+  \centering
+  \noindent\includegraphics[scale=0.5]{2DNavGoal.png} 
+  \caption{Bouton 2D Nav Goal}
 \end{figure}
-
 
 \subsection{Depuis un PC externe}
 
 Il est possible (et même conseillé dans le cadre de notre projet) de lancer l'application depuis un autre PC que celui de la TurtleBot.
-Il est tout de même préférable de lancer les fichiers \upshape \emph{minimal.launch} et \upshape \emph{alvar.launch} depuis le PC TurtleBot (voir section \ref{sec:navigation2}).
+Il est tout de même préférable de lancer les fichiers \upshape \emph{minimal.launch}, \upshape \emph{alvar.launch} et \upshape \emph{Kalman.launch} depuis le PC TurtleBot (voir section \ref{sec:navigation2}).
 
 \subsubsection{Fonctionnalités de base}
 
-Il est tout de même possible de lancer les fichiers \upshape \emph{minimal.launch} et \upshape \emph{alvar.launch} depuis un PC externe. Il faut pour cela se connecter au PC TurtleBot en premier lieu.
+Il est tout de même possible de lancer les fichiers \upshape \emph{minimal.launch}, \upshape \emph{alvar.launch} et \upshape \emph{Kalman.launch} depuis un PC externe. Il faut pour cela se connecter au PC TurtleBot en premier lieu.
 Dans un premier terminal, exécutez les commandes suivantes :
 
 \begin{itemize}
@@ -370,12 +371,26 @@ Dans un second terminal, exécutez les commandes suivantes :
 \item[]  \begin{verbatim}> roslaunch turtlebot_visual_navigation alvar.launch \end{verbatim}
 \end{itemize}
 
+Dans un troisième terminal, exécutez les commandes suivantes :
+
+\begin{itemize}
+\item[]  \begin{verbatim}> ssh turtlebot@<TURTLEBOTP_IP> \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_visual_navigation Kalman.launch \end{verbatim}
+\end{itemize}
+
 \subsubsection{Navigation}
 
 Pour lancer notre application depuis un PC externe, on lance d'abord RViz avec la commande :
 \begin{itemize}
-\item[]  \begin{verbatim}> rosrun rviz rviz \end{verbatim}
+\item[]  \begin{verbatim}> roslaunch turtlebot_visual_navigation navigation.launch \end{verbatim}
 \end{itemize}
+
+Puis on lance l'application avec :
+\begin{itemize}
+\item[]  \begin{verbatim}> rosrun turtlebot_visual_navigation Navigation \end{verbatim}
+\end{itemize}
+
+\begin{comment}
 
 On se connecte ensuite au PC Turtlebot et on lance notre programme grâce aux commandes suivantes :
 
@@ -384,12 +399,14 @@ On se connecte ensuite au PC Turtlebot et on lance notre programme grâce aux co
 \item[]  \begin{verbatim}> rosrun turtlebot_visual_navigation Navigation \end{verbatim}
 \end{itemize}
 
+\end{comment}
+
 Vous pouvez maintenant voir l'interface de RViz, le TurtleBot ainsi que tous les markers.
 Pour faire se déplacer le TurtleBot, il suffit de créer un 2D Nav Goal en cliquant sur le bouton du même nom. On positionne ensuite le NavGoal directement sur la carte.\\
-\begin{figure}
- \center
- \includegraphics[scale=0.5]{2DNavGoal.png}
- \caption{Bouton 2D Nav Goal}
+\begin{figure}[!h]
+  \centering
+  \noindent\includegraphics[scale=0.5]{2DNavGoal.png} 
+  \caption{Bouton 2D Nav Goal}
 \end{figure}
 
 
@@ -417,17 +434,22 @@ Dans un second terminal, lancez la commande :
 
 Dans un troisième terminal, lancez la commande :
 \begin{itemize}
-\item[] \begin{verbatim}> roslaunch turtlebot_visual_navigation navigation.launch \end{verbatim}
+\item[] \begin{verbatim}> roslaunch turtlebot_visual_navigation Kalman.launch \end{verbatim}
 \end{itemize}
 
 Dans un quatrième terminal, lancez la commande :
+\begin{itemize}
+\item[] \begin{verbatim}> roslaunch turtlebot_visual_navigation navigation.launch \end{verbatim}
+\end{itemize}
+
+Dans un cinquième terminal, lancez la commande :
 \begin{itemize}
 \item[] \begin{verbatim}> rosrun turtlebot_visual_navigation Navigation \end{verbatim}
 \end{itemize}
 
 \section{Un exemple de lancement depuis un PC externe}
 
-On va exécuter deux commandes depuis le PC TurtleBot. Dans un premier terminal, lancez :
+On va exécuter trois commandes depuis le PC TurtleBot. Dans un premier terminal, lancez :
 \begin{itemize}
 \item[] \begin{verbatim}> roslaunch turtlebot_bringup minimal.launch \end{verbatim}
 \end{itemize}
@@ -435,6 +457,11 @@ On va exécuter deux commandes depuis le PC TurtleBot. Dans un premier terminal,
 Dans un second terminal, lancez la commande :
 \begin{itemize}
 \item[] \begin{verbatim}> roslaunch turtlebot_visual_navigation alvar.launch \end{verbatim}
+\end{itemize}
+
+Dans un troisième terminal, lancez la commande :
+\begin{itemize}
+\item[] \begin{verbatim}> roslaunch turtlebot_visual_navigation Kalman.launch \end{verbatim}
 \end{itemize}
 
 \vspace{0.5cm}
