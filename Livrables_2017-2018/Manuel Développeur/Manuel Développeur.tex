@@ -205,7 +205,9 @@ Suivi de trajectoire jusqu'à la position finale avec relocalisation sur les ame
 \end{tabbing}
 
 
-Étant donné que le robot doit voir des AR-Codes pour pouvoir se relocaliser, on considère que suffisamment d'amers auront été placés dans l'environnement de navigation, afin que quelque soit l'endroit où se trouve le robot, il puisse visualiser au moins un amer en tournant sur lui-même.
+Étant donné que le robot doit voir des AR-Codes pour pouvoir se relocaliser, on considère que suffisamment d'amers auront été placés dans l'environnement de navigation, afin que quelque soit l'endroit où se trouve le robot, il puisse visualiser au moins un amer en tournant sur lui-même.\\
+
+Nous avons remarqué lors de nos expérimentations sur les TurtleBot qu'un des TurtleBot (le TurtleBot 3) avait des roues folles légèrement plus petites que celles des autres robots. Cette différence permet au robot d'éviter de frotter au sol lors de ces mouvements rotatifs, et lui permet de se déplacer de manière beaucoup plus fluide et plus stable. Pour les tests qualitatifs et les démonstrations, il sera donc plus intéressant d'utiliser ce TurtleBot, ou au moins de démonter ses roues et de les intégrer sur le TurtleBot utilisé.
 
 
 \section{Navigation avec amers 2D dans un environnement connu}
@@ -230,7 +232,9 @@ Le fichier $navigation.launch$ regroupe toutes les informations essentielles au 
 \label{sec:traitements}
 
 Pour pouvoir visualiser la carte de l'AIP sur RViz, nous avons d'abord construit une carte en faisant se déplacer le robot. La carte est sauvegardée dans le dossier $map$ de notre projet. Elle est lancée par le fichier $navigation.launch$.\\
+
 Pour visualiser de manière précise le déplacement du TurtleBot sur RViz, il faut tout d'abord effectuer quelques traitements d'images : dilatation des obstacles de la taille du robot pour éviter des collisions, association du robot à un point. Ces traitements sont effectués dans le fichier $Image\_Processing$, ce qui met à jour la carte sur RViz.\\
+
 Le fichier $Map\_Gui$ permet d'afficher toutes les informations liées aux marqueurs : repère lié au marqueur, meilleur point de visu d'un marqueur (points rouges sur RViz), cônes de visibilité..., et la classe $Set\_Marker$ permet de les récupérer depuis le fichier $navigation.launch$.\\
 Toutes les informations liées à la carte comme sa taille, sa résolution, ou la structure de la carte peuvent être récupérées dans le fichier $Map\_node$.\\\\
 
