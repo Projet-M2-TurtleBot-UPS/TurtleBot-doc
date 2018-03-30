@@ -230,6 +230,13 @@ La tâche de navigation autonome se découpe en sept briques :
 Le fichier $navigation.launch$ regroupe toutes les informations essentielles au projet. Il permet de lancer plusieurs noeuds (ici des fonctionnalités) nécessaires à la navigation du robot avec les bons paramètres.
 
 
+\subsection{Travail réalisé}
+\label{sec:travail_realise}
+
+L'ensemble des fonctionnalités (Traitements sur la carte, recherche d'amers, asservissement, génération de trajectoire, déplacement) fonctionnent, ont été testées et intégrées dans notre main final. Le robot peut donc se déplacer dans son environnement grâce à l'odométrie, mais aucune relocalisation n'est effectuée durant son déplacement.\\\\
+Malheureusement, le déplacement avec relocalisation (filtre de Kalman) ne fonctionne pas. Il manque le passage des coordonnées des points générés pour la trajectoire dans le nouveau repère donné par Kalman lors de la relocalisation.
+
+
 \subsection{Traitements sur la carte et génération de trajectoire}
 \label{sec:traitements}
 
