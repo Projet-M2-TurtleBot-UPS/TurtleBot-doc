@@ -313,8 +313,13 @@ Il faut également enregistrer sa configuration en faisant un \upshape \emph{Ctr
 \section{Travail réalisé}
 
 L'ensemble des fonctionnalités (Traitements sur la carte, recherche d'amers, asservissement, génération de trajectoire, déplacement) fonctionnent, ont été testées et intégrées dans notre main final. Le robot peut donc se déplacer dans son environnement grâce à l'odométrie, mais aucune relocalisation n'est effectuée durant son déplacement.\\\\
-Malheureusement, le déplacement avec relocalisation (filtre de Kalman) ne fonctionne pas. Il manque le passage des coordonnées des points générés pour la trajectoire dans le nouveau repère donné par Kalman lors de la relocalisation.
-
+Malheureusement, le déplacement avec relocalisation (filtre de Kalman) ne fonctionne pas. Deux solutions peuvent être envisagées :
+\begin{itemize}
+\item[$\bullet$]
+	Il manque le passage des coordonnées des points générés pour la trajectoire dans le nouveau repère donné par Kalman lors de la relocalisation. Il faudrait donc faire ce calcul pour faire fonctionner la relocalisation.
+\item[$\bullet$]
+	Il faudrait sinon recréer un script Kalman pour pouvoir rediriger l'entrée d'odométrie, et pour que le topic $/odom$ n'influe plus sur le repère de la carte (lié à l'environnement).
+\end{itemize}
 
 
 \newpage
